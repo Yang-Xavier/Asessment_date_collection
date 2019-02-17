@@ -11,11 +11,12 @@ npm run dev <br>
 `It has to consider the cross-domain problem in development enviroment`
 <br>
 # Production enviroment
-backend port: 8081 <br>
+<<<<<<< HEAD
+backend port: 8080 <br>
 run code:  <br>
 python setup.py <br>
 <br>
-frontend port: 8082 <br>
+frontend port: no port <br>
 run code: <br>
 cd webapp/ <br>
 npm run build <br>
