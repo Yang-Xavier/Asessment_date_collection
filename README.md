@@ -11,7 +11,6 @@ npm run dev <br>
 `It has to consider the cross-domain problem in development enviroment`
 <br>
 # Production enviroment
-<<<<<<< HEAD
 backend port: 8080 <br>
 run code:  <br>
 python setup.py <br>
