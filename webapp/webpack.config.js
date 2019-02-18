@@ -8,11 +8,11 @@ const htmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
     mode: 'development',
-    entry: ['webpack/hot/dev-server','./app/main.js'],
+    entry: ['./app/main.js'],
     output: {
         path: path.resolve(__dirname, 'static'),
         filename: 'bundle.js',
-        publicPath: '//assets//',
+        publicPath: '/static/',
         library: 'lib',
         libraryTarget: "umd"
     },
