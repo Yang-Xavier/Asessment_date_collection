@@ -32,8 +32,10 @@ module.exports = {
                 test: /\.css$/,
                 use: ExtractTextPlugin.extract({
                     fallback: "style-loader",
-                    use: "css-loader"
-                }) //must be this order
+                    use: "css-loader",
+                    // modules: true
+                }), //must be this order
+
 
             }
         ]
@@ -41,10 +43,16 @@ module.exports = {
     plugins: [
         new ExtractTextPlugin('[name].css'),
         new htmlWebpackPlugin({
-            title: 'My App',
+            title: 'Module Deliver App',
             filename: 'index.html'
         }),
-        new webpack.HotModuleReplacementPlugin()
+        new webpack.HotModuleReplacementPlugin(),
+        new webpack.ProvidePlugin({
+            $: 'jquery',
+            jQuery: 'jquery',
+            'window.jQuery': 'jquery',
+            Popper: ['popper.js', 'default'],
+        })
     ]
 
 }

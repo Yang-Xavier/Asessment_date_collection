@@ -9,7 +9,8 @@ config.entry.push('webpack/hot/dev-server');
 config.devServer = {
     contentBase: path.join(__dirname, 'static'),
     compress: true,
-    port: 8082
+    port: 8082,
+    hot: true
 };
 
 
