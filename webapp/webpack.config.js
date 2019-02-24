@@ -46,7 +46,6 @@ module.exports = {
             title: 'Module Deliver App',
             filename: 'index.html'
         }),
-        new webpack.HotModuleReplacementPlugin(),
         new webpack.ProvidePlugin({
             $: 'jquery',
             jQuery: 'jquery',
