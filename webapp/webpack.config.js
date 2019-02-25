@@ -32,12 +32,10 @@ module.exports = {
                 test: /\.css$/,
                 use: ExtractTextPlugin.extract({
                     fallback: "style-loader",
-                    use: "css-loader",
+                    use: ["css-loader","postcss-loader"]
                     // modules: true
                 }), //must be this order
-
-
-            }
+            },
         ]
     },
     plugins: [
@@ -56,4 +54,35 @@ module.exports = {
 
 }
 
+{
+    module: {
+        rules: [
+            {test: /\.css$/, use: ['style-loader', 'css-loader']},
+            {
+                test: /\.scss$/,
+                use: [
+                    {loader: 'style-loader'},
+                    {
+                        loader: 'css-loader', options: {
+                            sourceMap: true, modules: true,
+                            localIdentName: '[local]_[hash:base64:5]'
+                        }
+                    },
+                    {
+                        loader: 'postcss-loader',
+                        options: {
+                            sourceMap: true,
+                            config: {
+                                path: 'postcss.config.js'  // 这个得在项目根目录创建此文件
+                            }
+                        }
+                    },
+                    {
+                        loader: 'sass-loader', options: {sourceMap: true}
+                    }
+                ]
+            }
+        ]
+    }
+}
 
