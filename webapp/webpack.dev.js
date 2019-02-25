@@ -5,7 +5,7 @@ const config = require('./webpack.config');
 
 config.entry.push('./app/test/test.js');
 config.entry.push('webpack/hot/dev-server');
-
+config.output.publicPath = '/';
 
 config.devServer = {
     contentBase: path.join(__dirname, 'static'),

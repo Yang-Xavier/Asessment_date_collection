@@ -30,7 +30,7 @@ $('title').text('Login');
 
 const error_call = () => {
     add_animate(container,'shake');
-    inform_block.html("Sorry, account or password is wrong</br>Please try again.")
+    inform_block.html("Sorry, account or password is wrong</br>Please try again.");
     inform_block.css({
         'display' : 'block'
     })
