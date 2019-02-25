@@ -1,0 +1,110 @@
+.login_all_panel {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: var(--light);
+}
+ .login_all_panel .container_block {
+    width: 500px;
+    height: 500px;
+    margin-top: -150px;
+    background: var(--white);
+    border-radius: 10px;
+    box-shadow: 1px 1px 3px var(--gray);
+    padding: 50px 0 0 0;
+    display: flex;
+    flex-direction: column;
+}
+.login_all_panel .container_block.animated.shake {
+    animation-duration: 0.5s;
+}
+.login_all_panel .container_block.animated.jello {
+    animation-duration: 0.8s;
+}
+.login_all_panel .container_block.animated{
+    animation-duration: 1s;
+}
+.login_all_panel .container_block .header {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+    height: 20%;
+}
+
+.login_all_panel .container_block .header .logo {
+    height: 80px;
+    width: 35%;
+    background: url("https://www.sheffield.ac.uk/polopoly_fs/15.375.1548777706!/assets/images/uos-crest.svg") 5px center no-repeat #FFF;
+}
+.login_all_panel .container_block .header .mole {
+    height: 80px;
+    width: 35%;
+    max-width: 218px;
+    align-items: center;
+    font-size: 30px;
+    color: var(--dark);
+    line-height: 100%;
+    padding: 10px 0 0 0;
+}
+
+.login_all_panel .container_block .form_block {
+    width: 100%;
+    height: 80%;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
+}
+.login_all_panel .container_block .form_block input,
+.login_all_panel .container_block .form_block div,
+.login_all_panel .container_block .form_block button
+{
+    width: 70%;
+    height: 60px;
+    margin: 0;
+    box-sizing: border-box;
+    color: var(--gray-dark);
+}
+.login_all_panel .container_block .form_block input,
+.login_all_panel .container_block .form_block button {
+    border: 2px solid #bbb;
+    font-size: 20px;
+    padding: 0 10px 0 10px;
+}
+.login_all_panel .container_block .form_block input.account {
+    border-radius: 5px 5px 0 0;
+}
+.login_all_panel .container_block .form_block input.password {
+    border-top: none;
+    border-radius: 0 0 5px 5px;
+}
+.login_all_panel .container_block .form_block .check_block {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    height: 80px;
+}
+.login_all_panel .container_block .form_block .check_block input[type=checkbox] {
+    width: 20px;
+}
+.login_all_panel .container_block .form_block .check_block span {
+    padding: 0 5px 0 5px;
+}
+.login_all_panel .container_block .form_block button {
+    background: var(--blue);
+    border: none;
+    border-radius: 7px;
+    color: #ffe;
+}
+
+.login_all_panel .container_block .form_block .inform_block {
+    box-sizing: border-box;
+    padding: 20px 0 0 0;
+    height: 100px;
+    display: none;
+    color: var(--danger);
+    text-align: center;
+}
