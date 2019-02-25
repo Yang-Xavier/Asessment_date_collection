@@ -99,6 +99,10 @@ container.append(form_block);
 
 login_panel.append(container);
 
-
+login_panel.render_event = {
+    "before": () => {
+        add_animate(container, 'bounceInDown');
+    }
+};
 
 export default login_panel;

@@ -6,7 +6,9 @@ To open a frontend server for development
 
 #### Test Instruction
 * Type `cd webapp` into terminal. (Get into web frontend work folder)
-* Type`npm run dev` into terminal. (Make sure you have installed NodeJS) 
+* Type `rm -rf node_module' 
+* Type `npm install`
+* Type`npm run dev` into terminal. (Make sure you have installed NodeJS)
 * Open the browser and type `http://localhost:8082` into the address bar.
 * Then press `Enter`.
 
