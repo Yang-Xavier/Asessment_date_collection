@@ -11,6 +11,7 @@ import 'animate.css'
 
 
 const config = MyRouter['route_config'];
+const init_path = '/login';
 for (let route_ in config) {
     route(route_, config[route_])
 }
@@ -34,3 +35,10 @@ if(re.exec(current_path) == null) {
 }
 
 
+// =======
+// route.start(true);
+// route.base(MyRouter['base']);
+//
+// // console.log(route.create())
+// // route('/login');
+// >>>>>>> # This is a combination of 3 commits.
