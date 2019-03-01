@@ -36,6 +36,16 @@ module.exports = {
                     // modules: true
                 }), //must be this order
             },
+            {
+                test: /\.(jpg|png|gif|bmp|jpeg)$/,
+                use: [{
+                    loader:'url-loader',
+                    options:{
+                        limit:1024,
+                        name:'static/images/[name]-[hash:8].[ext]',
+                    }
+                }]
+            }
         ]
     },
     plugins: [
