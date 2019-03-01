@@ -11,7 +11,8 @@ config.devServer = {
     contentBase: path.join(__dirname, 'static'),
     compress: true,
     port: 8082,
-    hot: true
+    hot: true,
+    historyApiFallback: true
 };
 
 config.plugins.push(new webpack.HotModuleReplacementPlugin());

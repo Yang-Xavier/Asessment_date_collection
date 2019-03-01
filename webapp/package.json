@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --config webpack.config.js",
-    "dev": "webpack-dev-server --config webpack.dev.js  --progress --colors --content-base static --history-api-fallback --port 8082"
+    "dev": "webpack-dev-server --config webpack.dev.js  --progress --colors"
   },
   "author": "xavier yang",
   "license": "MIT",

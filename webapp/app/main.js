@@ -9,11 +9,15 @@ import 'animate.css'
 // import './test/index'
 /*for test index*/
 
+
 const config = MyRouter['route_config'];
+const init_path = '/login';
 for (let route_ in config) {
     route(route_, config[route_])
 }
 
-route.start(true)
+route.start(true);
 route.base(MyRouter['base']);
-route('/login');
+
+// console.log(route.create())
+// route('/login');
