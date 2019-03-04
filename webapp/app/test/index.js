@@ -1,6 +1,7 @@
 import route from 'riot-route'
-import login_pane from '../login/LoginPanel'
-import {mount} from '../util/node_util'
+import '../../style/test.css'
+// import login_pane from '../login/LoginPanel'
+// import {mount} from '../util/node_util'
 
 // import $ from 'jquery'
 
@@ -18,10 +19,10 @@ import {mount} from '../util/node_util'
 //     route(route_, config[route_](route))
 // }
 route('/login', () => {
-    mount(login_pane)
+    // mount(login_pane)
 });
 
 
-route.start(true);
-route.base('/app/');
-route('/login');
+// route.start(true);
+// route.base('/app/');
+// route('/login');

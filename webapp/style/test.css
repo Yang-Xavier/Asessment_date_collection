@@ -1,3 +1,7 @@
 .test {
     color: red;
 }
+
+body {
+    background: url("../resources/image/test.jpg");
+}

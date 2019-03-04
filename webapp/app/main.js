@@ -11,13 +11,26 @@ import 'animate.css'
 
 
 const config = MyRouter['route_config'];
-const init_path = '/login';
 for (let route_ in config) {
     route(route_, config[route_])
 }
 
+
+
 route.start(true);
 route.base(MyRouter['base']);
 
-// console.log(route.create())
-// route('/login');
+const current_path = location.pathname;
+const param = location.search;
+const hash = location.hash;
+
+
+// Response to the address change
+const re = new RegExp(MyRouter['base']);
+if(re.exec(current_path) == null) {
+    route(MyRouter['index']);
+} else {
+    route(current_path.substr(MyRouter['base'].length)+param+hash);
+}
+
+

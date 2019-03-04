@@ -42,7 +42,7 @@ module.exports = {
                     loader:'url-loader',
                     options:{
                         limit:1024,
-                        name:'static/images/[name]-[hash:8].[ext]',
+                        name:'images/[name]-[hash:8].[ext]',
                     }
                 }]
             }

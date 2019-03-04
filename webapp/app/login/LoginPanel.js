@@ -1,108 +1,130 @@
 import $ from "jquery"
 import request from 'superagent'
 
+import BaseNode from "../util/BaseNode"
 import {add_animate} from "../util/node_util";
 import '../../style/login_panel.css'
 import jsSHA from '../lib/sha1'
 import {RQ_HOST} from '../util/constant'
 
-// UI
-const login_panel = $('<div class="login_all_panel vmbox"></div>');
-const container = $('<div class="container_block"></div>');
 
-const header = $('<div class="header"></div>');
-const title_ = $('<span class="mole">Module Deliver</span>');
-const logo = $('<span class="logo"></span>');
+class LoginPanel extends BaseNode{
 
+    constructor() {
+        super();
 
-const form_block = $('<div class="form_block" ></div>');
-const account_input = $('<input type="email" class="account" placeholder="email"/>');
-const pwd_input = $('<input type="password" class="password" placeholder="password"/>');
-const check_block = $('<div class="check_block"></div>');
-const check_box = $('<input type = "checkbox"/>');
-const label = $('<span>Rmember me</span>');
-const inform_block = $('<div class="inform_block"></div>');
-const login_btn = $('<button>Log in</button>');
+        // UI
 
+        this.state = {
+            title: "Module Deliver",
+            checkBoxLabel: "Remember me",
+            loginBtnLabel: "Login in"
+        };
 
-// Event
-$('title').text('Login');
+        this.login_panel = $('<div class="login_all_panel vmbox"></div>');
+        this.container = $('<div class="container_block"></div>');
 
-const error_call = () => {
-    add_animate(container,'shake');
-    inform_block.html("Sorry, account or password is wrong.</br>Please try again.");
-    inform_block.css({
-        'display' : 'block'
-    })
-};
+        this.header = $('<div class="header"></div>');
+        this.title_ = $('<span class="mole"></span>');
+        this.logo = $('<span class="logo"></span>');
 
-const success_call = () => {
-    const remember_me = check_box.is(":checked");
-    add_animate(container,'bounceOutUp');
-    inform_block.html("Please enter the email or password.");
-    inform_block.css({
-        'display' : 'block'
-    });
-    console.log("Login successfully!")
-};
+        this.form_block = $('<div class="form_block" ></div>');
+        this.account_input = $('<input type="email" class="account" placeholder="email"/>');
+        this.pwd_input = $('<input type="password" class="password" placeholder="password"/>');
+        this.check_block = $('<div class="check_block"></div>');
+        this.check_box = $('<input type = "checkbox"/>');
+        this.label = $('<span></span>');
+        this.inform_block = $('<div class="inform_block"></div>');
+        this.login_btn = $('<button></button>');
 
-const hash_password = (pwd) => {
-    try {
-        const hashed_pwd = new jsSHA("SHA-1", "TEXT", {numRounds: 1});
-        hashed_pwd.update(pwd);
-        return hashed_pwd.getHash("HEX");
-    } catch (e) {
-        console.log(e.message);
-        return null
+        // Event
+        $('title').text('Login');
+
+        this.login_btn.click(() => {
+            let email = this.account_input.val();
+            let pwd =  this.pwd_input.val();
+
+            if (email == '' || pwd == '') {
+                add_animate(this.container,'jello');
+                this.inform_block.html("Please enter the email or password.");
+                this.inform_block.css({
+                    'display' : 'block'
+                });
+                return
+            }
+            pwd = this.hash_password(pwd);
+
+            request
+                .post(RQ_HOST+'/api/login')
+                .type("json")
+                .send({'email': email, "password": pwd})
+                .then(this.success_call.bind(this), this.error_call.bind(this))
+                .catch((e)=>{console.log(e)})
+        });
     }
-}
 
-login_btn.click(() => {
 
-    let email = account_input.val();
-    let pwd =  pwd_input.val();
+    error_call() {
+        add_animate(this.container,'shake');
+        this.inform_block.html("Sorry, account or password is wrong.</br>Please try again.");
+        this.inform_block.css({
+            'display' : 'block'
+        })
+    };
 
-    if (email == '' || pwd == '') {
-        add_animate(container,'jello');
-        inform_block.html("Please enter the email or password.");
-        inform_block.css({
+    success_call() {
+        const remember_me = this.check_box.is(":checked");
+        add_animate(this.container,'bounceOutUp');
+        this.inform_block.html("Please enter the email or password.");
+        this.inform_block.css({
             'display' : 'block'
         });
-        return
+        console.log("Login successfully!")
+    };
+
+    hash_password(pwd) {
+        try {
+            const hashed_pwd = new jsSHA("SHA-1", "TEXT", {numRounds: 1});
+            hashed_pwd.update(pwd);
+            return hashed_pwd.getHash("HEX");
+        } catch (e) {
+            console.log(e.message);
+            return null
+        }
     }
 
-    pwd = hash_password(pwd);
-
-    request
-        .post(RQ_HOST+'/api/login')
-        .type("json")
-        .send({'email': email, "password": pwd})
-        .then(success_call, error_call)
-        .catch((e)=>{console.log(e)})
-});
-
-
-header.append(logo);
-header.append(title_);
-
-check_block.append(check_box);
-check_block.append(label);
-
-form_block.append(account_input);
-form_block.append(pwd_input);
-form_block.append(check_block);
-form_block.append(login_btn);
-form_block.append(inform_block);
-
-container.append(header);
-container.append(form_block);
-
-login_panel.append(container);
-
-login_panel.render_event = {
-    "before": () => {
-        add_animate(container, 'bounceInDown');
+    before_render() {
+        add_animate(this.container, 'bounceInDown');
     }
-};
 
-export default login_panel;
+    update() {
+        this.title_.text(this.state.title);
+        this.label.text(this.state.checkBoxLabel);
+        this.login_btn.text(this.state.loginBtnLabel);
+    }
+
+    render() {
+
+        this.header.append(this.logo);
+        this.header.append(this.title_);
+
+        this.check_block.append(this.check_box);
+        this.check_block.append(this.label);
+
+        this.form_block.append(this.account_input);
+        this.form_block.append(this.pwd_input);
+        this.form_block.append(this.check_block);
+        this.form_block.append(this.login_btn);
+        this.form_block.append(this.inform_block);
+
+        this.container.append(this.header);
+        this.container.append(this.form_block);
+
+        this.login_panel.append(this.container);
+
+        return this.login_panel
+    }
+
+}
+
+export default LoginPanel;

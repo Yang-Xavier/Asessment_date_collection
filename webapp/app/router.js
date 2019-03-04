@@ -5,34 +5,36 @@ import {mount} from './util/node_util'
 
 const RouterList = {
     'base': "/app/",
+    'index': "login",
     "route_config": {
-        '/login': () => {
-            mount(login_pane)
-        },
-        '/app/admin': () => {
-            switch (role_type) {
-                case 'admin':
-                    break;
-                case 'academic':
-                    break;
-                case 'tutor':
-                    break;
-                default:
-                    break;
-            }
-        },
+        'login': () => {
 
-        'app/visualisation/*..': (graph_type)=>{
-            switch (graph_type) {
-                case 'heat_map' :
-                    break;
-                default:
-                    break;
-            }
+            mount(new login_pane(), $("body"));
         },
-        'app/module/*': (module_id)=>{
+        'admin': () => {
 
         },
+        'academic': () => {
+
+        },
+        'tutor': () => {
+
+        },
+        'visualisation/*..': (graph_type)=>{
+            // switch (graph_type) {
+            //     case 'heat_map' :
+            //         break;
+            //     default:
+            //         break;
+            // }
+
+        },
+        'module/*': (module_id)=>{
+            console.log(module_id)
+        },
+        'default': () =>{
+            console.log("404")
+        }
     }
 
 
