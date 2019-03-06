@@ -45,7 +45,7 @@ CREATE TABLE Assessment (
 
 -- List of form created by LTM for each academic year.
 CREATE TABLE Form (
-	form_id int AUTO_INCREMENT,
+  form_id int AUTO_INCREMENT,
   form_name char,
   form_state ENUM('CREATED', 'WAITING', 'DONE'),
   form_acad_year_start DATETIME,
@@ -57,10 +57,10 @@ CREATE TABLE Form (
 
 -- List of entries in each form, one for each module.
 CREATE TABLE FormEntry (
-	entry_id int AUTO_INCREMENT,
+  entry_id int AUTO_INCREMENT,
   entry_module INT,
   entry_parent INT,
-	entry_timestamp TIMESTAMP,
+  entry_timestamp TIMESTAMP,
   entry_is_filled BOOLEAN,
 	PRIMARY KEY (entry_id)
 );
