@@ -12,7 +12,7 @@ from flask_sqlalchemy import SQLAlchemy
 SECRET_KEY = 'mysecretkey'
 
 app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///adc.db"
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///../adc.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 

@@ -16,4 +16,4 @@ build/
 !.gitignore
 */node_modules/
 
-
+adc.db
