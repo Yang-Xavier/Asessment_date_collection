@@ -4,12 +4,12 @@ application.py
 """
 
 import enum
-import uuid
-from functools import wraps
 
-from flask import Flask, Blueprint, jsonify, request, make_response
+from flask import Flask, Blueprint, jsonify, g
 from flask_sqlalchemy import SQLAlchemy
+from flask_httpauth import HTTPBasicAuth
 from passlib.apps import custom_app_context as pwd_context
+from itsdangerous import (TimedJSONWebSignatureSerializer as Serializer, BadSignature, SignatureExpired)
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///../adc.db"
@@ -18,6 +18,8 @@ app.config["SECRET_KEY"] = "desidragons"
 db = SQLAlchemy(app)
 
 api = Blueprint('api', __name__)
+
+auth = HTTPBasicAuth()
 
 # ---------------- Models -------------------- #
 
@@ -47,8 +49,7 @@ class User(db.Model):
     name = db.Column(db.String(80), nullable=False)
     usertype = db.Column(db.Enum(UserType))
     email = db.Column(db.String(80), unique=True, nullable=False)
-    password_hash = db.Column(db.String(128), nullable=False, default='$6$rounds=656000$.pX2Wd1Frzi6fm.a$Ep623xhIV95hk6H2OMlbWl18P7tClRH00GW36N5UkXYvrEQAX2dE3e7J.Kjpk/eqljv3N721RA5o6X9VRk3hn.')
-    token = db.Column(db.String(32), nullable=True)
+    password_hash = db.Column(db.String(128), nullable=False, default="$6$rounds=656000$Mekxk00d5L5we4/3$CwY2NGNDHX1Yt6khinGYUJm/I5s2.3bmjgMLmmsRIVzowR.LWPqIF2KrauyfjuzyWD2MrPToRVNHxYCZAPsFf1")
 
     def to_dict(self):
         return dict(id=self.id,
@@ -56,19 +57,27 @@ class User(db.Model):
                     email=self.email,
                     password=self.password)
 
+    def hash_password(self, password):
+        self.password_hash = pwd_context.encrypt(password)
+
     def verify_password(self, password):
         return pwd_context.verify(password, self.password_hash)
 
-    def generate_token(self):
-        self.token = uuid.uuid4().hex
-        db.session.add(self)
-        db.session.commit()
-        return self.token
+    def generate_auth_token(self, expiration=600):
+        s = Serializer(app.config['SECRET_KEY'], expires_in=expiration)
+        return s.dumps({ 'id': self.id })
 
-    def revoke_token(self):
-        self.token = None
-        db.session.add(self)
-        db.session.commit()
+    @staticmethod
+    def verify_auth_token(token):
+        s = Serializer(app.config['SECRET_KEY'])
+        try:
+            data = s.loads(token)
+        except SignatureExpired:
+            return None # valid token, but expired.
+        except BadSignature:
+            return None # invalid token.
+        user = User.query.get(data['id'])
+        return user
 
 class Module(db.Model):  
     __tablename__ = "module"
@@ -100,64 +109,20 @@ class Assessment(db.Model):
 
 # ---------------- Other -------------------- #
 
-def requires_auth(f):
-    @wraps(f)
-    def decorated(*args, **kwargs):
-        token = request.args.get('token')
-
-        if not token:
-            return jsonify({'message':'Token is missing'}), 403
-
-        user = User.query.filter_by(token=token).first()
-        if not user:
-            return jsonify({'message':'Token is invalid'}), 403
-
-        return f(*args, **kwargs)
-    return decorated
+@auth.verify_password
+def verify_password(email, password):
+    user = User.query.filter_by(email=email).first()
+    if not user or not user.verify_password(password):
+        return False
+    g.user = user # set global user.
+    return True
 
 # ---------------- Routes -------------------- #
 
-@app.route('/login')
-def login():
-    auth = request.authorization
-
-    if auth:
-        # try to authenticate with username/password.
-        user = User.query.filter_by(email=auth.username).first()
-        if user and user.verify_password(auth.password):
-            if user.token:
-                token = user.token
-                print("Token already exists:", token)
-            else:
-                token = user.generate_token()
-                print("Generated token:", token)
-            return jsonify({'token':token})
-
-    return make_response('Not authorized', 401, {'WWW-Authenticate' : 'Basic realm="Login Required"'})
-
-@app.route('/logout')
-def logout():
-    token = request.args.get('token')
-
-    if not token:
-        return jsonify({'message':'Token is missing'}), 403
-
-    user = User.query.filter_by(token=token).first()
-    if not user:
-        return jsonify({'message':'Token is invalid'}), 403
-
-    user.token = None
-    db.session.add(user)
-    db.session.commit()
-
-    return "Logout", 401
-
-@app.route('/restricted')
-@requires_auth
-def hello():
-    return jsonify({'message':"Hello"})
-
-# ---------------- Routes -------------------- #
+@app.route('/api/hello')
+@auth.login_required
+def get_resource():
+    return jsonify({ 'data': 'Hello, %s!' % g.user.name })
 
 app.register_blueprint(api, url_prefix="/api")
 
