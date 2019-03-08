@@ -110,10 +110,14 @@ class Assessment(db.Model):
 # ---------------- Other -------------------- #
 
 @auth.verify_password
-def verify_password(email, password):
-    user = User.query.filter_by(email=email).first()
-    if not user or not user.verify_password(password):
-        return False
+def verify_password(email_or_token, password):
+    # first try to authenticate by token
+    user = User.verify_auth_token(email_or_token)
+    if not user:
+        # try to authenticate with username/password
+        user = User.query.filter_by(email=email_or_token).first()
+        if not user or not user.verify_password(password):
+            return False
     g.user = user # set global user.
     return True
 
@@ -123,6 +127,12 @@ def verify_password(email, password):
 @auth.login_required
 def get_resource():
     return jsonify({ 'data': 'Hello, %s!' % g.user.name })
+
+@app.route('/api/token')
+@auth.login_required
+def get_auth_token():
+    token = g.user.generate_auth_token()
+    return jsonify({ 'token': token.decode('ascii') })
 
 app.register_blueprint(api, url_prefix="/api")
 
