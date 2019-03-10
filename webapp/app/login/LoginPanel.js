@@ -37,8 +37,10 @@ class LoginPanel extends BaseNode{
         this.inform_block = $('<div class="inform_block"></div>');
         this.login_btn = $('<button></button>');
 
-        // Event
         $('title').text('Login');
+
+        // Event
+
 
         this.login_btn.click(() => {
             let email = this.account_input.val();
