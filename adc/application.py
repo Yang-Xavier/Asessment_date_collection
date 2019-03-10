@@ -144,4 +144,4 @@ def send_401():
 app.register_blueprint(api, url_prefix="/api")
 
 if __name__ == '__main__':
-    app.run() # run the server.
+    app.run(port=8081) # run the server.
