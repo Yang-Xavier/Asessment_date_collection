@@ -6,12 +6,14 @@ application.py
 import enum
 
 from flask import Flask, Blueprint, jsonify, g
+from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from flask_httpauth import HTTPBasicAuth
 from passlib.apps import custom_app_context as pwd_context
 from itsdangerous import (TimedJSONWebSignatureSerializer as Serializer, BadSignature, SignatureExpired)
 
 app = Flask(__name__)
+CORS(app)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///../adc.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SECRET_KEY"] = "desidragons"
@@ -133,6 +135,11 @@ def get_resource():
 def get_auth_token():
     token = g.user.generate_auth_token()
     return jsonify({ 'token': token.decode('ascii') })
+
+@app.route('/api/401')
+@auth.login_required
+def send_401():
+    return "Not authorized", 401
 
 app.register_blueprint(api, url_prefix="/api")
 
