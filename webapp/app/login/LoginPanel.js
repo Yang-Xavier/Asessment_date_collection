@@ -1,10 +1,10 @@
 import $ from "jquery"
 import request from 'superagent'
+import {Base64} from 'js-base64'
 
 import BaseNode from "../util/BaseNode"
 import {add_animate} from "../util/node_util";
 import '../../style/login_panel.css'
-import jsSHA from '../lib/sha1'
 import {RQ_HOST} from '../util/constant'
 
 
@@ -45,6 +45,7 @@ class LoginPanel extends BaseNode{
         this.login_btn.click(() => {
             let email = this.account_input.val();
             let pwd =  this.pwd_input.val();
+            let authorization = "Basic " + Base64.encode(email+":"+pwd);
 
             if (email == '' || pwd == '') {
                 add_animate(this.container,'jello');
@@ -54,14 +55,14 @@ class LoginPanel extends BaseNode{
                 });
                 return
             }
-            pwd = this.hash_password(pwd);
 
             request
-                .post(RQ_HOST+'/api/login')
-                .type("json")
-                .send({'email': email, "password": pwd})
+                .get(RQ_HOST+'/api/token')
+                .set({'authorization': authorization})
                 .then(this.success_call.bind(this), this.error_call.bind(this))
-                .catch((e)=>{console.log(e)})
+                .catch((e)=>{
+                    console.log(e)
+                })
         });
     }
 
@@ -77,23 +78,8 @@ class LoginPanel extends BaseNode{
     success_call() {
         const remember_me = this.check_box.is(":checked");
         add_animate(this.container,'bounceOutUp');
-        this.inform_block.html("Please enter the email or password.");
-        this.inform_block.css({
-            'display' : 'block'
-        });
-        console.log("Login successfully!")
     };
 
-    hash_password(pwd) {
-        try {
-            const hashed_pwd = new jsSHA("SHA-1", "TEXT", {numRounds: 1});
-            hashed_pwd.update(pwd);
-            return hashed_pwd.getHash("HEX");
-        } catch (e) {
-            console.log(e.message);
-            return null
-        }
-    }
 
     before_render() {
         add_animate(this.container, 'bounceInDown');
