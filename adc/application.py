@@ -43,6 +43,7 @@ class AssessmentFormat(enum.Enum):
     ASSESSED_LAB = 5
     GROUP_PROJECT = 6
     PORTFOLIO = 7
+    PROBLEM_SHEET=8
 
 class User(db.Model):  
     __tablename__ = "user"
