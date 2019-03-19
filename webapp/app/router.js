@@ -1,14 +1,15 @@
-// import route from 'riot-route'
+
 import login_pane from './login/LoginPanel'
+import EditableForm from './module/EditableForm'
+
 import {mount} from './util/node_util'
-// import $ from 'jquery'
+
 
 const RouterList = {
     'base': "/app/",
     'index': "login",
     "route_config": {
         'login': () => {
-
             mount(new login_pane(), $("body"));
         },
         'admin': () => {
@@ -34,6 +35,9 @@ const RouterList = {
         },
         'default': () =>{
             console.log("404")
+        },
+        'test': () => {
+            mount(new EditableForm(), $("body"));
         }
     }
 

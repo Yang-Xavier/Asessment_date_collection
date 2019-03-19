@@ -1,6 +1,7 @@
 import $ from "jquery"
 import request from 'superagent'
 import {Base64} from 'js-base64'
+import Cookies from 'js-cookie'
 
 import BaseNode from "../util/BaseNode"
 import {add_animate} from "../util/node_util";
@@ -41,10 +42,9 @@ class LoginPanel extends BaseNode{
 
         // Event
 
-
         this.login_btn.click(() => {
-            let email = this.account_input.val();
-            let pwd =  this.pwd_input.val();
+            let email = 'user.2@sheffield.ac.uk';//this.account_input.val();
+            let pwd =  'password';//this.pwd_input.val();
             let authorization = "Basic " + Base64.encode(email+":"+pwd);
 
             if (email == '' || pwd == '') {
@@ -67,7 +67,7 @@ class LoginPanel extends BaseNode{
     }
 
 
-    error_call() {
+    error_call(msg) {
         add_animate(this.container,'shake');
         this.inform_block.html("Sorry, account or password is wrong.</br>Please try again.");
         this.inform_block.css({
@@ -75,8 +75,13 @@ class LoginPanel extends BaseNode{
         })
     };
 
-    success_call() {
+    success_call(msg) {
         const remember_me = this.check_box.is(":checked");
+        const json_data = JSON.parse(msg.text);
+        if(remember_me) {
+            Cookies.set("re", 1);
+        }
+        Cookies.set('token', json_data.token);
         add_animate(this.container,'bounceOutUp');
     };
 

@@ -2,7 +2,7 @@
 
 class BaseNode {
 
-    constructor(param) {
+    constructor() {
 
         // pre-process the data here and pass ot into state
 

@@ -2,9 +2,10 @@ import $ from 'jquery';
 import route from 'riot-route'
 import MyRouter from "./router"
 
-import 'bootstrap/dist/css/bootstrap.min.css'
+
 import '../style/base.css'
 import 'animate.css'
+import 'bootstrap/dist/css/bootstrap.min.css'
 
 // import './test/index'
 /*for test index*/
