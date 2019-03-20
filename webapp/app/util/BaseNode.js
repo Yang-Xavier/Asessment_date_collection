@@ -26,7 +26,7 @@ class BaseNode {
         // used to unmount the node
     }
 
-    update_state(state) {
+    set_state(state) {
         // update the state
         // this doesn't need to be overwrite
         this.state = Object.assign(this.state, state); // Update the state
