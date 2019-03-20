@@ -14,8 +14,9 @@ html,body,#root {
     justify-content: center;
 }
 
-input:focus, button:focus {
+input:focus, button:focus, select:focus {
     outline: none !important;
+    box-shadow: none !important;
 }
 button:hover, input[type=checkbox] {
     cursor: pointer;

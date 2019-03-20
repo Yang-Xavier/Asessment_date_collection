@@ -24,10 +24,7 @@
   line-height: 20px;
   color: #aaa;
   font-family: Arial, sans-serif;
-  -webkit-box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5);
-          box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5);
-  -webkit-box-sizing: initial;
-          box-sizing: initial;
+
 }
 
 .dp-clearfix {
@@ -38,8 +35,7 @@
 
 .date-picker-wrapper.inline-wrapper {
   position: relative;
-  -webkit-box-shadow: none;
-          box-shadow: none;
+
   display: inline-block;
 }
 
@@ -415,19 +411,13 @@
   position: absolute;
   margin-top: -4px;
   margin-left: -8px;
-  -webkit-box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
-          box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+
   display: none;
   background-color: yellow;
   padding: 0 6px;
   border-radius: 2px;
   font-size: 12px;
   line-height: 16px;
-  -webkit-filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.3));
-  -moz-filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.3));
-  -ms-filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.3));
-  -o-filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.3));
-  filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.3));
 }
 
 .date-picker-wrapper .date-range-length-tip:after {
