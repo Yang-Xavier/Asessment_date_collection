@@ -3,23 +3,29 @@ import $ from "jquery"
 import BaseNode from "../util/BaseNode"
 
 import {Form_Field_Title, ASM_Format_Options} from "../util/constant"
+import {add_animate} from "../util/node_util";
 
 class SingleField extends BaseNode{
     constructor(param) {
         /*
         * param = {
         *   editable:
-        *   inform:
+        *   inform:[]
+        *   removable:
+        *   title:
+        *   id:
+        *   remove_callback
         * }*/
-        super();
+        super(param);
 
-        this.setState({
+        this.set_state({
             "asm_format": "",
             "asm_name": "",
             "asm_per": "",
             "asm_release": "",
             "asm_due": ""
         });
+
 
         this.asm_format_field = (() => {
             const group = $("<div class='form-group'></div>");
@@ -78,15 +84,46 @@ class SingleField extends BaseNode{
             return group
         })();
 
-        this.container = $('<div></div>');
+        this.divided_line = $("<div class='divide_line'>"+ this.state["title"] +"</div>");
+        this.remove_block = $("<div class='remove_block '><i class='fas fa-times-circle'/></div>");
+
+        this.left_block = $('<div class="left"></div>');
+        this.right_block = $('<div class="right"></div>');
+
+        this.container = $('<div class="form_field"></div>');
+
+
+        this.remove_block.on('click', () => {this.remove()});
+        this.container.on('mouseenter', () => {this.remove_block.css({"display": "block"});});
+        this.container.on('mouseleave', () => {this.remove_block.css({"display": "none"});});
+        this.remove_block.on('mouseenter', () => {this.container.css({"background": "#eee"});});
+        this.remove_block.on('mouseleave', () => {this.container.css({"background": "none"});});
 
     }
 
+    remove() {
+        this.container.remove();
+        this.state["remove_callback"](this.state["id"]);
+    }
+
     render() {
-        this.container.append(this.asm_format_field);
-        this.container.append(this.asm_name_field);
-        this.container.append(this.asm_per_field);
-        this.container.append(this.asm_period_field);
+        if (this.state["title"]){
+            this.left_block.append(this.divided_line);
+        }
+
+        this.left_block.append(this.asm_format_field);
+        this.left_block.append(this.asm_name_field);
+        this.left_block.append(this.asm_per_field);
+        this.left_block.append(this.asm_period_field);
+
+        if(this.state["removable"]) {
+            this.right_block.append(this.remove_block);
+        }
+
+        this.container.append(this.left_block);
+        this.container.append(this.right_block);
+
+        return this.container;
     }
 
 

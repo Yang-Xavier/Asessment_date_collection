@@ -2,11 +2,11 @@
 
 class BaseNode {
 
-    constructor() {
+    constructor(param) {
 
         // pre-process the data here and pass ot into state
 
-        this.state = {};  // Used to store the state of the node e.g. text or child node
+        this.state = param;  // Used to store the state of the node e.g. text or child node
 
         // In this part, only create the node, no operation e.g. pass value
     }
@@ -30,7 +30,7 @@ class BaseNode {
         // update the state
         // this doesn't need to be overwrite
         this.state = Object.assign(this.state, state); // Update the state
-        this.update_node();
+        this.update();
     }
 
     update() {

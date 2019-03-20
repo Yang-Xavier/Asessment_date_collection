@@ -1,11 +1,11 @@
 .form_container {
     width: 100%;
     height: 100%;
-    padding: 50px 150px 100px 150px;
     display: block;
     overflow: scroll;
 }
 .form_container .header {
+    padding: 5% 6% 0 6%;
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -43,6 +43,7 @@
 .form_container .btn_block {
     display: flex;
     flex-direction: row-reverse;
+    padding: 1% 17% 1% 0;
 }
 
 
@@ -53,3 +54,48 @@
 .form_container .submit_btn {
     margin: 0 0 0 10px;
 }
+
+.form_container .form_field {
+    display: flex;
+    flex-direction: row;
+    padding: 1% 10% 1% 20%;
+}
+
+
+.form_container .form_field .left {
+    width: 90%;
+}
+
+.form_container .form_field .right{
+    width: 10%;
+    display: flex;
+    padding: 1% 1% 1% 1%;
+    justify-content: center;
+    justify-items: center;
+    align-content: center;
+    align-items: center;
+}
+
+
+.form_container .form_field .right .remove_block{
+    width: 2em;
+    height: 2em;
+    display: none;
+    animation-duration: 0.5s;
+    margin-top: 50px;
+}
+
+.form_container .form_field .right .remove_block:hover {
+    cursor: pointer;
+    color: red;
+}
+
+.form_container .form_field .right .remove_block svg {
+    width: inherit;
+    height: inherit;
+}
+
+.form_container .form_field .right .remove_block.animated {
+
+}
+

@@ -51,6 +51,7 @@ module.exports = {
     plugins: [
         new ExtractTextPlugin('[name].css'),
         new htmlWebpackPlugin({
+            template: './template/template.html',
             title: 'Module Deliver App',
             filename: 'index.html'
         }),
