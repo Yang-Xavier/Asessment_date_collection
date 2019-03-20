@@ -55,7 +55,7 @@ class EditableForm extends BaseNode{
         this.state["form_fields"].push(new_field);
         this.state["field_counter"]++;
 
-        this.submit_btn.on('click', ()=>{});
+        this.submit_btn.on('click', ()=>{this.check()});
         this.add_more_btn.on('click', ()=>{this.add_more()});
 
     }
@@ -79,7 +79,9 @@ class EditableForm extends BaseNode{
     }
 
     check() {
-
+        for(let i in this.state['form_fields']) {
+            console.log(this.state['form_fields'][i].state['asm_per'])
+        }
     }
 
     submit() {

@@ -3,6 +3,8 @@ import $ from "jquery"
 import BaseNode from "../util/BaseNode"
 
 import {Form_Field_Title, ASM_Format_Options} from "../util/constant"
+import '../lib/TimePicker'
+
 import {add_animate} from "../util/node_util";
 
 class SingleField extends BaseNode{
@@ -63,7 +65,7 @@ class SingleField extends BaseNode{
             const field = $("<input class='form-control'  type='number'/>");
 
             field.on('change',() => {
-                this.state.forms[assessment_count]["asm_per"] = field.val()
+                this.state["asm_per"] = field.val()
             });
 
             label.text(Form_Field_Title["asm_per"]);
@@ -78,6 +80,8 @@ class SingleField extends BaseNode{
             const field = $("<input class='form-control' />");
 
             label.text(Form_Field_Title["asm_period"]);
+
+            field.dateRangePicker();
 
             group.append(label);
             group.append(field);
