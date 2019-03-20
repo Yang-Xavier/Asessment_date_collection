@@ -10,7 +10,7 @@ const RouterList = {
     'index': "login",
     "route_config": {
         'login': () => {
-            mount(new login_pane(), $("body"));
+            mount(new login_pane(), $("#root"));
         },
         'admin': () => {
 
@@ -37,7 +37,7 @@ const RouterList = {
             console.log("404")
         },
         'test': () => {
-            mount(new EditableForm(), $("body"));
+            mount(new EditableForm(), $("#root"));
         }
     }
 

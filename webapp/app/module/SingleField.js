@@ -25,7 +25,7 @@ class SingleField extends BaseNode{
             "asm_name": "",
             "asm_per": "",
             "asm_release": "",
-            "asm_due": ""
+            "asm_due": {}
         });
 
 
@@ -81,7 +81,25 @@ class SingleField extends BaseNode{
 
             label.text(Form_Field_Title["asm_period"]);
 
-            field.dateRangePicker();
+            field
+                .dateRangePicker({
+                format: 'MM/DD/YYYY',
+                separator: '   to   ',})
+                .bind('datepicker-change',(event,obj) => {
+                    this.state["asm_due"] = {
+                        "release": {
+                            "day": obj["date1"].getDate(),
+                            "month": obj["date1"].getMonth()+1,
+                            "year": obj["date1"].getFullYear(),
+                        },
+                        "due": {
+                            "day": obj["date2"].getDate(),
+                            "month": obj["date2"].getMonth()+1,
+                            "year": obj["date2"].getFullYear(),
+                        }
+                    };
+                    
+                });
 
             group.append(label);
             group.append(field);
@@ -106,8 +124,10 @@ class SingleField extends BaseNode{
     }
 
     remove() {
-        this.container.remove();
+
         this.state["remove_callback"](this.state["id"]);
+        this.asm_period_field.find('input').data('dateRangePicker').destroy();
+        this.container.remove();
     }
 
     render() {

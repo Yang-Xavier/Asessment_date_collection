@@ -1,4 +1,5 @@
 import moment from 'moment'
+import '../../style/daterangepicker.css'
 
 (function($, moment) {
     'use strict';
@@ -1033,7 +1034,7 @@ import moment from 'moment'
 
             box = createDom().hide();
             box.append('<div class="date-range-length-tip"></div>');
-            console.log($(opt.container).html());
+
             $(opt.container).append(box);
 
             if (!opt.inline) {
