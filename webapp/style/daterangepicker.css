@@ -22,7 +22,7 @@
   padding: 5px 12px;
   font-size: 12px;
   line-height: 20px;
-  color: #aaa;
+  color: #333;
   font-family: Arial, sans-serif;
 
 }
@@ -337,9 +337,9 @@
   cursor: pointer;
   color: #d9eef7;
   border: solid 1px #0076a3;
-  background: #0095cd;
-  background: -moz-linear-gradient(top, #00adee, #0078a5);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00adee', endColorstr='#0078a5');
+  background: #007bff;
+  /*background: -moz-linear-gradient(top, #007bff, #007bff);*/
+  /*filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00adee', endColorstr='#0078a5');*/
   color: white;
   line-height: initial;
 }
