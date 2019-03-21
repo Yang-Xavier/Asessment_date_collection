@@ -21,7 +21,9 @@ class EditableForm extends BaseNode{
         // states
         this.set_state({
             form_fields:[],
+            form_data:[],
             field_counter: 0
+
         });
 
 
@@ -56,6 +58,7 @@ class EditableForm extends BaseNode{
         this.state["field_counter"]++;
 
         this.submit_btn.on('click', ()=>{this.check()});
+        this.submit_btn.on('click', ()=>{this.submit()});
         this.add_more_btn.on('click', ()=>{this.add_more()});
 
     }
@@ -79,12 +82,46 @@ class EditableForm extends BaseNode{
     }
 
     check() {
+        let per = 0;
+        // for(let i in this.state['form_fields']) {
+        //     console.log(this.state['form_fields'][i].state['asm_per'])
+        // }
         for(let i in this.state['form_fields']) {
-            console.log(this.state['form_fields'][i].state['asm_per'])
+            if(this.state['form_fields'][i].state['asm_per'] == ""){
+                alert("Please submit the percentage")
+                return
+            }
+            per += parseInt(this.state['form_fields'][i].state['asm_per'])
         }
+        if(per == "100"){
+            alert("Save Successfully!")
+        }
+        else {
+            //document.getElementById("border").style.border = "border:solid 1px red";
+            alert("The total percentage should equal to 100%")
+
+        }
+      //  console.log(per)
+
     }
 
     submit() {
+        for(let i in this.state['form_fields']) {
+            console.log(this.state['form_fields'][i].state['asm_due'])
+        }
+
+        for (let i in this.state['form_fields']) {
+            let item ="\"asm_format\": \"\",\n" +
+                "    \"asm_name\": \"\",\n" +
+                "    \"asm_per\": \"\",\n" +
+                "    \"asm_release\": \"\",\n" +
+                "    \"asm_due\": { \"release\": {\"day\": 1, \"month\": 2, \"year\": 2019},\n" +
+                "                    \"due\": {\"day\": 1, \"month\": 2, \"year\": 2019}"
+
+
+            this.state['form_data'][i]=item;
+            console.log(this.state['form_data'][i])
+        }
 
     }
 

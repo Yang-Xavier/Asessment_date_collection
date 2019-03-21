@@ -1,0 +1,48 @@
+.home_page{
+    width: 100%;
+    height: 100%;
+    background: var(--light);
+
+}
+
+.home_page .container_block {
+    width: 100%;
+    height: 100px;
+    margin-top: 0;
+    background: var(--white);
+    /* border-radius: 10px; */
+    box-shadow: 1px 1px 3px var(--gray);
+    /* padding: 50px 0 0 0; */
+    display: flex;
+    flex-direction: row;
+}
+
+.home_page.container_block.panel {
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: row;
+}
+.home_page .navbar .logo {
+    height: 80px;
+    width: 200px;
+    margin-left: auto;
+    background: url("https://www.sheffield.ac.uk/polopoly_fs/15.375.1548777706!/assets/images/uos-crest.svg") 5px center no-repeat #FFF;
+}
+
+.home_page .side_bar{
+    background-color: black;
+}
+/*ul{*/
+    /*display: flex;*/
+    /*align-content: center;*/
+    /*margin: 10px;*/
+/*}*/
+
+/*li{*/
+    /*list-style-type: none;*/
+    /*width:100px;*/
+    /*background: pink;*/
+    /*margin:10px;*/
+    /*text-align: center;*/
+/*}*/
+

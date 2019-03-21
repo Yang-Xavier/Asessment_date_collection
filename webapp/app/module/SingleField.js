@@ -83,8 +83,8 @@ class SingleField extends BaseNode{
 
             field
                 .dateRangePicker({
-                format: 'MM/DD/YYYY',
-                separator: '   to   ',})
+                    format: 'MM/DD/YYYY',
+                    separator: '   to   ',})
                 .bind('datepicker-change',(event,obj) => {
                     this.state["asm_due"] = {
                             "day": obj["date2"].getDate(),
@@ -96,7 +96,7 @@ class SingleField extends BaseNode{
                         "month": obj["date1"].getMonth()+1,
                         "year": obj["date1"].getFullYear(),
                     };
-                    
+
                 });
 
             group.append(label);

@@ -3,6 +3,7 @@ import login_pane from './login/LoginPanel'
 import EditableForm from './module/EditableForm'
 
 import {mount} from './util/node_util'
+import YearTutor from "./login/YearTutor";
 
 
 const RouterList = {
@@ -13,13 +14,13 @@ const RouterList = {
             mount(new login_pane(), $("#root"));
         },
         'admin': () => {
-
+            mount(new LTM(), $("#root"));
         },
         'academic': () => {
-
+            mount(new academics(), $("#root"));
         },
         'tutor': () => {
-
+            mount(new YearTutor(), $("#root"));
         },
         'visualisation/*..': (graph_type)=>{
             // switch (graph_type) {
