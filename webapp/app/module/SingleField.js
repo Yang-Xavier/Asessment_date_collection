@@ -87,16 +87,14 @@ class SingleField extends BaseNode{
                 separator: '   to   ',})
                 .bind('datepicker-change',(event,obj) => {
                     this.state["asm_due"] = {
-                        "release": {
-                            "day": obj["date1"].getDate(),
-                            "month": obj["date1"].getMonth()+1,
-                            "year": obj["date1"].getFullYear(),
-                        },
-                        "due": {
                             "day": obj["date2"].getDate(),
                             "month": obj["date2"].getMonth()+1,
                             "year": obj["date2"].getFullYear(),
-                        }
+                    };
+                    this.state["asm_release"] = {
+                        "day": obj["date1"].getDate(),
+                        "month": obj["date1"].getMonth()+1,
+                        "year": obj["date1"].getFullYear(),
                     };
                     
                 });
