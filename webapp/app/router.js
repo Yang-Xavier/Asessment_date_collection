@@ -3,6 +3,7 @@ import login_pane from './login/LoginPanel'
 import Header from './homepage/Header'
 import AcademicPage from './homepage/AcademicPage'
 import {mount} from './util/node_util'
+import YearTutor from "./login/YearTutor";
 
 
 import YearTutor from "./login/YearTutor";
