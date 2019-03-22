@@ -3,7 +3,12 @@
     height: 100%;
     display: block;
     overflow: scroll;
+
 }
+.form_container input.animated {
+    animation-duration: 0.3s ;
+}
+
 .form_container .header {
     padding: 5% 6% 0 6%;
     display: flex;

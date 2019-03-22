@@ -21,7 +21,7 @@ class SingleField extends BaseNode{
         super(param);
 
         this.set_state({
-            "asm_format": "",
+            "asm_format": ASM_Format_Options[0],
             "asm_name": "",
             "asm_per": "",
             "asm_release": "",
@@ -39,6 +39,9 @@ class SingleField extends BaseNode{
             }
 
             label.text(Form_Field_Title["asm_format"]);
+            field.on('change', (e) => {
+                this.state["asm_format"] = field.val()
+            })
 
             group.append(label);
             group.append(field);

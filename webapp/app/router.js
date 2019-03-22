@@ -3,10 +3,11 @@ import login_pane from './login/LoginPanel'
 import Header from './homepage/Header'
 import AcademicPage from './homepage/AcademicPage'
 import {mount} from './util/node_util'
-import YearTutor from "./login/YearTutor";
+// import YearTutor from "./login/YearTutor";
 
 
 import YearTutor from "./login/YearTutor";
+import EditableForm from "./module/EditableForm";
 
 
 const RouterList = {
@@ -17,13 +18,13 @@ const RouterList = {
             mount(new login_pane(), $("#root"));
         },
         'admin': () => {
-            mount(new LTM(), $("#root"));
+            // mount(new LTM(), $("#root"));
         },
         'academic': () => {
             mount(new AcademicPage(), $("#root"));
         },
         'tutor': () => {
-            mount(new YearTutor(), $("#root"));
+            // mount(new YearTutor(), $("#root"));
         },
         'visualisation/*..': (graph_type)=>{
             // switch (graph_type) {
@@ -41,7 +42,11 @@ const RouterList = {
             console.log("404")
         },
         'test': () => {
-            mount(new Header({user_type:'test', user_name: 'Test'}), $("#root"));
+            mount(new EditableForm({
+                    "form_name": "Form Name",
+                    "username": "Use Name",
+                    "module_code": "COM6666",
+                }), $("#root"));
         }
     }
 

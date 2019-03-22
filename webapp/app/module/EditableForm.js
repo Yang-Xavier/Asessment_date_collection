@@ -4,17 +4,18 @@ import '../../style/form_style.css'
 import SingleField from './SingleField'
 
 import BaseNode from "../util/BaseNode"
+import {add_animate} from '../util/node_util'
 
 /*
 * Based on bootstrap*/
 class EditableForm extends BaseNode{
     constructor(param) {
         // param e.g.
-        param = {
-            "form_name": "Form Name",
-            "username": "Use Name",
-            "module_code": "COM6666",
-        };
+        // param = {
+        //     "form_name": "Form Name",
+        //     "username": "Use Name",
+        //     "module_code": "COM6666",
+        // };
 
         super(param);
 
@@ -85,7 +86,8 @@ class EditableForm extends BaseNode{
 
         for(let i in this.state['form_fields']) {
             if(this.state['form_fields'][i].state['asm_name'] == ""){
-                this.state['form_fields'][i].asm_name_field.find('input').css({"border": "1px solid red"})
+                this.state['form_fields'][i].asm_name_field.find('input').css({"border": "1px solid red"});
+                add_animate(this.state['form_fields'][i].asm_name_field.find('input'),'shake')
                 alert("Please submit the name");
                 return
             }
@@ -95,8 +97,9 @@ class EditableForm extends BaseNode{
 
             per += parseInt(this.state['form_fields'][i].state['asm_per']);
             if(this.state['form_fields'][i].state['asm_per'] == ""){
-                this.state['form_fields'][i].asm_per_field.find('input').css({"border": "1px solid red"})
+                this.state['form_fields'][i].asm_per_field.find('input').css({"border": "1px solid red"});
                 alert("Please submit the percentage");
+                add_animate(this.state['form_fields'][i].asm_per_field.find('input'),'shake')
                 return
             }
             else if(per==100){
@@ -105,6 +108,7 @@ class EditableForm extends BaseNode{
             else {
                 for(let i in this.state['form_fields']) {
                     this.state['form_fields'][i].asm_per_field.find('input').css({"border": "1px solid red"})
+                    add_animate(this.state['form_fields'][i].asm_per_field.find('input'),'shake')
                 }
                 alert("The total percentage should equal to 100%");
                 return
@@ -113,6 +117,7 @@ class EditableForm extends BaseNode{
             if(this.state['form_fields'][i].state['asm_release'] == ""){
                 this.state['form_fields'][i].asm_period_field.find('input').css({"border": "1px solid red"})
                 alert("Please submit the peroid");
+                add_animate(this.state['form_fields'][i].asm_period_field.find('input'),'shake')
                 return
             }
             else{
@@ -120,7 +125,7 @@ class EditableForm extends BaseNode{
             }
 
         }
-        alert("Save Successfully!");
+
         return true
     }
 
