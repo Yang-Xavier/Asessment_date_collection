@@ -70,6 +70,7 @@
 
 .home_page .header_bar div{
     padding: 0 20px 0 20px;
+    font-family: 'Playfair Display', cursive;
 }
 
 .home_page .header_bar .log_out_btn {
@@ -176,12 +177,12 @@
 
 .home_page .content .nav_bar .menu {
     width: 100%;
+    padding: 10px 0 10px 0;
 }
 
 .home_page .content .nav_bar .menu_title {
     height: 30px;
     font-size: 1rem;
-    margin-top: 10px;
     padding-left: 20px;
     display: flex;
     align-items: center;
@@ -222,5 +223,5 @@
 .home_page .content .nav_bar .menu_item:hover {
     background: #f1f3f4;
     color: #202124;
-    box-shadow: 1px 2px 2px #999;
+    z-index: 0;
 }

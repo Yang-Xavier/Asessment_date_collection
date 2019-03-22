@@ -42,11 +42,7 @@ const RouterList = {
             console.log("404")
         },
         'test': () => {
-            mount(new EditableForm({
-                    "form_name": "Form Name",
-                    "username": "Use Name",
-                    "module_code": "COM6666",
-                }), $("#root"));
+            mount(new AcademicPage(), $("#root"));
         }
     }
 

@@ -56,7 +56,8 @@ class MenuItem extends BaseNode{
             this.container.css({
                 "color" : '#2874A6',
                 "background": '#D6EAF8',
-                "box-shadow": "1px 2px 2px #999"
+                "box-shadow": "1px 2px 2px #999",
+                "z-index": 10
             })
         } else {
             this.container.attr('style', '');
