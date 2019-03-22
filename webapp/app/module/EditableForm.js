@@ -57,8 +57,7 @@ class EditableForm extends BaseNode{
         this.state["form_fields"].push(new_field);
         this.state["field_counter"]++;
 
-        this.submit_btn.on('click', ()=>{this.check()});
-        this.submit_btn.on('click', ()=>{this.submit()});
+        this.submit_btn.on('click', ()=>{this.save()});
         this.add_more_btn.on('click', ()=>{this.add_more()});
 
     }
@@ -83,46 +82,71 @@ class EditableForm extends BaseNode{
 
     check() {
         let per = 0;
-        // for(let i in this.state['form_fields']) {
-        //     console.log(this.state['form_fields'][i].state['asm_per'])
-        // }
+
         for(let i in this.state['form_fields']) {
-            if(this.state['form_fields'][i].state['asm_per'] == ""){
-                alert("Please submit the percentage")
+            if(this.state['form_fields'][i].state['asm_name'] == ""){
+                this.state['form_fields'][i].asm_name_field.find('input').css({"border": "1px solid red"})
+                alert("Please submit the name");
                 return
             }
-            per += parseInt(this.state['form_fields'][i].state['asm_per'])
-        }
-        if(per == "100"){
-            alert("Save Successfully!")
-        }
-        else {
-            //document.getElementById("border").style.border = "border:solid 1px red";
-            alert("The total percentage should equal to 100%")
+            else{
+                this.state['form_fields'][i].asm_name_field.find('input').css({"border": "1px solid #ced4da"})
+            }
+
+            per += parseInt(this.state['form_fields'][i].state['asm_per']);
+            if(this.state['form_fields'][i].state['asm_per'] == ""){
+                this.state['form_fields'][i].asm_per_field.find('input').css({"border": "1px solid red"})
+                alert("Please submit the percentage");
+                return
+            }
+            else if(per==100){
+                this.state['form_fields'][i].asm_per_field.find('input').css({"border": "1px solid #ced4da"})
+            }
+            else {
+                for(let i in this.state['form_fields']) {
+                    this.state['form_fields'][i].asm_per_field.find('input').css({"border": "1px solid red"})
+                }
+                alert("The total percentage should equal to 100%");
+                return
+            }
+
+            if(this.state['form_fields'][i].state['asm_release'] == ""){
+                this.state['form_fields'][i].asm_period_field.find('input').css({"border": "1px solid red"})
+                alert("Please submit the peroid");
+                return
+            }
+            else{
+                this.state['form_fields'][i].asm_period_field.find('input').css({"border": "1px solid #ced4da"})
+            }
 
         }
-      //  console.log(per)
-
+        alert("Save Successfully!");
+        return true
     }
 
+    save(){
+        if(this.check() == true){
+            this.submit()
+        }
+        else{
+            console.log("Not submit")
+        }
+    }
     submit() {
+
+        const items = []
         for(let i in this.state['form_fields']) {
-            console.log(this.state['form_fields'][i].state['asm_due'])
+            //console.log(this.state['form_fields'][i].state['asm_due'])
+            const item ={}
+            item['asm_format'] =  this.state['form_fields'][i].state['asm_format']
+            item['asm_name'] =this.state['form_fields'][i].state['asm_name']
+            item['asm_per'] =this.state['form_fields'][i].state['asm_per']
+            item['asm_release'] =this.state['form_fields'][i].state['asm_release']
+            item['asm_due'] =this.state['form_fields'][i].state['asm_due']
+            items.push(item)
+            //console.log()
         }
-
-        for (let i in this.state['form_fields']) {
-            let item ="\"asm_format\": \"\",\n" +
-                "    \"asm_name\": \"\",\n" +
-                "    \"asm_per\": \"\",\n" +
-                "    \"asm_release\": \"\",\n" +
-                "    \"asm_due\": { \"release\": {\"day\": 1, \"month\": 2, \"year\": 2019},\n" +
-                "                    \"due\": {\"day\": 1, \"month\": 2, \"year\": 2019}"
-
-
-            this.state['form_data'][i]=item;
-            console.log(this.state['form_data'][i])
-        }
-
+        console.log(items)
     }
 
     render() {
