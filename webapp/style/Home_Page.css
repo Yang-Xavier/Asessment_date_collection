@@ -46,3 +46,182 @@
     /*text-align: center;*/
 /*}*/
 
+
+/******************************************************************/
+.home_page {
+    display: flex;
+    flex-direction: column;
+    justify-items: stretch;
+}
+
+.home_page .header_bar {
+    width: 100%;
+    height: 80px;
+    line-height: 80px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background: #fff;
+    font-size: larger;
+    font-family: Arial, sans-serif;
+    align-items: center;
+    border-bottom: 1px solid #ccc;
+}
+
+.home_page .header_bar div{
+    padding: 0 20px 0 20px;
+}
+
+.home_page .header_bar .log_out_btn {
+    display: flex;
+    width: 150px;
+    flex-direction: row;
+    justify-content: space-around;
+    justify-items: center;
+    align-items: center;
+}
+
+
+
+.home_page .header_bar .log_out_btn svg {
+    width: 25px;
+    height: 25px;
+    color: var(--gray-dark);
+}
+
+.home_page .header_bar .log_out_btn svg:hover {
+    cursor: pointer;
+    color: var(--red);
+}
+
+.home_page .header_bar .logo {
+    width: 180px;
+    height: 60px;
+    display: flex;
+    align-content: center;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-around;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    margin-left: 20px;
+}
+
+.home_page .header_bar .logo i{
+    width: 100px;
+    height: 60px;
+    background: url("https://www.sheffield.ac.uk/polopoly_fs/15.375.1548777706!/assets/images/uos-crest.svg") -10px center no-repeat transparent;
+    background-size: 130px 60px;
+}
+
+.home_page .header_bar .logo .profile {
+    width: 35px;
+    height: 35px;
+    padding: 0;
+    position: relative;
+}
+
+.home_page .header_bar .logo .profile img {
+    width: 35px;
+    height: 35px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 50%;
+    z-index: 0;
+}
+.home_page .header_bar .logo .profile .role {
+    width: 15px;
+    height: 15px;
+    position: absolute;
+    bottom: -5px;
+    right: -15px;
+    z-index: 1;
+    border-radius: 50%;
+    opacity: 0;
+}
+.home_page .header_bar .logo .profile .role:hover {
+    cursor: help;
+}
+
+.home_page .header_bar .logo:hover .profile .role {
+    opacity: 1;
+}
+
+.home_page .header_bar .logo .profile .role.default {
+    color: #777;
+}
+
+.home_page .header_bar .logo .profile .role.ltm {
+    color: #CB4335;
+}
+
+.home_page .header_bar .logo .profile .role.tutor {
+    color: #2471A3;
+}
+
+.home_page .content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+}
+.home_page .content .nav_bar {
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+}
+
+.home_page .content .nav_bar .menu {
+    width: 100%;
+}
+
+.home_page .content .nav_bar .menu_title {
+    height: 30px;
+    font-size: 1rem;
+    margin-top: 10px;
+    padding-left: 20px;
+    display: flex;
+    align-items: center;
+
+}
+.home_page .content .nav_bar .menu_title svg{
+    width: 20px;
+    height: 20px;
+}
+
+.home_page .content .nav_bar .menu_item {
+    padding-left: 20px;
+    height: 30px;
+    line-height: 40px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    border-radius: 0 20px 20px 0;
+    color: #767676;
+
+}
+.home_page .content .nav_bar  svg {
+    width: 20px;
+    height: 20px;
+
+}
+.home_page .content .nav_bar  span ,
+.home_page .content .nav_bar  span {
+    padding: 0 0 0 30px;
+
+}
+
+.home_page .content .nav_bar .items_container:hover {
+    cursor: pointer;
+
+}
+
+.home_page .content .nav_bar .menu_item:hover {
+    background: #f1f3f4;
+    color: #202124;
+    box-shadow: 1px 2px 2px #999;
+}
+

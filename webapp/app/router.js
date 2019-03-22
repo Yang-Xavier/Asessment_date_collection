@@ -1,8 +1,10 @@
 
 import login_pane from './login/LoginPanel'
-import EditableForm from './module/EditableForm'
-
+import Header from './homepage/Header'
+import AcademicPage from './homepage/AcademicPage'
 import {mount} from './util/node_util'
+
+
 import YearTutor from "./login/YearTutor";
 
 
@@ -17,7 +19,7 @@ const RouterList = {
             mount(new LTM(), $("#root"));
         },
         'academic': () => {
-            mount(new academics(), $("#root"));
+            mount(new AcademicPage(), $("#root"));
         },
         'tutor': () => {
             mount(new YearTutor(), $("#root"));
@@ -38,7 +40,7 @@ const RouterList = {
             console.log("404")
         },
         'test': () => {
-            mount(new EditableForm(), $("#root"));
+            mount(new Header({user_type:'test', user_name: 'Test'}), $("#root"));
         }
     }
 

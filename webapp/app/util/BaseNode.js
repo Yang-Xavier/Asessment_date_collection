@@ -6,7 +6,7 @@ class BaseNode {
 
         // pre-process the data here and pass ot into state
 
-        this.state = param;  // Used to store the state of the node e.g. text or child node
+        this.state = param || {};  // Used to store the state of the node e.g. text or child node
 
         // In this part, only create the node, no operation e.g. pass value
     }
