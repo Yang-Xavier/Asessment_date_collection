@@ -5,7 +5,7 @@ application.py
 
 import enum
 
-from flask import Flask, Blueprint, jsonify, g
+from flask import Flask, Blueprint, jsonify, g, request
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from flask_httpauth import HTTPBasicAuth
@@ -45,12 +45,23 @@ class AssessmentFormat(enum.Enum):
     PORTFOLIO = 7
     PROBLEM_SHEET=8
 
+class FormState(enum.Enum):
+    CREATED = 1
+    WAITING = 2
+    DONE = 3
+
+# ---------------- Association tables -------------------- #
+
+student_module_table = db.Table("student_to_module",
+        db.Column("student_id", db.Integer, db.ForeignKey("student.id"), primary_key=True),
+        db.Column("module_id", db.Integer, db.ForeignKey("module.id"), primary_key=True))
+
 class User(db.Model):  
     __tablename__ = "user"
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), nullable=False)
-    usertype = db.Column(db.Enum(UserType))
+    usertype = db.Column(db.Enum(UserType), nullable=False)
     email = db.Column(db.String(80), unique=True, nullable=False)
     password_hash = db.Column(db.String(128), nullable=False, default="$6$rounds=656000$Mekxk00d5L5we4/3$CwY2NGNDHX1Yt6khinGYUJm/I5s2.3bmjgMLmmsRIVzowR.LWPqIF2KrauyfjuzyWD2MrPToRVNHxYCZAPsFf1")
 
@@ -88,15 +99,22 @@ class Module(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     code = db.Column(db.String(10), unique=True, nullable=False)
     name = db.Column(db.String(80), nullable=False)
-    semester = db.Column(db.Enum(Semester))
-    academic = db.Column(db.Integer, db.ForeignKey('user.id'))
+    semester = db.Column(db.Enum(Semester), nullable=False)
+    academic = db.Column(db.Integer, db.ForeignKey('user.id')) # foreign key.
+    assessments = db.relationship('Assessment', backref='module', lazy=True) # one to many.
+    students = db.relationship(
+            "Student",
+            secondary=student_module_table,
+            back_populates="modules") # many to many.
 
     def to_dict(self):
         return dict(id=self.id,
                     code=self.code,
                     name=self.name,
-                    semester=self.semester,
-                    academic=self.academic)
+                    semester=str(self.semester),
+                    academic=self.academic,
+                    assessments=[a.to_dict() for a in self.assessments],
+                    students=self.students)
 
 class Assessment(db.Model):
     __tablename__ = "assessment"
@@ -107,8 +125,52 @@ class Assessment(db.Model):
     marks = db.Column(db.Float, nullable=False)
     release_date = db.Column(db.DateTime, nullable=False)
     submission_date = db.Column(db.DateTime, nullable=False)
-    module_id = db.Column(db.Integer, db.ForeignKey('module.id'))
-    module = db.relationship("Module", backref=db.backref("assessments", lazy=True))
+    module_id = db.Column(db.Integer, db.ForeignKey('module.id'), nullable=False) # foreign key.
+
+    def to_dict(self):
+        return dict(id=self.id,
+                    format=str(self.format),
+                    name=self.name,
+                    marks=self.marks,
+                    release_date=self.release_date,
+                    submission_date=self.submission_date,
+                    module_id=self.module_id)
+
+class Student(db.Model):
+    __tablename__ = "student"
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(80), nullable=False)
+    modules = db.relationship(
+            "Module",
+            secondary=student_module_table,
+            back_populates="students") # many to many.
+
+class Entry(db.Model):
+    __tablename__ = "entry"
+
+    id = db.Column(db.Integer, primary_key=True)
+    module_id = db.Column(db.Integer, db.ForeignKey('module.id'), nullable=False) # foreign key.
+    is_filled = db.Column(db.Boolean)
+
+    def to_dict(self):
+        return dict(id=self.id,
+                    module_id=self.module_id,
+                    is_filled=self.is_filled)
+
+class Form(db.Model):
+    __tablename__ = "form"
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(80), nullable=False)
+    state = db.Column(db.Enum(Semester), nullable=False)
+    entries = db.relationship('Entry', backref='form', lazy=True) # one to many.
+
+    def to_dict(self):
+        return dict(id=self.id,
+                    format=str(self.format),
+                    name=self.name,
+                    entries=[e.to_dict() for e in self.entries])
 
 # ---------------- Other -------------------- #
 
@@ -141,6 +203,42 @@ def get_auth_token():
 @auth.login_required
 def send_401():
     return "Not authorized", 401
+
+@app.route('/api/module/', methods=['GET'])
+@auth.login_required
+def get_module():
+    modules = []
+    for module in Module.query.all():
+        if module.academic == g.user.id:
+            modules.append(module.to_dict())
+    return jsonify({"modules":modules})
+
+@app.route('/api/form', methods=['POST'])
+@auth.login_required
+def create_form():
+    pass
+
+@app.route('/api/form', methods=['GET'])
+@auth.login_required
+def get_form():
+    all_forms = Form.query.all()
+
+    # return complete forms for LTM.
+    if g.user.usertype == UserType.LTM:
+        return jsonify({"forms":all_forms})
+
+    # return forms with only module entries for academic.
+    if g.user.usertype == UserType.ACADEMIC:
+        for form in all_forms:
+            entries = []
+            for entry in form.entries:
+                module = Module.query.filter_by(entry.module_id)
+                if not module or len(module) != 1:
+                    return jsonify({"error":"Invalid module ID in form entry"})
+                if module.academic == g.user.id:
+                    entries.append(entry)
+            form.entries = entries
+    return jsonify({"forms":all_forms})
 
 app.register_blueprint(api, url_prefix="/api")
 
