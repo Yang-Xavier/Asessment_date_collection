@@ -3,6 +3,8 @@ import route from 'riot-route'
 import login_pane from './login/LoginPanel'
 import Header from './homepage/Header'
 import AcademicPage from './homepage/AcademicPage'
+import TutorPage from './homepage/TutorPage'
+import AdminPAge from './homepage/AdminPage'
 import {mount} from './util/node_util'
 // import YearTutor from "./login/YearTutor";
 
@@ -14,7 +16,7 @@ import EditableForm from "./module/EditableForm";
 
 
 let home_page;
-let academic_page = new AcademicPage();
+
 // const tutor_page = new
 
 
@@ -27,9 +29,17 @@ const RouterList = {
             mount(new login_pane({
                 "callback": (users) => {
                     const user_type = users['user_type'];
+                    console.log(user_type)
                     switch (user_type) {
                         case "academic":
+
                             home_page = new AcademicPage();
+                            break;
+                        case "ltm":
+                            home_page = new AdminPAge();
+                            break;
+                        case "tutor":
+                            home_page = new TutorPage();
                             break
                     }
                     route("home")
