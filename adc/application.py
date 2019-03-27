@@ -150,8 +150,9 @@ class Entry(db.Model):
     __tablename__ = "entry"
 
     id = db.Column(db.Integer, primary_key=True)
-    module_id = db.Column(db.Integer, db.ForeignKey('module.id'), nullable=False) # foreign key.
     is_filled = db.Column(db.Boolean)
+    module_id = db.Column(db.Integer, db.ForeignKey('module.id'), nullable=False) # foreign key.
+    form_id = db.Column(db.Integer, db.ForeignKey('form.id'), nullable=False) # foreign key.
 
     def to_dict(self):
         return dict(id=self.id,
@@ -197,6 +198,7 @@ def get_resource():
 @auth.login_required
 def get_auth_token():
     token = g.user.generate_auth_token()
+    print("Returning token", token)
     return jsonify({ 'token': token.decode('ascii') })
 
 @app.route('/api/401')
@@ -225,15 +227,18 @@ def get_form():
 
     # return complete forms for LTM.
     if g.user.usertype == UserType.LTM:
+        print("Returning all forms for LTM")
         return jsonify({"forms":all_forms})
 
     # return forms with only module entries for academic.
     if g.user.usertype == UserType.ACADEMIC:
+        print("Returning forms for user", g.user.id)
         for form in all_forms:
             entries = []
             for entry in form.entries:
                 module = Module.query.filter_by(entry.module_id)
                 if not module or len(module) != 1:
+                    print("Invalid module ID in form entry:", entry.module_id)
                     return jsonify({"error":"Invalid module ID in form entry"})
                 if module.academic == g.user.id:
                     entries.append(entry)
