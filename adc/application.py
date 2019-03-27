@@ -67,9 +67,9 @@ class User(db.Model):
 
     def to_dict(self):
         return dict(id=self.id,
-                    usertype=self.usertype,
-                    email=self.email,
-                    password=self.password)
+                    name=self.name,
+                    usertype=str(self.usertype),
+                    email=self.email)
 
     def hash_password(self, password):
         self.password_hash = pwd_context.encrypt(password)
@@ -101,7 +101,6 @@ class Module(db.Model):
     name = db.Column(db.String(80), nullable=False)
     semester = db.Column(db.Enum(Semester), nullable=False)
     academic = db.Column(db.Integer, db.ForeignKey('user.id')) # foreign key.
-    assessments = db.relationship('Assessment', backref='module', lazy=True) # one to many.
     students = db.relationship(
             "Student",
             secondary=student_module_table,
@@ -125,7 +124,7 @@ class Assessment(db.Model):
     marks = db.Column(db.Float, nullable=False)
     release_date = db.Column(db.DateTime, nullable=False)
     submission_date = db.Column(db.DateTime, nullable=False)
-    module_id = db.Column(db.Integer, db.ForeignKey('module.id'), nullable=False) # foreign key.
+    entry_id = db.Column(db.Integer, db.ForeignKey('entry.id'), nullable=False) # foreign key.
 
     def to_dict(self):
         return dict(id=self.id,
@@ -133,8 +132,7 @@ class Assessment(db.Model):
                     name=self.name,
                     marks=self.marks,
                     release_date=self.release_date,
-                    submission_date=self.submission_date,
-                    module_id=self.module_id)
+                    submission_date=self.submission_date)
 
 class Student(db.Model):
     __tablename__ = "student"
@@ -152,25 +150,28 @@ class Entry(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     is_filled = db.Column(db.Boolean)
     module_id = db.Column(db.Integer, db.ForeignKey('module.id'), nullable=False) # foreign key.
+    assessments = db.relationship('Assessment', backref='entry', lazy=True) # one to many.
     form_id = db.Column(db.Integer, db.ForeignKey('form.id'), nullable=False) # foreign key.
 
     def to_dict(self):
         return dict(id=self.id,
+                    is_filled=self.is_filled,
+                    form_id=self.form_id,
                     module_id=self.module_id,
-                    is_filled=self.is_filled)
+                    assessments=[a.to_dict() for a in self.assessments])
 
 class Form(db.Model):
     __tablename__ = "form"
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), nullable=False)
-    state = db.Column(db.Enum(Semester), nullable=False)
+    state = db.Column(db.Enum(FormState), nullable=False)
     entries = db.relationship('Entry', backref='form', lazy=True) # one to many.
 
     def to_dict(self):
         return dict(id=self.id,
-                    format=str(self.format),
                     name=self.name,
+                    state=str(self.state),
                     entries=[e.to_dict() for e in self.entries])
 
 # ---------------- Other -------------------- #
@@ -218,7 +219,15 @@ def get_module():
 @app.route('/api/form', methods=['POST'])
 @auth.login_required
 def create_form():
+    if g.user.usertype != UserType.LTM:
+        print("Only LTM can create forms")
+        return jsonify({"error":"Invalid module ID in form entry"})
     pass
+
+@app.route('/api/user', methods=['GET'])
+@auth.login_required
+def get_user():
+    return jsonify({"user":g.user.to_dict()})
 
 @app.route('/api/form', methods=['GET'])
 @auth.login_required
@@ -228,7 +237,7 @@ def get_form():
     # return complete forms for LTM.
     if g.user.usertype == UserType.LTM:
         print("Returning all forms for LTM")
-        return jsonify({"forms":all_forms})
+        return jsonify({"forms":[form.to_dict() for form in all_forms]})
 
     # return forms with only module entries for academic.
     if g.user.usertype == UserType.ACADEMIC:
@@ -243,7 +252,7 @@ def get_form():
                 if module.academic == g.user.id:
                     entries.append(entry)
             form.entries = entries
-    return jsonify({"forms":all_forms})
+    return jsonify({"forms":[form.to_dict() for form in all_forms]})
 
 app.register_blueprint(api, url_prefix="/api")
 
