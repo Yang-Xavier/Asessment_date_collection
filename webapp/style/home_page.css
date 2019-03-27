@@ -1,37 +1,37 @@
-.home_page{
-    width: 100%;
-    height: 100%;
-    background: var(--light);
+/*.home_page{*/
+    /*width: 100%;*/
+    /*height: 100%;*/
+    /*background: var(--light);*/
 
-}
+/*}*/
 
-.home_page .container_block {
-    width: 100%;
-    height: 100px;
-    margin-top: 0;
-    background: var(--white);
-    /* border-radius: 10px; */
-    box-shadow: 1px 1px 3px var(--gray);
-    /* padding: 50px 0 0 0; */
-    display: flex;
-    flex-direction: row;
-}
+/*.home_page .container_block {*/
+    /*width: 100%;*/
+    /*height: 100px;*/
+    /*margin-top: 0;*/
+    /*background: var(--white);*/
+    /*!* border-radius: 10px; *!*/
+    /*box-shadow: 1px 1px 3px var(--gray);*/
+    /*!* padding: 50px 0 0 0; *!*/
+    /*display: flex;*/
+    /*flex-direction: row;*/
+/*}*/
 
-.home_page.container_block.panel {
-    display: flex;
-    justify-content: flex-start;
-    flex-direction: row;
-}
-.home_page .navbar .logo {
-    height: 80px;
-    width: 200px;
-    margin-left: auto;
-    background: url("https://www.sheffield.ac.uk/polopoly_fs/15.375.1548777706!/assets/images/uos-crest.svg") 5px center no-repeat #FFF;
-}
+/*.home_page.container_block.panel {*/
+    /*display: flex;*/
+    /*justify-content: flex-start;*/
+    /*flex-direction: row;*/
+/*}*/
+/*.home_page .navbar .logo {*/
+    /*height: 80px;*/
+    /*width: 200px;*/
+    /*margin-left: auto;*/
+    /*background: url("https://www.sheffield.ac.uk/polopoly_fs/15.375.1548777706!/assets/images/uos-crest.svg") 5px center no-repeat #FFF;*/
+/*}*/
 
-.home_page .side_bar{
-    background-color: black;
-}
+/*.home_page .side_bar{*/
+    /*background-color: black;*/
+/*}*/
 /*ul{*/
     /*display: flex;*/
     /*align-content: center;*/
@@ -52,12 +52,14 @@
     display: flex;
     flex-direction: column;
     justify-items: stretch;
+    height: 100%;
+    width: 100%;
 }
 
 .home_page .header_bar {
     width: 100%;
-    height: 80px;
-    line-height: 80px;
+    height: 60px;
+    line-height: 60px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -96,8 +98,8 @@
 }
 
 .home_page .header_bar .logo {
-    width: 180px;
-    height: 60px;
+    width: 160px;
+    height: 50px;
     display: flex;
     align-content: center;
     align-items: center;
@@ -111,9 +113,9 @@
 
 .home_page .header_bar .logo i{
     width: 100px;
-    height: 60px;
+    height: 50px;
     background: url("https://www.sheffield.ac.uk/polopoly_fs/15.375.1548777706!/assets/images/uos-crest.svg") -10px center no-repeat transparent;
-    background-size: 130px 60px;
+    background-size: 100px 50px;
 }
 
 .home_page .header_bar .logo .profile {
@@ -173,8 +175,14 @@
     display: flex;
     flex-direction: column;
     background: #fff;
+    padding-right: 10px;
+    border-right: 1px solid #ccc;
 }
-
+.home_page .content  .content_block{
+    width: 100%;
+    background: #fff;
+    overflow: hidden;
+}
 .home_page .content .nav_bar .menu {
     width: 100%;
     padding: 10px 0 10px 0;
@@ -201,6 +209,7 @@
     justify-content: flex-start;
     align-items: center;
     border-radius: 0 20px 20px 0;
+    margin: 2px 0 2px 0;
     color: #767676;
 
 }

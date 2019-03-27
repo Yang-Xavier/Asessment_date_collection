@@ -11,11 +11,11 @@ import {add_animate} from '../util/node_util'
 class EditableForm extends BaseNode{
     constructor(param) {
         // param e.g.
-        // param = {
-        //     "form_name": "Form Name",
-        //     "username": "Use Name",
-        //     "module_code": "COM6666",
-        // };
+        param = {
+            "form_name": "Form Name",
+            "username": "Use Name",
+            "module_code": "COM6666",
+        };
 
         super(param);
 

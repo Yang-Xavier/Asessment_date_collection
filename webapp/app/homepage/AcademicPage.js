@@ -5,6 +5,8 @@ import Header from './Header'
 import NavBar from './NavBar'
 import {Menu, MenuItem} from "./Menu";
 
+import ProjectDisplay  from '../module/ProjectDisplay'
+
 class AcademicPage extends BaseNode{
     constructor(param) {
         super(param);
@@ -21,6 +23,7 @@ class AcademicPage extends BaseNode{
             'menus': this.create_menu()
         });
         this.content = $('<div class="content"/>');
+        this.content_block = $('<div class="content_block"/>');
         this.container = $('<div class="home_page"/>');
     }
 
@@ -60,6 +63,25 @@ class AcademicPage extends BaseNode{
         this.submitted_form.set_state({selected: true});
         this.new_form.set_state({selected: false});
 
+        const project_display = new ProjectDisplay({
+            data: [{
+                form_name: "Test",
+                form_submitted_date: "Test",
+                form_release_date: "Test",
+                form_due: "Test",
+                editable: false,
+                form_content: [{
+                    "asm_format": "",
+                    "asm_name": "",
+                    "asm_per": "",
+                    "asm_release": "",
+                    "asm_due": ""
+                }]
+            }]
+        });
+
+
+        this.content_block.html(project_display.render());
     }
 
     check_new_form() {
@@ -77,6 +99,7 @@ class AcademicPage extends BaseNode{
         }
         this.container.append(this.header.render());
         this.content.append(this.nav.render());
+        this.content.append(this.content_block);
         this.container.append(this.content);
         return this.container;
 

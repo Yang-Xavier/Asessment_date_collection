@@ -24,7 +24,7 @@ class SingleField extends BaseNode{
             "asm_format": ASM_Format_Options[0],
             "asm_name": "",
             "asm_per": "",
-            "asm_release": "",
+            "asm_release": {},
             "asm_due": {}
         });
 
@@ -86,7 +86,7 @@ class SingleField extends BaseNode{
 
             field
                 .dateRangePicker({
-                    format: 'MM/DD/YYYY',
+                    format: 'DD/MM/YYYY',
                     separator: '   to   ',})
                 .bind('datepicker-change',(event,obj) => {
                     this.state["asm_due"] = {

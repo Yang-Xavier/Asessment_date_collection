@@ -11,16 +11,15 @@ import {RQ_HOST} from '../util/constant'
 
 class LoginPanel extends BaseNode{
 
-    constructor() {
-        super();
+    constructor(param) {
+        super(param);
 
         // UI
-
-        this.state = {
+        this.set_state({
             title: "Module Deliver",
             checkBoxLabel: "Remember me",
             loginBtnLabel: "Login in"
-        };
+        });
 
         this.login_panel = $('<div class="login_all_panel vmbox"></div>');
         this.container = $('<div class="container_block"></div>');
@@ -39,6 +38,10 @@ class LoginPanel extends BaseNode{
         this.login_btn = $('<button></button>');
 
         $('title').text('Login');
+
+        this.title_.text(this.state["title"]);
+        this.label.text(this.state["checkBoxLabel"]);
+        this.login_btn.text(this.state["loginBtnLabel"]);
 
         // Event
 
@@ -82,7 +85,11 @@ class LoginPanel extends BaseNode{
             Cookies.set("re", 1);
         }
         Cookies.set('token', json_data.token);
-        add_animate(this.container,'bounceOutUp');
+        add_animate(this.container,'bounceOutUp', () => {
+            this.state['callback']({"user_type": 'academic'})
+        });
+
+    //    then get the information of the user
     };
 
 
@@ -91,9 +98,7 @@ class LoginPanel extends BaseNode{
     }
 
     update() {
-        this.title_.text(this.state.title);
-        this.label.text(this.state.checkBoxLabel);
-        this.login_btn.text(this.state.loginBtnLabel);
+
     }
 
     render() {

@@ -5,7 +5,7 @@ import request from "superagent";
 import {RQ_HOST} from "../util/constant";
 import LoginPanel from "./LoginPanel";
 import 'bootstrap'
-import '../../style/Home_Page.css'
+import '../../style/home_page.css'
 
 
 class LTM extends BaseNode {

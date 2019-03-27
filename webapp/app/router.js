@@ -1,3 +1,4 @@
+import route from 'riot-route'
 
 import login_pane from './login/LoginPanel'
 import Header from './homepage/Header'
@@ -9,19 +10,36 @@ import {mount} from './util/node_util'
 import YearTutor from "./login/YearTutor";
 import EditableForm from "./module/EditableForm";
 
+// Test
+
+
+let home_page;
+let academic_page = new AcademicPage();
+// const tutor_page = new
+
 
 const RouterList = {
     'base': "/app/",
     'index': "login",
     "route_config": {
         'login': () => {
-            mount(new login_pane(), $("#root"));
+
+            mount(new login_pane({
+                "callback": (users) => {
+                    const user_type = users['user_type'];
+                    switch (user_type) {
+                        case "academic":
+                            home_page = new AcademicPage();
+                            break
+                    }
+                    route("home")
+                }}), $("#root"));
         },
-        'admin': () => {
-            // mount(new LTM(), $("#root"));
+        'home': () => {
+            mount(home_page, $("#root"));
         },
         'academic': () => {
-            mount(new AcademicPage(), $("#root"));
+            // mount(new AcademicPage(), $("#root"));
         },
         'tutor': () => {
             // mount(new YearTutor(), $("#root"));
@@ -43,6 +61,9 @@ const RouterList = {
         },
         'test': () => {
             mount(new AcademicPage(), $("#root"));
+        },
+        'form': () => {
+            mount(new EditableForm(), $("#root"));
         }
     }
 
