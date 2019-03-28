@@ -2,7 +2,7 @@ import $ from "jquery";
 import route from 'riot-route'
 
 import BaseNode from "../util/BaseNode";
-import {ASM_Format_Options} from "../util/constant";
+
 
 import '../../style/project_display.css'
 
@@ -62,8 +62,9 @@ class FormsDisplay extends BaseNode{
                 "asm_name": "Test",
                 "asm_per": "100",
                 "asm_release": "00/00/0000",
-                "asm_due": "00/00/0000" }
-            ]
+                "asm_due": "00/00/0000" ,
+                "editable":false
+            }]
         }]
 
         return data;

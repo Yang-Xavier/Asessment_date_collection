@@ -48,7 +48,7 @@ class EditableForm extends BaseNode{
         this.header.append(this.head_label);
 
         const new_field = new SingleField({
-            editable:true,
+            editable: false,
             removable: false,
             title: "Assignment " + (this.state["field_counter"] + 1),
             id: this.state["field_counter"],
@@ -130,7 +130,7 @@ class EditableForm extends BaseNode{
     }
 
     save(){
-        if(this.check() == true){
+        if(this.check()){
             this.submit()
         }
         else{
@@ -142,14 +142,13 @@ class EditableForm extends BaseNode{
         const items = []
         for(let i in this.state['form_fields']) {
             //console.log(this.state['form_fields'][i].state['asm_due'])
-            const item ={}
-            item['asm_format'] =  this.state['form_fields'][i].state['asm_format']
-            item['asm_name'] =this.state['form_fields'][i].state['asm_name']
-            item['asm_per'] =this.state['form_fields'][i].state['asm_per']
-            item['asm_release'] =this.state['form_fields'][i].state['asm_release']
-            item['asm_due'] =this.state['form_fields'][i].state['asm_due']
+            const item ={};
+            item['asm_format'] =  this.state['form_fields'][i].state['asm_format'];
+            item['asm_name'] = this.state['form_fields'][i].state['asm_name'];
+            item['asm_per'] = this.state['form_fields'][i].state['asm_per'];
+            item['asm_release'] = this.state['form_fields'][i].state['asm_release'];
+            item['asm_due'] = this.state['form_fields'][i].state['asm_due'];
             items.push(item)
-            //console.log()
         }
         console.log(items)
     }

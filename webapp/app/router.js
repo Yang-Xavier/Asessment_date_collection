@@ -14,13 +14,12 @@ import {mount} from './util/node_util'
 import '../style/home_page.css'
 
 
-let home_page  = new LTMPage(); // test
+
 let user_inform = {
     "user_type": 'ltm',
     "user_name": 'Xavier'
 };
-// const tutor_page = new
-
+let home_page  = new AcademicPage(user_inform); // test
 
 const RouterList = {
     'base': "/app/",
