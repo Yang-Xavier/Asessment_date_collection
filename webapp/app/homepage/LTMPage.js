@@ -6,7 +6,7 @@ import NavBar from './NavBar'
 import {Menu, MenuItem} from "./Menu";
 import route from "riot-route";
 
-class TutorPage extends HomePageBased{
+class LTMPage extends HomePageBased{
     constructor(param) {
         super(param);
 
@@ -33,7 +33,7 @@ class TutorPage extends HomePageBased{
         this.menu_items = [];
 
         this.menu_items.push(new MenuItem({
-            'title': 'Visualizable',
+            'title': 'Done',
             'icon': 'fa-clipboard-check',
             'click_callback': (id) => {
                 this.select_nav(id);
@@ -42,25 +42,25 @@ class TutorPage extends HomePageBased{
             'id': "done"
         }));
 
-        // this.menu_items.push(new MenuItem({
-        //     'title': 'Pending',
-        //     'icon': 'fa-file-contract',
-        //     'click_callback': (id) => {
-        //         this.select_nav(id);
-        //         route("/home/projects/pending")
-        //     },
-        //     'id': "pending"
-        // }));
-        //
-        // this.menu_items.push(new MenuItem({
-        //     'title': 'All Projects',
-        //     'icon': 'fa-file',
-        //     'click_callback': (id) => {
-        //         this.select_nav(id);
-        //         route("/home/projects/all")
-        //     },
-        //     'id': "all"
-        // }));
+        this.menu_items.push(new MenuItem({
+            'title': 'Pending',
+            'icon': 'fa-file-contract',
+            'click_callback': (id) => {
+                this.select_nav(id);
+                route("/home/projects/pending")
+            },
+            'id': "pending"
+        }));
+
+        this.menu_items.push(new MenuItem({
+            'title': 'All Projects',
+            'icon': 'fa-file',
+            'click_callback': (id) => {
+                this.select_nav(id);
+                route("/home/projects/all")
+            },
+            'id': "all"
+        }));
 
 
 
@@ -102,4 +102,4 @@ class TutorPage extends HomePageBased{
 }
 
 
-export default TutorPage;
+export default LTMPage;

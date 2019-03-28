@@ -1,28 +1,23 @@
 import $ from "jquery";
+import route from 'riot-route'
 
-import BaseNode from "../util/BaseNode";
+import HomePageBased from "../util/HomePageBased";
 import Header from './Header'
 import NavBar from './NavBar'
 import {Menu, MenuItem} from "./Menu";
 
-import ProjectDisplay  from '../module/ProjectDisplay'
-
-class AcademicPage extends BaseNode{
+class AcademicPage extends HomePageBased{
     constructor(param) {
         super(param);
-        this.set_state({
-            "history_form": [],
-            "new_form": []
-        });
 
         this.header = new Header({
-            user_type:'academic', user_name: 'Test'
+            user_type: this.state['user_type'], user_name: this.state['user_name']
         });
 
         this.nav = new NavBar({
             'menus': this.create_menu()
         });
-        this.content = $('<div class="content"/>');
+        this.nav_content = $('<div class="content"/>');
         this.content_block = $('<div class="content_block"/>');
         this.container = $('<div class="home_page"/>');
     }
@@ -35,21 +30,31 @@ class AcademicPage extends BaseNode{
             'icon': 'fa-chevron-circle-down',
         };
 
-        this.submitted_form = new MenuItem({
-            'title': 'Submitted Form (' + this.state["history_form"].length + ")",
+        this.menu_items = [];
+        this.menu_items.push(new MenuItem({
+            'title': 'Submitted Form',
             'icon': 'fa-file-alt',
-            'click_callback': () => {this.check_submitted_form()},
-        });
+            'click_callback': (id) => {
+                this.select_nav(id);
+                route("/home/forms/submitted")
+            },
+            'id': "submitted"
+        }));
 
 
-        this.new_form = new MenuItem({
-            'title': 'New Form (' + this.state["new_form"].length + ")",
+        this.menu_items.push(new MenuItem({
+            'title': 'New Form',
             'icon': 'fa-file-contract',
-            'click_callback': () => {this.check_new_form()}
-        });
+            'click_callback': (id) => {
+                this.select_nav(id);
+                route("/home/forms/new")
+            },
+            'id': "new"
+        }));
 
-        form_items['items'].push(this.submitted_form);
-        form_items['items'].push(this.new_form);
+        for(let i in this.menu_items) {
+            form_items['items'].push(this.menu_items[i])
+        }
 
         this.menu = new Menu(form_items);
 
@@ -59,48 +64,27 @@ class AcademicPage extends BaseNode{
         return menus;
     }
 
-    check_submitted_form() {
-        this.submitted_form.set_state({selected: true});
-        this.new_form.set_state({selected: false});
-
-        const project_display = new ProjectDisplay({
-            data: [{
-                form_name: "Test",
-                form_submitted_date: "Test",
-                form_release_date: "Test",
-                form_due: "Test",
-                editable: false,
-                form_content: [{
-                    "asm_format": "",
-                    "asm_name": "",
-                    "asm_per": "",
-                    "asm_release": "",
-                    "asm_due": ""
-                }]
-            }]
-        });
-
-
-        this.content_block.html(project_display.render());
+    select_nav(status) {
+        this.set_state({status: status})
     }
 
-    check_new_form() {
-        this.new_form.set_state({selected: true});
-        this.submitted_form.set_state({selected: false});
-
+    update() {
+        for(let i in this.menu_items) {
+            if(this.state["status"] == this.menu_items[i].state["id"]) {
+                this.menu_items[i].set_state({selected: true})
+            } else {
+                this.menu_items[i].set_state({selected: false})
+            }
+        }
     }
 
 
     render() {
-        if(this.state["history_form"].length > 0) {
-            this.submitted_form.click();
-        } else if(this.state["new_form"].length > 0) {
-            this.new_form.click();
-        }
+
         this.container.append(this.header.render());
-        this.content.append(this.nav.render());
-        this.content.append(this.content_block);
-        this.container.append(this.content);
+        this.nav_content.append(this.nav.render());
+        this.nav_content.append(this.content_block);
+        this.container.append(this.nav_content);
         return this.container;
 
     }

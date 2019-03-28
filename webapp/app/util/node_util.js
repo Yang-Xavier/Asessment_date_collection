@@ -5,12 +5,13 @@ const document = $('document');
 const window = $('window');
 
 
-const mount = (node, id) => {
+const mount = (node, jDom) => {
     const render_node = node.render_();
 
-    // if(id) {
-    $(id).html(render_node)
-    // }
+    if(jDom) {
+        jDom.html(render_node)
+        node.mounted = true;
+    }
 
 };
 
@@ -32,9 +33,8 @@ const LetterAvatar =  (name, size) => {
     name  = name || '';
     size  = size || 60;
     const colours = [
-        "#884EA0"
-            // "#A93226", "#2ecc71", "#3498db", "#9b59b6", "#34495e", "#16a085", "#27ae60", "#2980b9", "#8e44ad", "#2c3e50",
-            // "#f1c40f", "#e67e22", "#e74c3c", "#95a5a6", "#f39c12", "#d35400", "#c0392b", "#bdc3c7", "#7f8c8d"
+            "#A93226", "#2ecc71", "#3498db", "#9b59b6", "#34495e", "#16a085", "#27ae60", "#2980b9", "#8e44ad", "#2c3e50",
+            "#f1c40f", "#e67e22", "#e74c3c", "#95a5a6", "#f39c12", "#d35400", "#c0392b", "#bdc3c7", "#7f8c8d"
         ];
     const nameSplit = String(name).toUpperCase().split(' ');
     let initials, charIndex, colourIndex, canvas, context, dataURI;

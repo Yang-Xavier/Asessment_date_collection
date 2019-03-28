@@ -125,10 +125,12 @@ class SingleField extends BaseNode{
     }
 
     remove() {
+        add_animate(this.container, 'zoomOut', () => {
+            this.state["remove_callback"](this.state["id"]);
+            this.asm_period_field.find('input').data('dateRangePicker').destroy();
+            this.container.remove();
+        })
 
-        this.state["remove_callback"](this.state["id"]);
-        this.asm_period_field.find('input').data('dateRangePicker').destroy();
-        this.container.remove();
     }
 
     render() {

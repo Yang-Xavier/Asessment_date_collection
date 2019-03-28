@@ -40,6 +40,7 @@ class MenuItem extends BaseNode{
         *   icon:
         *   click_callback: ()=>{}
         *   selected:
+        *
         * }
         * */
         super(param);
@@ -48,7 +49,7 @@ class MenuItem extends BaseNode{
     }
 
     click() {
-        this.state['click_callback']()
+        this.state['click_callback'](this.state["id"])
     }
 
     update() {

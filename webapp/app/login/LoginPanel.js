@@ -85,8 +85,9 @@ class LoginPanel extends BaseNode{
             Cookies.set("re", 1);
         }
         Cookies.set('token', json_data.token);
+
         add_animate(this.container,'bounceOutUp', () => {
-            this.state['callback']({"user_type": 'ltm'})
+            this.state['callback']()
         });
 
     //    then get the information of the user
