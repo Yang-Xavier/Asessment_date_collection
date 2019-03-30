@@ -2,19 +2,20 @@
 .content_block .form_display{
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-content: flex-start;
     width: 100%;
     height: 100%;
-    padding: 0 80px 0 80px;
+
     flex-wrap: wrap;
     overflow: scroll;
 }
 
 .content_block .form_display .display_container {
-    width: 300px;
+    min-width: 250px;
+    width: 25%;
     height: 150px;
-    margin: 50px 0 0 0;
+    margin: 50px 4% 0 4%;
     background: #f1f3f4;
     border-radius: 5px;
     position: relative;

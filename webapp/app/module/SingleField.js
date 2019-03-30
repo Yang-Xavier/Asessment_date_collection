@@ -24,11 +24,13 @@ class SingleField extends BaseNode{
             "asm_per": "",
             "asm_release": "",
             "asm_due": "",
-            "editable": false
+            "id": 0,
+            "editable": true
         };
         param = Object.assign(init_state,param);
 
         super(param);
+
 
         this.asm_format_field = (() => {
             const group = $("<div class='form-group'></div>");
@@ -39,7 +41,7 @@ class SingleField extends BaseNode{
                 field.append($("<option>" + ASM_Format_Options[k] + "</option>"))
             }
             field.val(this.state['asm_format']);
-            field.attr("editable",this.state['editable']);
+            field.attr("disabled", !this.state['editable']);
             label.text(Form_Field_Title["asm_format"]);
             field.on('change', (e) => {
                 this.state["asm_format"] = field.val()
@@ -56,7 +58,7 @@ class SingleField extends BaseNode{
             const field = $("<input class='form-control' type='text'/>");
 
             field.val(this.state['asm_name']);
-            field.attr("editable",this.state['editable']);
+            field.attr("disabled", !this.state['editable']);
             field.on('change',() => {
                 this.state["asm_name"] = field.val()
             });
@@ -74,7 +76,7 @@ class SingleField extends BaseNode{
             const field = $("<input class='form-control'  type='number'/>");
 
             field.val(this.state['asm_per']);
-            field.attr("editable",this.state['editable']);
+            field.attr("disabled", !this.state['editable']);
             field.on('change',() => {
                 this.state["asm_per"] = field.val()
             });
@@ -93,8 +95,7 @@ class SingleField extends BaseNode{
             const separator = '   to   ';
             if (this.state['asm_release'].length != 0 && this.state['asm_due'].length != 0)
                 field.val(this.state['asm_release'] + separator + this.state['asm_due']);
-            field.attr("editable",this.state['editable']);
-            field.attr("editable",this.state['editable']);
+            field.attr("disabled", !this.state['editable']);
             label.text(Form_Field_Title["asm_period"]);
 
             field
@@ -116,7 +117,7 @@ class SingleField extends BaseNode{
 
 
 
-        this.divided_line = $("<div class='divide_line'>"+ this.state["title"] +"</div>");
+        this.divided_line = $("<div class='divide_line'>"+ this.state["title"]+ (this.state["id"]+1) +"</div>");
         this.remove_block = $("<div class='remove_block '><i class='fas fa-times-circle'/></div>");
 
         this.left_block = $('<div class="left"></div>');
@@ -135,11 +136,17 @@ class SingleField extends BaseNode{
 
     remove() {
         add_animate(this.container, 'zoomOut', () => {
-            this.state["remove_callback"](this.state["id"]);
+            if (this.state["remove_callback"]){
+                this.state["remove_callback"](this.state["id"]);
+            }
             this.asm_period_field.find('input').data('dateRangePicker').destroy();
             this.container.remove();
         })
 
+    }
+
+    update(){
+        this.divided_line.html(this.state["title"]+ (this.state["id"]+1));
     }
 
     render() {
@@ -152,7 +159,7 @@ class SingleField extends BaseNode{
         this.left_block.append(this.asm_per_field);
         this.left_block.append(this.asm_period_field);
 
-        if(this.state["removable"]) {
+        if(this.state["removable"] && this.state["editable"]) {
             this.right_block.append(this.remove_block);
         }
 

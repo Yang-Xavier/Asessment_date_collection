@@ -11,20 +11,14 @@ import {add_animate} from '../util/node_util'
 class EditableForm extends BaseNode{
     constructor(param) {
         // param e.g.
-        param = {
-            "form_name": "Form Name",
-            "username": "Use Name",
-            "module_code": "COM6666",
-        };
 
         super(param);
 
         // states
         this.set_state({
             form_fields:[],
-            form_data:[],
-            field_counter: 0
-
+            field_counter: 0,
+            editable: true
         });
 
 
@@ -47,27 +41,47 @@ class EditableForm extends BaseNode{
         this.head_label.text("Module: " + this.state['module_code']);
         this.header.append(this.head_label);
 
-        const new_field = new SingleField({
-            editable: false,
+
+        const init_state_single_form = {
+            editable: this.state['editable'],
             removable: false,
-            title: "Assignment " + (this.state["field_counter"] + 1),
+            title: "Assignment ",
             id: this.state["field_counter"],
             remove_callback: this.remove_field.bind(this)
-        });
+        };
 
-        this.state["form_fields"].push(new_field);
-        this.state["field_counter"]++;
+        if (this.state['form_data'].length > 0) {
+            const state = Object.assign(init_state_single_form, this.state['form_data'][0]);
+            const new_field = new SingleField(state);
+            this.state["form_fields"].push(new_field);
+            this.state["field_counter"]++;
+
+            for(let i = 1; i < this.state['form_data'].length; i++) {
+                init_state_single_form.removable = true;
+                init_state_single_form.id = i;
+
+                const state = Object.assign(init_state_single_form,this.state['form_data'][i]);
+                const new_field = new SingleField(state);
+                this.state["form_fields"].push(new_field);
+                this.state["field_counter"]++;
+            }
+
+        } else {
+            init_state_single_form.removable = true;
+            const new_field = new SingleField(init_state_single_form);
+            this.state["form_fields"].push(new_field);
+            this.state["field_counter"]++;
+        }
 
         this.submit_btn.on('click', ()=>{this.save()});
         this.add_more_btn.on('click', ()=>{this.add_more()});
-
     }
 
     add_more() {
         const new_field = new SingleField({
             editable:true,
             removable: true,
-            title: "Assignment " + (this.state["field_counter"] + 1),
+            title: "Assignment ",
             id: this.state["field_counter"],
             remove_callback: this.remove_field.bind(this)
         });
@@ -77,8 +91,14 @@ class EditableForm extends BaseNode{
     }
 
     remove_field(id) {
-        delete this.state["form_fields"][id];
+        this.state["form_fields"] = this.state["form_fields"]
+            .slice(0,id)
+            .concat(this.state["form_fields"].slice(id+1));
         this.state["field_counter"]--;
+        for(let i in this.state["form_fields"]) {
+            this.state["form_fields"][i].set_state({'id': parseInt(i)});
+        }
+
     }
 
     check() {
@@ -141,7 +161,6 @@ class EditableForm extends BaseNode{
 
         const items = []
         for(let i in this.state['form_fields']) {
-            //console.log(this.state['form_fields'][i].state['asm_due'])
             const item ={};
             item['asm_format'] =  this.state['form_fields'][i].state['asm_format'];
             item['asm_name'] = this.state['form_fields'][i].state['asm_name'];
@@ -150,7 +169,6 @@ class EditableForm extends BaseNode{
             item['asm_due'] = this.state['form_fields'][i].state['asm_due'];
             items.push(item)
         }
-        console.log(items)
     }
 
     render() {

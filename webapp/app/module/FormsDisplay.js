@@ -8,10 +8,7 @@ import '../../style/project_display.css'
 
 class FormsDisplay extends BaseNode{
     constructor(param) {
-        /*
-        * param = {
-        *   type: 'submitted_form' | 'new_form'
-        * }*/
+
         super(param);
         /*
             * this.state = {
@@ -33,43 +30,12 @@ class FormsDisplay extends BaseNode{
              }
             * */
 
-        this.set_state({
-            data: this.request_form(param)
-        });
-
         this.container = $("<div class='form_display'></div>");
         this.display_blocks = [];
 
-        for(let j =0; j<=3;j++)
-            for( let i in this.state['data']) {
-                this.display_blocks.push(new DisplayBlock(this.state['data'][i]));
-            }
-    }
-
-    request_form(param) {
-        // do request here
-
-        // mock data
-        const data = [{
-            form_id: "123",
-            form_name: "Test Test Test Test Test Test Test Test Test Test Test Test",
-            form_submitted_date: "00/00/0000",
-            form_release_date: "00/00/0000",
-            form_due: "00/00/0000",
-            editable: false,
-            form_content: [{
-                "asm_format": "Mole quize",
-                "asm_name": "Test",
-                "asm_per": "100",
-                "asm_release": "00/00/0000",
-                "asm_due": "00/00/0000" ,
-                "editable":false
-            }]
-        }]
-
-        return data;
-
-
+        for( let i in this.state['data']) {
+            this.display_blocks.push(new DisplayBlock(this.state['data'][i]));
+        }
     }
 
     render() {
