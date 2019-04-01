@@ -68,7 +68,6 @@ class DisplayBlock extends BaseNode{
 
         this.container = $("<div class='display_container'/>");
 
-        this.pre_view_block = $("<div class='pre_view_small'><img/></div>");
         this.due_block = $("<div class='due'>Due: " + this.state["form_due"] + "</div>");
         this.form_name_blcok = $("<div class='form_name'>" + this.state["form_name"] + "</div>");
         this.information_block = $("<div class='information_block'></div>");
@@ -83,7 +82,6 @@ class DisplayBlock extends BaseNode{
         this.information_block.append(this.form_name_blcok);
         this.information_block.append(this.due_block);
 
-        this.container.append(this.pre_view_block);
         this.container.append(this.information_block);
 
         return this.container;

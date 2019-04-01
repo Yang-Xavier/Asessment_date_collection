@@ -11,6 +11,7 @@ const Form_Field_Title = {
     "asm_period":"What dates will this assessment be released to students and handed in (if applicable)?",
 };
 
+const Semester_Selection = [ "Semester 1 only", "Semester 2 only","BOTH Semesters"]
 
 
-export {RQ_HOST, ASM_Format_Options, Form_Field_Title}
+export {RQ_HOST, ASM_Format_Options, Form_Field_Title, Semester_Selection}

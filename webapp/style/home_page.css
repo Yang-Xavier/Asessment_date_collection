@@ -1,53 +1,3 @@
-/*.home_page{*/
-    /*width: 100%;*/
-    /*height: 100%;*/
-    /*background: var(--light);*/
-
-/*}*/
-
-/*.home_page .container_block {*/
-    /*width: 100%;*/
-    /*height: 100px;*/
-    /*margin-top: 0;*/
-    /*background: var(--white);*/
-    /*!* border-radius: 10px; *!*/
-    /*box-shadow: 1px 1px 3px var(--gray);*/
-    /*!* padding: 50px 0 0 0; *!*/
-    /*display: flex;*/
-    /*flex-direction: row;*/
-/*}*/
-
-/*.home_page.container_block.panel {*/
-    /*display: flex;*/
-    /*justify-content: flex-start;*/
-    /*flex-direction: row;*/
-/*}*/
-/*.home_page .navbar .logo {*/
-    /*height: 80px;*/
-    /*width: 200px;*/
-    /*margin-left: auto;*/
-    /*background: url("https://www.sheffield.ac.uk/polopoly_fs/15.375.1548777706!/assets/images/uos-crest.svg") 5px center no-repeat #FFF;*/
-/*}*/
-
-/*.home_page .side_bar{*/
-    /*background-color: black;*/
-/*}*/
-/*ul{*/
-    /*display: flex;*/
-    /*align-content: center;*/
-    /*margin: 10px;*/
-/*}*/
-
-/*li{*/
-    /*list-style-type: none;*/
-    /*width:100px;*/
-    /*background: pink;*/
-    /*margin:10px;*/
-    /*text-align: center;*/
-/*}*/
-
-
-/******************************************************************/
 .home_page {
     display: flex;
     flex-direction: column;
@@ -175,7 +125,6 @@
     display: flex;
     flex-direction: column;
     background: #fff;
-    padding-right: 10px;
     border-right: 1px solid #ccc;
 }
 .home_page .content  .content_block{
@@ -185,7 +134,7 @@
 }
 .home_page .content .nav_bar .menu {
     width: 100%;
-    padding: 10px 0 10px 0;
+    padding: 10px 10px 10px 0;
 }
 
 .home_page .content .nav_bar .menu_title {
@@ -233,4 +182,79 @@
     background: #f1f3f4;
     color: #202124;
     z-index: 0;
+}
+
+.home_page .nav_bar .menu_appendix {
+    height: 60px;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    position: relative;
+}
+.home_page .nav_bar .menu_appendix div{
+    position: absolute;
+}
+
+.home_page .nav_bar .menu_appendix .create_label{
+    height: 30px;
+    width: 30px;
+    text-align: center;
+    line-height: 30px;
+    white-space: nowrap;
+    overflow: hidden;
+    box-sizing: content-box;
+    border: 3px solid #767676;
+    border-radius: 30px 30px 30px 30px;
+    margin: auto;
+    left: 0; right: 0; top: 0; bottom: 0;
+    transition: width 0.5s, border-radius 0.5s;
+}
+
+.home_page .nav_bar .menu_appendix .create_btn {
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    box-sizing: content-box;
+    border-radius: 50%;
+    display: inline;
+    align-content: center;
+    align-items: center;
+    justify-items: center;
+    justify-content: center;
+    opacity: 1;
+    transition: transform 0.7s;
+    color: #767676;
+}
+
+.home_page .nav_bar .menu_appendix .create_label span{
+    display: inline;
+    padding: 0 30px 0 30px;
+    box-sizing: border-box;
+    /*opacity: 0;*/
+    /*transition: opacity 0.5s 0.5s;*/
+    color: #767676;
+}
+
+.home_page .nav_bar .menu_appendix .create_btn svg {
+    width: 20px;
+    height: 20px;
+    margin-top: 5px;
+
+}
+
+.home_page .nav_bar .menu_appendix:hover .create_label{
+    cursor: pointer;
+    border: 3px solid var(--blue);
+    width: 80%;
+    border-radius: 30px 30px 30px 30px;
+    color: #000;
+}
+
+.home_page .nav_bar .menu_appendix:hover .create_btn{
+    transform:  translate(-45%) rotate(-90deg);
+    color: var(--blue);
+}
+
+.home_page .nav_bar .menu_appendix:hover span{
+    opacity: 1;
+    color: var(--blue);
 }

@@ -5,6 +5,7 @@ import SingleField from './SingleField'
 
 import BaseNode from "../util/BaseNode"
 import {add_animate} from '../util/node_util'
+import {Semester_Selection} from '../util/constant'
 
 /*
 * Based on bootstrap*/
@@ -16,6 +17,7 @@ class EditableForm extends BaseNode{
 
         // states
         this.set_state({
+            semester: Semester_Selection[0],
             form_fields:[],
             field_counter: 0,
             editable: true
@@ -31,6 +33,25 @@ class EditableForm extends BaseNode{
         this.submit_btn = $('<button type="button" class="btn btn-secondary submit_btn">Save</button>');
         this.add_more_btn = $('<button type="button" class="btn btn-light add_btn">Add More Assessment</button>')
 
+        this.semester_selection = () => {
+            const container = $("<div class='semester_selection form-group'/>");
+            const label  = $("<label>Semester: &nbsp;</label>");
+            container.append(label)
+
+
+            const selection = $("<select class='form-control'/>");
+            for( let i in Semester_Selection) {
+                selection.append("<option>" + Semester_Selection[i] + "</option>");
+            }
+            selection.val(this.state["semester"]);
+            selection.on("change", () => {
+                this.state["semester"] = selection.val();
+            })
+            container.append(selection);
+            return container
+        };
+
+
         this.head_label = $("<label></label>");
         this.head_label.text("Form: " + this.state['form_name']);
         this.header.append(this.head_label);
@@ -40,7 +61,7 @@ class EditableForm extends BaseNode{
         this.head_label = $("<label></label>");
         this.head_label.text("Module: " + this.state['module_code']);
         this.header.append(this.head_label);
-
+        this.header.append(this.semester_selection());
 
         const init_state_single_form = {
             editable: this.state['editable'],
@@ -158,8 +179,10 @@ class EditableForm extends BaseNode{
         }
     }
     submit() {
+        let data = {
 
-        const items = []
+        };
+        const items = [];
         for(let i in this.state['form_fields']) {
             const item ={};
             item['asm_format'] =  this.state['form_fields'][i].state['asm_format'];

@@ -32,7 +32,7 @@ class AcademicPage extends HomePageBased{
 
         this.menu_items = [];
         this.menu_items.push(new MenuItem({
-            'title': 'Submitted Form',
+            'title': 'History Form',
             'icon': 'fa-file-alt',
             'click_callback': (id) => {
                 this.select_nav(id);

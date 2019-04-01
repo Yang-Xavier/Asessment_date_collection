@@ -18,6 +18,18 @@ class LTMPage extends HomePageBased{
             'menus': this.create_menu()
         });
 
+        this.new_project_btn = (() => {
+            const container = $("<div class='menu_appendix'></div>");
+            const create_btn = $("<div class='create_btn'><i class='fas fa-plus'/></div>");
+            const create_label = $("<div class='create_label'></div>");
+
+            create_label.append(create_btn);
+            create_label.append("<span>Create A New</span>");
+            container.append(create_label);
+
+            return container;
+        })();
+
         this.nav_content = $('<div class="content"/>');
         this.content_block = $('<div class="content_block"/>');
         this.container = $('<div class="home_page"/>');
@@ -52,16 +64,6 @@ class LTMPage extends HomePageBased{
             'id': "pending"
         }));
 
-        this.menu_items.push(new MenuItem({
-            'title': 'All Projects',
-            'icon': 'fa-file',
-            'click_callback': (id) => {
-                this.select_nav(id);
-                route("/home/projects/all")
-            },
-            'id': "all"
-        }));
-
 
 
         for(let i in this.menu_items) {
@@ -92,7 +94,11 @@ class LTMPage extends HomePageBased{
     render() {
 
         this.container.append(this.header.render());
-        this.nav_content.append(this.nav.render());
+
+        const nav = this.nav.render();
+        nav.append(this.new_project_btn);
+
+        this.nav_content.append(nav);
         this.nav_content.append(this.content_block);
         this.container.append(this.nav_content);
         return this.container;

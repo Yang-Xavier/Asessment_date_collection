@@ -5,6 +5,7 @@ import SingleField from './SingleField'
 
 import BaseNode from "../util/BaseNode"
 import {add_animate} from '../util/node_util'
+import {Semester_Selection} from "../util/constant";
 
 /*
 * Based on bootstrap*/
@@ -25,6 +26,17 @@ class ReadOnlyForm extends BaseNode{
         this.container = $("<div class='form_container'></div>");
         this.buttom_btn_block = $("<div class='btn_block'></div>");
 
+        this.semester_selection = () => {
+            const container = $("<div class='semester_selection form-group'/>");
+            const label  = $("<label>Semester: </label>");
+            container.append(label);
+
+            const semester_label = $("<label/>");
+            semester_label.html("&nbsp;"+this.state["semester"]);
+            container.append(semester_label);
+
+            return container
+        };
 
         this.form_Panel = $("<form role='form'></form>");
 
@@ -37,6 +49,7 @@ class ReadOnlyForm extends BaseNode{
         this.head_label = $("<label></label>");
         this.head_label.text("Module: " + this.state['module_code']);
         this.header.append(this.head_label);
+        this.header.append(this.semester_selection());
 
         const init_state_single_form = {
             editable: this.state['editable'],
