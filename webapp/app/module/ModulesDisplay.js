@@ -25,10 +25,12 @@ class ModulesDisplay extends BaseNode{
         *
         * }*/
 
-        this.set_state({
-            modules: param.selectable? this.get_all_modules(): this.get_selection_modules(),
-            selectable: true,
-        });
+        if(!param.modules) {
+            this.set_state({
+                modules: this.get_all_modules()
+            })
+        }
+
 
         this.set_state({selected_module: []});
 

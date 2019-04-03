@@ -1,9 +1,10 @@
-import "jquery"
+import $ from "jquery"
 
+import 'jquery-ui/ui/widgets/datepicker';
 import 'jquery-ui/themes/base/core.css';
 import 'jquery-ui/themes/base/theme.css';
 import 'jquery-ui/themes/base/datepicker.css';
-import 'jquery-ui/ui/widgets/datepicker';
+
 
 import BaseNode from "../util/BaseNode"
 
@@ -58,7 +59,7 @@ class ProjectCreate extends BaseNode{
 
             return container
         })();
-
+        this.module_selection_display = $("<div class='display_content'></div>");
     }
 
     open_modules_selection() {
@@ -66,6 +67,7 @@ class ProjectCreate extends BaseNode{
         const module_selection = new ModulesDisplay({'selectable': true, 'selected_items': this.state['selected_id']});
         const select_all = $("<div class='select_all_btn'>All</div>");
         const close = $("<div class='close_btn'><i class='fas fa-check-circle'></i></div>");
+
         close.on('click', () => {
             this.module_selection.close();
         });
@@ -84,24 +86,21 @@ class ProjectCreate extends BaseNode{
 
         this.module_selection.set_on_close(() => {
             this.state["selected_id"] = module_selection.state['selected_items'];
-            // console.log(this.state["selected_id"])
+
+
         });
-
-
 
         this.module_selection.popup(700,700)
     }
 
-    select_module() {
 
-    }
 
 
     render() {
 
+
         this.container.append(this.header);
-        this.container.append(this.module_selection_btn);
-        // this.container.append(this.module_selection);
+        this.container.append(this.module_selection_display);
 
         return this.container;
     }

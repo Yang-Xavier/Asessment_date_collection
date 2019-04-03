@@ -25,16 +25,15 @@ import '../style/home_page.css'
 
 
 
-let user_inform ={
-    "user_type": "",
-    "user_name":""
-};
-// = {
-//     "user_type": 'ltm',
+let user_inform;
+
+let home_page;
+
+// let user_inform = {
+//     "user_type": 'tutor',
 //     "user_name": 'Xavier'
 // };
-let home_page;
-    // = new LTMPage(user_inform); // test
+// let home_page  = new AcademicPage(user_inform); // test
 
 const RouterList = {
     'base': "/app/",

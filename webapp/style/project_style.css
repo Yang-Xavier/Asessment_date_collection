@@ -185,3 +185,8 @@
     color: var(--blue);
 
 }
+
+.project_create .display_content {
+    width: 100%;
+    flex-grow: 2;
+}
