@@ -217,17 +217,22 @@ def get_project():
     # return projects with only module forms for academic.
     if g.user.usertype == "academic":
         print("Returning projects for user", g.user.id)
-        for project in all_projects:
-            forms = []
-            for form in project.forms:
-                module = Module.query.filter_by(form.module_id)
-                if not module or len(module) != 1:
-                    print("Invalid module ID in project form:", form.module_id)
-                    return jsonify({"error":"Invalid module ID in project form"})
-                if module.academic == g.user.id:
-                    forms.append(form)
-            project.forms = forms
-    return jsonify({"projects":[project.to_dict() for project in all_projects]})
+
+        # Find module of current academic.
+        acad_module = Module.query.filter_by(academic=g.user.id).first()
+        print("Module of current user", acad_module)
+
+        ret_dict = {"projects":[project.to_dict() for project in all_projects]}
+
+        # delete forms not relevant to current user from dict.
+        for project in ret_dict["projects"]:
+            new_forms = []
+            for form in project["forms"]:
+                if form["module_id"] == acad_module.id:
+                    new_forms.append(form)
+            project["forms"] = new_forms
+
+        return jsonify(ret_dict)
 
 app.register_blueprint(api, url_prefix="/api")
 
