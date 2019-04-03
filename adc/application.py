@@ -23,45 +23,20 @@ api = Blueprint('api', __name__)
 
 auth = HTTPBasicAuth()
 
-# ---------------- Models -------------------- #
-
-class UserType(enum.Enum):
-    LTM = 1
-    ACADEMIC = 2
-    TUTOR = 3
-
-class Semester(enum.Enum):
-    ONE = 1
-    TWO = 2
-    BOTH = 3
-
-class AssessmentFormat(enum.Enum):
-    MOLE_QUIZ = 1
-    ASSIGNMENT = 2
-    PRESENTATION = 3
-    FORMAL_EXAM = 4
-    ASSESSED_LAB = 5
-    GROUP_PROJECT = 6
-    PORTFOLIO = 7
-    PROBLEM_SHEET=8
-
-class FormState(enum.Enum):
-    CREATED = 1
-    WAITING = 2
-    DONE = 3
-
 # ---------------- Association tables -------------------- #
 
 student_module_table = db.Table("student_to_module",
         db.Column("student_id", db.Integer, db.ForeignKey("student.id"), primary_key=True),
         db.Column("module_id", db.Integer, db.ForeignKey("module.id"), primary_key=True))
 
+# ---------------- Models -------------------- #
+
 class User(db.Model):  
     __tablename__ = "user"
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), nullable=False)
-    usertype = db.Column(db.Enum(UserType), nullable=False)
+    usertype = db.Column(db.String(80), nullable=False)
     email = db.Column(db.String(80), unique=True, nullable=False)
     password_hash = db.Column(db.String(128), nullable=False, default="$6$rounds=656000$Mekxk00d5L5we4/3$CwY2NGNDHX1Yt6khinGYUJm/I5s2.3bmjgMLmmsRIVzowR.LWPqIF2KrauyfjuzyWD2MrPToRVNHxYCZAPsFf1")
 
@@ -99,7 +74,7 @@ class Module(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     code = db.Column(db.String(10), unique=True, nullable=False)
     name = db.Column(db.String(80), nullable=False)
-    semester = db.Column(db.Enum(Semester), nullable=False)
+    semester = db.Column(db.String(80), nullable=False)
     academic = db.Column(db.Integer, db.ForeignKey('user.id')) # foreign key.
     students = db.relationship(
             "Student",
@@ -119,12 +94,12 @@ class Assessment(db.Model):
     __tablename__ = "assessment"
 
     id = db.Column(db.Integer, primary_key=True)
-    format = db.Column(db.Enum(AssessmentFormat), nullable=False)
+    format = db.Column(db.String(80), nullable=False)
     name = db.Column(db.String(80), nullable=False)
     marks = db.Column(db.Float, nullable=False)
     release_date = db.Column(db.DateTime, nullable=False)
     submission_date = db.Column(db.DateTime, nullable=False)
-    entry_id = db.Column(db.Integer, db.ForeignKey('entry.id'), nullable=False) # foreign key.
+    form_id = db.Column(db.Integer, db.ForeignKey('form.id'), nullable=False) # foreign key.
 
     def to_dict(self):
         return dict(id=self.id,
@@ -144,35 +119,35 @@ class Student(db.Model):
             secondary=student_module_table,
             back_populates="students") # many to many.
 
-class Entry(db.Model):
-    __tablename__ = "entry"
-
-    id = db.Column(db.Integer, primary_key=True)
-    is_filled = db.Column(db.Boolean)
-    module_id = db.Column(db.Integer, db.ForeignKey('module.id'), nullable=False) # foreign key.
-    assessments = db.relationship('Assessment', backref='entry', lazy=True) # one to many.
-    form_id = db.Column(db.Integer, db.ForeignKey('form.id'), nullable=False) # foreign key.
-
-    def to_dict(self):
-        return dict(id=self.id,
-                    is_filled=self.is_filled,
-                    form_id=self.form_id,
-                    module_id=self.module_id,
-                    assessments=[a.to_dict() for a in self.assessments])
-
 class Form(db.Model):
     __tablename__ = "form"
 
     id = db.Column(db.Integer, primary_key=True)
+    is_filled = db.Column(db.Boolean)
+    module_id = db.Column(db.Integer, db.ForeignKey('module.id'), nullable=False) # foreign key.
+    assessments = db.relationship('Assessment', backref='form', lazy=True) # one to many.
+    project_id = db.Column(db.Integer, db.ForeignKey('project.id'), nullable=False) # foreign key.
+
+    def to_dict(self):
+        return dict(id=self.id,
+                    is_filled=self.is_filled,
+                    project_id=self.project_id,
+                    module_id=self.module_id,
+                    assessments=[a.to_dict() for a in self.assessments])
+
+class Project(db.Model):
+    __tablename__ = "project"
+
+    id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), nullable=False)
-    state = db.Column(db.Enum(FormState), nullable=False)
-    entries = db.relationship('Entry', backref='form', lazy=True) # one to many.
+    state = db.Column(db.String(80), nullable=False)
+    forms = db.relationship('Form', backref='project', lazy=True) # one to many.
 
     def to_dict(self):
         return dict(id=self.id,
                     name=self.name,
                     state=str(self.state),
-                    entries=[e.to_dict() for e in self.entries])
+                    forms=[e.to_dict() for e in self.forms])
 
 # ---------------- Other -------------------- #
 
@@ -216,12 +191,12 @@ def get_module():
             modules.append(module.to_dict())
     return jsonify({"modules":modules})
 
-@app.route('/api/form', methods=['POST'])
+@app.route('/api/project', methods=['POST'])
 @auth.login_required
-def create_form():
-    if g.user.usertype != UserType.LTM:
-        print("Only LTM can create forms")
-        return jsonify({"error":"Invalid module ID in form entry"})
+def create_project():
+    if g.user.usertype != "ltm":
+        print("Only LTM can create projects")
+        return jsonify({"error":"Invalid module ID in project form"})
     pass
 
 @app.route('/api/user', methods=['GET'])
@@ -229,30 +204,30 @@ def create_form():
 def get_user():
     return jsonify({"user":g.user.to_dict()})
 
-@app.route('/api/form', methods=['GET'])
+@app.route('/api/project', methods=['GET'])
 @auth.login_required
-def get_form():
-    all_forms = Form.query.all()
+def get_project():
+    all_projects = Project.query.all()
 
-    # return complete forms for LTM.
-    if g.user.usertype == UserType.LTM:
-        print("Returning all forms for LTM")
-        return jsonify({"forms":[form.to_dict() for form in all_forms]})
+    # return complete projects for LTM.
+    if g.user.usertype == "ltm":
+        print("Returning all projects for LTM")
+        return jsonify({"projects":[project.to_dict() for project in all_projects]})
 
-    # return forms with only module entries for academic.
-    if g.user.usertype == UserType.ACADEMIC:
-        print("Returning forms for user", g.user.id)
-        for form in all_forms:
-            entries = []
-            for entry in form.entries:
-                module = Module.query.filter_by(entry.module_id)
+    # return projects with only module forms for academic.
+    if g.user.usertype == "academic":
+        print("Returning projects for user", g.user.id)
+        for project in all_projects:
+            forms = []
+            for form in project.forms:
+                module = Module.query.filter_by(form.module_id)
                 if not module or len(module) != 1:
-                    print("Invalid module ID in form entry:", entry.module_id)
-                    return jsonify({"error":"Invalid module ID in form entry"})
+                    print("Invalid module ID in project form:", form.module_id)
+                    return jsonify({"error":"Invalid module ID in project form"})
                 if module.academic == g.user.id:
-                    entries.append(entry)
-            form.entries = entries
-    return jsonify({"forms":[form.to_dict() for form in all_forms]})
+                    forms.append(form)
+            project.forms = forms
+    return jsonify({"projects":[project.to_dict() for project in all_projects]})
 
 app.register_blueprint(api, url_prefix="/api")
 
