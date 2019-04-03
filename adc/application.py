@@ -34,7 +34,7 @@ student_module_table = db.Table("student_to_module",
 class User(db.Model):  
     __tablename__ = "user"
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(80), nullable=False)
     usertype = db.Column(db.String(80), nullable=False)
     email = db.Column(db.String(80), unique=True, nullable=False)
@@ -71,7 +71,7 @@ class User(db.Model):
 class Module(db.Model):  
     __tablename__ = "module"
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     code = db.Column(db.String(10), unique=True, nullable=False)
     name = db.Column(db.String(80), nullable=False)
     semester = db.Column(db.String(80), nullable=False)
@@ -93,7 +93,7 @@ class Module(db.Model):
 class Assessment(db.Model):
     __tablename__ = "assessment"
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     format = db.Column(db.String(80), nullable=False)
     name = db.Column(db.String(80), nullable=False)
     marks = db.Column(db.Float, nullable=False)
@@ -112,7 +112,7 @@ class Assessment(db.Model):
 class Student(db.Model):
     __tablename__ = "student"
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(80), nullable=False)
     modules = db.relationship(
             "Module",
@@ -122,7 +122,7 @@ class Student(db.Model):
 class Form(db.Model):
     __tablename__ = "form"
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     is_filled = db.Column(db.Boolean)
     module_id = db.Column(db.Integer, db.ForeignKey('module.id'), nullable=False) # foreign key.
     assessments = db.relationship('Assessment', backref='form', lazy=True) # one to many.
@@ -138,7 +138,7 @@ class Form(db.Model):
 class Project(db.Model):
     __tablename__ = "project"
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(80), nullable=False)
     state = db.Column(db.String(80), nullable=False)
     forms = db.relationship('Form', backref='project', lazy=True) # one to many.
@@ -191,18 +191,31 @@ def get_module():
             modules.append(module.to_dict())
     return jsonify({"modules":modules})
 
+@app.route('/api/user', methods=['GET'])
+@auth.login_required
+def get_user():
+    return jsonify({"user":g.user.to_dict()})
+
 @app.route('/api/project', methods=['POST'])
 @auth.login_required
 def create_project():
     if g.user.usertype != "ltm":
         print("Only LTM can create projects")
         return jsonify({"error":"Invalid module ID in project form"})
-    pass
 
-@app.route('/api/user', methods=['GET'])
-@auth.login_required
-def get_user():
-    return jsonify({"user":g.user.to_dict()})
+    # Get request params.
+    json = request.get_json()
+    project = Project(name=json["name"], state="created")
+    db.session.add(project)
+    db.session.flush()
+    db.session.refresh(project)
+    for module_id in json["modules"]:
+        form = Form(is_filled=False,
+                module_id=module_id,
+                project_id=project.id)
+        db.session.add(form)
+    db.session.commit()
+    return jsonify({"status":"success"})
 
 @app.route('/api/project', methods=['GET'])
 @auth.login_required
@@ -233,6 +246,11 @@ def get_project():
             project["forms"] = new_forms
 
         return jsonify(ret_dict)
+
+@app.route('/api/project', methods=['PUT'])
+@auth.login_required
+def update_project():
+    pass
 
 app.register_blueprint(api, url_prefix="/api")
 
