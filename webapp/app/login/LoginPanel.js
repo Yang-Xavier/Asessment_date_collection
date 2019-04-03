@@ -6,7 +6,7 @@ import Cookies from 'js-cookie'
 import BaseNode from "../util/BaseNode"
 import {add_animate} from "../util/node_util";
 import '../../style/login_panel.css'
-import {RQ_HOST} from '../util/constant'
+import {API} from '../util/constant'
 
 
 class LoginPanel extends BaseNode{
@@ -60,7 +60,7 @@ class LoginPanel extends BaseNode{
             }
 
             request
-                .get(RQ_HOST+'/api/token')
+                .get(API.token)
                 .set({'authorization': authorization})
                 .then(this.success_call.bind(this), this.error_call.bind(this))
                 .catch((e)=>{

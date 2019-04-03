@@ -1,4 +1,6 @@
 import route from 'riot-route'
+import request from 'superagent'
+import Cookies from 'js-cookie'
 
 import login_pane from './login/LoginPanel'
 
@@ -15,6 +17,9 @@ import ProjectDisplay from "./module/ProjectDisplay"
 import ProjectCreate from "./module/ProjectCreate"
 
 import {mount} from './util/node_util'
+import {API} from './util/constant'
+import {get_format_token} from './util/cookie_util'
+
 
 import '../style/home_page.css'
 
@@ -38,6 +43,15 @@ const RouterList = {
                     // set username to cookie
                     //
                     //
+                    request
+                        .get(API.user)
+                        .set("Authorization", get_format_token())
+                        .then((d) => {
+                            const data = eval(d).body;
+                            user_inform["user_type"] = data["usertype"];
+                            user_inform["user_name"] = data["name"];
+                        }, ()=>{});
+
                     switch (user_inform['user_type']) {
                         case "academic":
                             home_page = new AcademicPage(user_inform);
