@@ -12,6 +12,7 @@ import EditableForm from "./module/EditableForm";
 import ReadOnlyForm from "./module/ReadOnlyForm";
 
 import ProjectDisplay from "./module/ProjectDisplay"
+import ProjectCreate from "./module/ProjectCreate"
 
 import {mount} from './util/node_util'
 
@@ -235,16 +236,23 @@ const RouterList = {
 
 
             let data;
+            let project_display;
             switch (status) {
                 case 'done':
                     data = projects_done;
+                    project_display = new ProjectDisplay(data);
                     break;
                 case 'pending':
                     data = projects_pending;
+                    project_display = new ProjectDisplay(data);
                     break;
+                case 'creating':
+                    project_display = new ProjectCreate();
+                    break;
+
             }
 
-            let project_display = new ProjectDisplay(data);
+
             home_page.mount_content(project_display);
             home_page.set_state({status: status});
 
@@ -252,6 +260,16 @@ const RouterList = {
                 mount(home_page, $("#root"));
         },
 
+        'home/project/creating': () => {
+            let project_display = new ProjectCreate();
+
+
+            home_page.mount_content(project_display);
+            home_page.set_state();
+
+            if(!home_page.mounted)
+                mount(home_page, $("#root"));
+        },
 
         'home/form/*': (id) => {
             // some request here
@@ -358,7 +376,7 @@ const RouterList = {
             console.log("404")
         },
         'test': () => {
-            mount(new TutorPage(), $("#root"));
+            mount(new ProjectCreate(), $("#root"));
         }
     }
 };

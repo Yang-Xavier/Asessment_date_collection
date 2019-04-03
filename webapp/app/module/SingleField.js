@@ -3,7 +3,7 @@ import $ from "jquery"
 import BaseNode from "../util/BaseNode"
 
 import {Form_Field_Title, ASM_Format_Options} from "../util/constant"
-import '../lib/TimePicker'
+import '../lib/DateRangePicker'
 
 import {add_animate} from "../util/node_util";
 
