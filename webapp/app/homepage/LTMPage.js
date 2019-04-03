@@ -11,7 +11,11 @@ class LTMPage extends HomePageBased{
         super(param);
 
         this.header = new Header({
-            user_type: this.state['user_type'], user_name: this.state['user_name']
+            user_type: this.state['user_type'],
+            user_name: this.state['user_name'],
+            login_out_callback: () => {
+                route('login')
+            }
         });
 
         this.nav = new NavBar({

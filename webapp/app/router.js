@@ -25,11 +25,16 @@ import '../style/home_page.css'
 
 
 
-let user_inform = {
-    "user_type": 'ltm',
-    "user_name": 'Xavier'
+let user_inform ={
+    "user_type": "",
+    "user_name":""
 };
-let home_page  = new LTMPage(user_inform); // test
+// = {
+//     "user_type": 'ltm',
+//     "user_name": 'Xavier'
+// };
+let home_page;
+    // = new LTMPage(user_inform); // test
 
 const RouterList = {
     'base': "/app/",
@@ -38,32 +43,26 @@ const RouterList = {
         'login': () => {
             mount(new login_pane({
                 "callback": () => {
-                    // request user information here
-                    // user_inform
-                    // set username to cookie
-                    //
-                    //
                     request
                         .get(API.user)
                         .set("Authorization", get_format_token())
                         .then((d) => {
                             const data = eval(d).body;
-                            user_inform["user_type"] = data["usertype"];
-                            user_inform["user_name"] = data["name"];
+                            user_inform["user_type"] = data.user["usertype"];
+                            user_inform["user_name"] = data.user["name"];
+                            switch (user_inform['user_type']) {
+                                case "academic":
+                                    home_page = new AcademicPage(user_inform);
+                                    break;
+                                case "ltm":
+                                    home_page = new LTMPage(user_inform);
+                                    break;
+                                case "tutor":
+                                    home_page = new TutorPage(user_inform);
+                                    break
+                            }
                         }, ()=>{});
 
-                    switch (user_inform['user_type']) {
-                        case "academic":
-                            home_page = new AcademicPage(user_inform);
-                            break;
-                        case "ltm":
-                            home_page = new LTMPage(user_inform);
-                            break;
-                        case "tutor":
-                            home_page = new TutorPage(user_inform);
-                            break
-                    }
-                    route("home")
                 }}), $("#root"));
         },
         'home': () => {

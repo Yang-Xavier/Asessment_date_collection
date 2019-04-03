@@ -7,6 +7,7 @@ import BaseNode from "../util/BaseNode"
 import {add_animate} from "../util/node_util";
 import '../../style/login_panel.css'
 import {API} from '../util/constant'
+import route from "riot-route";
 
 
 class LoginPanel extends BaseNode{
@@ -46,8 +47,8 @@ class LoginPanel extends BaseNode{
         // Event
 
         this.login_btn.click(() => {
-            let email = 'user.2@sheffield.ac.uk';//this.account_input.val();
-            let pwd =  'password';//this.pwd_input.val();
+            let email = this.account_input.val();
+            let pwd =  this.pwd_input.val();
             let authorization = "Basic " + Base64.encode(email+":"+pwd);
 
             if (email == '' || pwd == '') {
@@ -85,22 +86,24 @@ class LoginPanel extends BaseNode{
             Cookies.set("re", 1);
         }
         Cookies.set('token', json_data.token);
+        this.state['callback']();
 
         add_animate(this.container,'bounceOutUp', () => {
-            this.state['callback']()
+
+            route('home')
+
+
         });
 
     //    then get the information of the user
     };
 
 
+
     before_render() {
         add_animate(this.container, 'bounceInDown');
     }
 
-    update() {
-
-    }
 
     render() {
 
