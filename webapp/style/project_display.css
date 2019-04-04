@@ -44,9 +44,22 @@
     white-space: nowrap;
     text-overflow: ellipsis;
     height: 100px;
+    font-size: 1rem;
 }
 
-.content_block .form_display .display_container .information_block div {
+.content_block .form_display .display_container .information_block:hover .form_name,
+.content_block .project_display .display_container .information_block:hover .project_name {
+    width: 100%;
+    word-wrap: break-word;
+    text-overflow: initial;
+    white-space: normal;
+    height: 100px;
+    font-size: 1rem;
+}
+
+.content_block .form_display .display_container .information_block div,
+.content_block .project_display .display_container .information_block div {
+    font-size: 0.7rem;
     height: 25px;
 }
 

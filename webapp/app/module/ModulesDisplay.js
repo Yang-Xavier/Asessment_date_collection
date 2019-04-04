@@ -16,7 +16,7 @@ class ModulesDisplay extends BaseNode{
         *           capacity:
         *           lecturer:
         *           }
-        *           status: // for shown the status of form
+        *           filled: // for shown the status of form
         *
         *       }
         *   ],
@@ -42,7 +42,7 @@ class ModulesDisplay extends BaseNode{
         const item = (module, index) => {
             const init_state = Object.assign(module, {
                 index: index,
-                selected: (module.id in this.state['selected_items']),
+                selected: this.state['selected_items']?(module.id in this.state['selected_items']) : [],
                 selectable: this.state['selectable'],
                 select_callback: (id, status) => {this.select_item(id, status)}
             });
@@ -50,7 +50,11 @@ class ModulesDisplay extends BaseNode{
             return new ModuleItem(init_state)
         };
 
-        this.items.append($("<div class='item title'><span>Module Code</span><span>Module Name</span><span>Module Capacity</span><span>Module Lecturer</span></div>")) //add title
+        if (this.state["selectable"]) {
+            this.items.append($("<div class='item title'><span>Module Code</span><span>Module Name</span><span>Module Capacity</span><span>Module Lecturer</span></div>")) //add title
+        } else {
+            this.items.append($("<div class='item title'><span>Module Code</span><span>Module Name</span><span>Module Capacity</span><span>Module Lecturer</span><span>Collected</span></div>")) //add title
+        }
         for(let i in this.state['modules']) {
             const item_ = item(this.state['modules'][i],i);
             this.all_items.push(item_);
@@ -161,12 +165,10 @@ class ModuleItem extends BaseNode{
 
 
         if (!this.state["selectable"]) {
-            const status_block = $("<div/>");
-
-            // const checkbox_span = $("<span/>");
-            // checkbox_span.append(checkbox);
-            // container.append(checkbox_span);
+            const  status_block = $("<span class='status'>"+(this.state['filled']?"<i class= 'fa fa-check' />":"")+"</span>");
+            this.container.append(status_block);
         } else {
+            this.container.addClass('selectable');
             this.container.addClass(this.state['selected']?'selected': '');
             this.container.on('click', ()=>{
                 this.select();

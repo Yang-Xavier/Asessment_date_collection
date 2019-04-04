@@ -1,4 +1,6 @@
 import $ from "jquery"
+import request from 'superagent'
+
 
 import 'jquery-ui/ui/widgets/datepicker';
 import 'jquery-ui/themes/base/core.css';
@@ -10,6 +12,9 @@ import BaseNode from "../util/BaseNode"
 
 import ModulesDisplay from'./ModulesDisplay'
 import Popup from './Popup'
+
+import {API} from '../util/constant'
+import {get_format_token} from '../util/cookie_util'
 
 import '../../style/project_style.css'
 
@@ -45,8 +50,25 @@ class ProjectCreate extends BaseNode{
                 this.open_modules_selection()
             });
 
+            save_btn.on('click', () => {
+                const post_data = {};
+
+                post_data['name'] = name.val();
+                post_data['deadline'] = time.val();
+                post_data['modules'] = this.state['selected_id'];
+
+                request
+                    .post(API.project)
+                    .set("Authorization", get_format_token())
+                    .send(post_data)
+                    .then(()=>{
+
+                    }, ()=>{})
+            });
+
+
             // time picker
-            time.datepicker();
+            time.datepicker({dateFormat: 'dd/mm/yy'});
 
             name_block.append(name);
             time_block.append(time);
@@ -64,7 +86,7 @@ class ProjectCreate extends BaseNode{
 
     open_modules_selection() {
         const container = $("<div class='modules_block'/>");
-        const module_selection = new ModulesDisplay({'selectable': true, 'selected_items': this.state['selected_id']});
+        const modules_selection = new ModulesDisplay({'selectable': true, 'selected_items': this.state['selected_id']});
         const select_all = $("<div class='select_all_btn'>All</div>");
         const close = $("<div class='close_btn'><i class='fas fa-check-circle'></i></div>");
 
@@ -73,10 +95,10 @@ class ProjectCreate extends BaseNode{
         });
 
         select_all.on('click', () => {
-            module_selection.select_all(true);
+            modules_selection.select_all(true);
         });
 
-        container.append(module_selection.render());
+        container.append(modules_selection.render());
 
 
         this.module_selection = new Popup(container);
@@ -85,16 +107,27 @@ class ProjectCreate extends BaseNode{
         this.module_selection.add_appendix_to_content(close);
 
         this.module_selection.set_on_close(() => {
-            this.state["selected_id"] = module_selection.state['selected_items'];
-
-
+            this.show_modules_selection(modules_selection);
         });
 
         this.module_selection.popup(700,700)
     }
 
+    show_modules_selection(modules_selection) {
+        this.state["selected_id"] = modules_selection.state['selected_items'];
+        const selected_id = modules_selection.state['selected_items'];
+        const all_items = modules_selection.state['modules'];
+        const selected_modules = all_items.filter(term => {
+            term['filled'] = false;
+            return term.id in selected_id
+        });
 
-
+        const modules_display = new ModulesDisplay({
+            modules:selected_modules,
+            selectable: false
+        });
+        this.module_selection_display.html(modules_display.render())
+    }
 
     render() {
 

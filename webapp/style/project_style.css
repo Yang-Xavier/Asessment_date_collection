@@ -125,19 +125,28 @@
     width: 200px;
 }
 
-.modules_container .items_container .item:hover {
+.modules_container .items_container .item.selectable:hover {
     cursor: pointer;
     background: #D1F2EB;
 }
 
-.modules_container .items_container .item.title:hover {
+.modules_container .items_container .item.selectable.title:hover {
     cursor: auto;
     background: #f1f3f4;
 }
 
-.modules_container .items_container .item.selected{
+.modules_container .items_container .item.selectable.selected{
     background: #D6EAF8;
 }
+.modules_container .items_container .item:hover {
+    cursor: pointer;
+    background: #D1F2EB;
+}
+.modules_container .items_container .item.title:hover {
+    cursor: auto;
+    background: transparent;
+}
+
 
 .select_all_btn {
     position: absolute;
@@ -189,4 +198,5 @@
 .project_create .display_content {
     width: 100%;
     flex-grow: 2;
+    padding: 0 5% 0 5%;
 }

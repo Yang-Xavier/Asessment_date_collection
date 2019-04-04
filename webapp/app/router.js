@@ -19,54 +19,34 @@ import ProjectCreate from "./module/ProjectCreate"
 import {mount} from './util/node_util'
 import {API} from './util/constant'
 import {get_format_token} from './util/cookie_util'
+import {projects_data_parsing} from './util/data_parse_util'
 
 
 import '../style/home_page.css'
 
 
 
-let user_inform;
+let user_inform={};
 
 let home_page;
-
-// let user_inform = {
-//     "user_type": 'tutor',
-//     "user_name": 'Xavier'
-// };
-// let home_page  = new AcademicPage(user_inform); // test
 
 const RouterList = {
     'base': "/app/",
     'index': "login",
     "route_config": {
         'login': () => {
-            mount(new login_pane({
-                "callback": () => {
-                    request
-                        .get(API.user)
-                        .set("Authorization", get_format_token())
-                        .then((d) => {
-                            const data = eval(d).body;
-                            user_inform["user_type"] = data.user["usertype"];
-                            user_inform["user_name"] = data.user["name"];
-                            switch (user_inform['user_type']) {
-                                case "academic":
-                                    home_page = new AcademicPage(user_inform);
-                                    break;
-                                case "ltm":
-                                    home_page = new LTMPage(user_inform);
-                                    break;
-                                case "tutor":
-                                    home_page = new TutorPage(user_inform);
-                                    break
-                            }
-                        }, ()=>{});
+            mount(new login_pane(), $("#root"));
+        },
 
-                }}), $("#root"));
-        },
         'home': () => {
-            mount(home_page, $("#root"));
+            mount_homepage_frame()
+                .then(page => {
+                    home_page = page;
+                    mount(home_page, $("#root"))
+                })
+
         },
+
         'home/forms/*': (status) => {
             // some request here
 
@@ -159,15 +139,43 @@ const RouterList = {
 
             let project_display = new FormsDisplay(data);
 
-            home_page.mount_content(project_display);
-            home_page.set_state({status: status});
+            mount_to_homepage(project_display, status)
 
-            if(!home_page.mounted)
-                mount(home_page, $("#root"));
         },
 
         'home/projects/*': (status) => {
-            // some request here
+
+            let project_display;
+
+            if(status == 'creating') {
+                project_display = new ProjectCreate();
+                mount_to_homepage(project_display, status)
+
+            }
+            else {
+                request
+                    .get(API.project)
+                    .set("Authorization", get_format_token())
+                    .then((data)=>{
+                        let project_data;
+
+                        switch (status) {
+                            case 'done':
+                                project_data = [].filter.call(data.body.projects, term => term.state=='done');
+                                project_data = projects_data_parsing(project_data);
+                                break;
+                            case 'pending':
+                                project_data = [].filter.call(data.body.projects, term => term.state=='created');
+
+                                project_data = projects_data_parsing(project_data);
+                                break;
+                        }
+
+                        project_display = new ProjectDisplay({data: project_data});
+                        mount_to_homepage(project_display, status)
+                    })
+            }
+
             const projects_done = {
                 data: [
                     {
@@ -247,40 +255,12 @@ const RouterList = {
             };
 
 
-            let data;
-            let project_display;
-            switch (status) {
-                case 'done':
-                    data = projects_done;
-                    project_display = new ProjectDisplay(data);
-                    break;
-                case 'pending':
-                    data = projects_pending;
-                    project_display = new ProjectDisplay(data);
-                    break;
-                case 'creating':
-                    project_display = new ProjectCreate();
-                    break;
-
-            }
-
-
-            home_page.mount_content(project_display);
-            home_page.set_state({status: status});
-
-            if(!home_page.mounted)
-                mount(home_page, $("#root"));
         },
 
         'home/project/creating': () => {
+
             let project_display = new ProjectCreate();
-
-
-            home_page.mount_content(project_display);
-            home_page.set_state();
-
-            if(!home_page.mounted)
-                mount(home_page, $("#root"));
+            mount_to_homepage(project_display)
         },
 
         'home/form/*': (id) => {
@@ -393,4 +373,45 @@ const RouterList = {
     }
 };
 
-export default RouterList
+const mount_homepage_frame = () => {
+    let frame;
+
+    return request
+        .get(API.user)
+        .set("Authorization", get_format_token())
+        .then((d) => {
+            const data = d.body;
+            user_inform["user_type"] = data.user["usertype"];
+            user_inform["user_name"] = data.user["name"];
+            switch (user_inform['user_type']) {
+                case "academic":
+                    frame = new AcademicPage(user_inform);
+                    break;
+                case "ltm":
+                    frame = new LTMPage(user_inform);
+                    break;
+                case "tutor":
+                    frame = new TutorPage(user_inform);
+                    break
+            }
+            return frame
+        }, ()=>{});
+}
+
+const mount_to_homepage = (node, status) => {
+    if (!home_page) {
+        mount_homepage_frame()
+            .then(page => {
+                page.mount_content(node);
+                page.set_state({status: status});
+                home_page = page;
+                mount(home_page, $("#root"))
+            })
+    } else {
+        home_page.mount_content(node);
+        home_page.set_state({status: status});
+    }
+}
+
+
+export default RouterList;
