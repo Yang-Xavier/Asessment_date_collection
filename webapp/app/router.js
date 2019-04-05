@@ -15,6 +15,7 @@ import ReadOnlyForm from "./module/ReadOnlyForm";
 
 import ProjectDisplay from "./module/ProjectDisplay"
 import ProjectCreate from "./module/ProjectCreate"
+import ProjectDetails from "./module/ProjectDetails"
 
 import {mount} from './util/node_util'
 import {API} from './util/constant'
@@ -173,7 +174,7 @@ const RouterList = {
 
                         project_display = new ProjectDisplay({data: project_data});
                         mount_to_homepage(project_display, status)
-                    })
+                    }, () => {route('login')})
             }
 
             const projects_done = {
@@ -261,6 +262,48 @@ const RouterList = {
 
             let project_display = new ProjectCreate();
             mount_to_homepage(project_display)
+        },
+
+        'home/project/*': (id) => {
+            const mock_data = {
+                modules: [
+                    {
+                        id:0,
+                        name:'Team Software Project',
+                        code: "COM666",
+                        details: {
+                            capacity: 100,
+                            lecturer: "ABCABCABC"
+                        },
+                        filled: false
+                    },{
+                        id:1,
+                        name:'Team Software Project',
+                        code: "COM666",
+                        details: {
+                            capacity: 100,
+                            lecturer: "ABCABCABC"
+                        },
+                        filled: true
+                    },{
+                        id:2,
+                        name:'Team Software Project',
+                        code: "COM666",
+                        details: {
+                            capacity: 100,
+                            lecturer: "ABCABCABC"
+                        },
+                        filled: true
+                    },
+                ],
+                project_name: "TESTTESTTESTTESTTESTTESTTESTTEST",
+                project_due: "00/00/000",
+                status: "00/000",
+                state: 'pending'
+
+            }
+
+            mount_to_homepage(new ProjectDetails(mock_data));
         },
 
         'home/form/*': (id) => {
@@ -356,9 +399,7 @@ const RouterList = {
                 mount(home_page, $("#root"));
         },
 
-
         'visualisation/*..': (graph_type)=>{
-
 
         },
         'module/*': (module_id)=>{
@@ -368,7 +409,7 @@ const RouterList = {
             console.log("404")
         },
         'test': () => {
-            mount(new ProjectCreate(), $("#root"));
+
         }
     }
 };
@@ -395,7 +436,7 @@ const mount_homepage_frame = () => {
                     break
             }
             return frame
-        }, ()=>{});
+        }, ()=>{route('login')});
 }
 
 const mount_to_homepage = (node, status) => {

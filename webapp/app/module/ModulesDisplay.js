@@ -53,7 +53,7 @@ class ModulesDisplay extends BaseNode{
         if (this.state["selectable"]) {
             this.items.append($("<div class='item title'><span>Module Code</span><span>Module Name</span><span>Module Capacity</span><span>Module Lecturer</span></div>")) //add title
         } else {
-            this.items.append($("<div class='item title'><span>Module Code</span><span>Module Name</span><span>Module Capacity</span><span>Module Lecturer</span><span>Collected</span></div>")) //add title
+            this.items.append($("<div class='item title'><span>Module Code</span><span>Module Name</span><span>Module Capacity</span><span>Module Lecturer</span><span>Filled</span></div>")) //add title
         }
         for(let i in this.state['modules']) {
             const item_ = item(this.state['modules'][i],i);
@@ -124,9 +124,6 @@ class ModulesDisplay extends BaseNode{
             ]
     }
 
-    get_selection_modules() {
-
-    }
 
     render() {
         this.container.append(this.items);
@@ -155,8 +152,6 @@ class ModuleItem extends BaseNode{
         **/
 
         this.container = $("<div class='item'/>");
-
-
 
         this.container.append($("<span> " + this.state["code"] + " </span>"));
         this.container.append($("<span> " + this.state["name"] + " </span>"));

@@ -1,0 +1,145 @@
+.project_detail {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
+    padding: 20px 20px;
+}
+
+.project_detail .header {
+    width: 80%;
+    height: 120px;
+    position: relative;
+}
+.project_detail .forms {
+    width: 80%;
+}
+.project_detail .header:after {
+    content: ' ';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    width: 100%;
+    height: 1px;
+    background: #777;
+}
+
+.project_detail .header div{
+    margin: 0 0 20px 0;
+    height: 40px;
+    line-height: 40px;
+}
+
+.project_detail .header .name {
+    text-align: center;
+    font-size: 1.5rem;
+}
+
+.project_detail .header .status {
+    text-align: center;
+}
+.project_detail .header .status span {
+    padding: 0 20px 0 20px;
+}
+
+.project_detail .header .status span .done {
+    color: var(--green);
+}
+
+.project_detail .header .function_block {
+    position: absolute;
+    display: flex;
+    flex-direction: row-reverse;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+}
+
+.project_detail .header .function_block .visual_selection,
+.project_detail .header .function_block .notify_btn {
+    width: 40px;
+    text-align: center;
+    margin: 0;
+    overflow: hidden;
+    white-space : nowrap;
+    color: #909497;
+    border: 1px solid #909497;
+    border-radius: 40px 40px;
+    line-height: 40px;
+    transition: width 0.5s;
+}
+
+
+.project_detail .header .function_block .v_icon{
+    display: inline-block;
+    height: 40px;
+    width: 40px;
+    text-align: center;
+    line-height: 40px;
+    margin: 0;
+    font-weight: bold;
+}
+.project_detail .header .function_block .visual_btn,
+.project_detail .header .function_block .notify_btn div{
+    display: inline-block;
+    margin: 0 20px 0 20px;
+}
+
+
+.project_detail .header .function_block .visual_selection:hover {
+    width: 250px;
+    color: #85C1E9;
+    border: 1px solid #85C1E9;
+}
+
+.project_detail .header .function_block .visual_selection:hover .eye_icon{
+    display: inline-block;
+}
+.project_detail .header .function_block .visual_selection:hover .v_icon{
+    display: none;
+}
+
+.project_detail .header .function_block .visual_selection .eye_icon {
+    display: none;
+}
+.project_detail .header .function_block .notify_btn div.text:hover,
+.project_detail .header .function_block .visual_selection .visual_btn:hover {
+    cursor: pointer;
+    color: #3498DB;
+}
+.project_detail .header .function_block .notify_btn:hover {
+    width: 100px;
+    color: #85C1E9;
+    border: 1px solid #85C1E9;
+}
+
+.project_detail .header .function_block .notify_btn div {
+    width: 40px;
+    height: 40px;
+}
+.project_detail .header .function_block .notify_btn div.icon {
+    position: relative;
+    margin: -1px 0 0 0;
+}
+.project_detail .header .function_block .notify_btn div.icon svg{
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    top: 0;
+    margin: auto;
+    height: 17px;
+    width: 17px;
+    text-align: center;
+    font-weight: bold;
+}
+.project_detail .header .function_block .notify_btn div.text {
+    width: 40px;
+    vertical-align: top;
+    margin: 0 10px 0 0;
+}

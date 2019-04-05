@@ -2,7 +2,7 @@ export const projects_data_parsing = (data) =>{
     const new_data = [];
     for(let i in data) {
         const item = {};
-        item['id'] = data[i].id;
+        item['project_id'] = data[i].id;
         item['project_name'] = data[i].name;
 
         item['checking'] = data[i].state == '';
