@@ -4,6 +4,7 @@ application.py
 """
 
 import enum
+from datetime import datetime
 
 from flask import Flask, Blueprint, jsonify, g, request
 from flask_cors import CORS
@@ -141,12 +142,16 @@ class Project(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(80), nullable=False)
     state = db.Column(db.String(80), nullable=False)
+    create_date = db.Column(db.String(80), nullable=False)
+    due_date = db.Column(db.String(80), nullable=False)
     forms = db.relationship('Form', backref='project', lazy=True) # one to many.
 
     def to_dict(self):
         return dict(id=self.id,
                     name=self.name,
                     state=str(self.state),
+                    create_date=self.create_date,
+                    due_date=self.due_date,
                     forms=[e.to_dict() for e in self.forms])
 
 # ---------------- Other -------------------- #
@@ -205,7 +210,10 @@ def create_project():
 
     # Get request params.
     json = request.get_json()
-    project = Project(name=json["name"], state="created")
+    project = Project(name=json["name"],
+            state="created",
+            create_date=datetime.now().strftime("%d/%m/%Y"),
+            due_date=json["due_date"])
     db.session.add(project)
     db.session.flush()
     db.session.refresh(project)
