@@ -87,8 +87,8 @@ class Module(db.Model):
         return dict(id=self.id,
                     code=self.code,
                     name=self.name,
-                    academic_name=academic_name,
                     semester=str(self.semester),
+                    academic_name=academic_name,
                     academic_id=self.academic,
                     students=self.students)
 
@@ -105,11 +105,11 @@ class Assessment(db.Model):
 
     def to_dict(self):
         return dict(id=self.id,
-                    format=str(self.format),
-                    name=self.name,
-                    marks=self.marks,
-                    release_date=self.release_date.strftime("%d/%m/%Y"),
-                    submission_date=self.submission_date.strftime("%d/%m/%Y"))
+                    asm_format=str(self.format),
+                    asm_name=self.name,
+                    asm_per=self.marks,
+                    asm_release=self.release_date.strftime("%d/%m/%Y"),
+                    asm_due=self.submission_date.strftime("%d/%m/%Y"))
 
 class Student(db.Model):
     __tablename__ = "student"
@@ -126,6 +126,7 @@ class Form(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     is_filled = db.Column(db.Boolean)
+    submission_date = db.Column(db.DateTime, nullable=True)
     module_id = db.Column(db.Integer, db.ForeignKey('module.id'), nullable=False) # foreign key.
     assessments = db.relationship('Assessment', backref='form', lazy=True) # one to many.
     project_id = db.Column(db.Integer, db.ForeignKey('project.id'), nullable=False) # foreign key.
@@ -133,6 +134,7 @@ class Form(db.Model):
     def to_dict(self):
         return dict(id=self.id,
                     is_filled=self.is_filled,
+                    form_submitted_date=self.strftime("%d/%m/%Y"),
                     project_id=self.project_id,
                     module_id=self.module_id,
                     assessments=[a.to_dict() for a in self.assessments])
@@ -148,11 +150,11 @@ class Project(db.Model):
     forms = db.relationship('Form', backref='project', lazy=True) # one to many.
 
     def to_dict(self):
-        return dict(id=self.id,
-                    name=self.name,
+        return dict(project_id=self.id,
+                    project_name=self.name,
                     state=str(self.state),
-                    create_date=self.create_date.strftime("%d/%m/%Y"),
-                    due_date=self.due_date.strftime("%d/%m/%Y"),
+                    project_create=self.create_date.strftime("%d/%m/%Y"),
+                    project_due=self.due_date.strftime("%d/%m/%Y"),
                     forms=[e.to_dict() for e in self.forms])
 
 # ---------------- Other -------------------- #
