@@ -134,7 +134,7 @@ class Form(db.Model):
     def to_dict(self):
         return dict(id=self.id,
                     is_filled=self.is_filled,
-                    form_submitted_date=self.submission_date.strftime("%d/%m/%Y"),
+                    form_submitted_date=self.submission_date.strftime("%d/%m/%Y") if self.submission_date else "",
                     project_id=self.project_id,
                     module_id=self.module_id,
                     assessments=[a.to_dict() for a in self.assessments])
