@@ -88,7 +88,6 @@ class Module(db.Model):
                     name=self.name,
                     semester=str(self.semester),
                     academic=self.academic,
-                    assessments=[a.to_dict() for a in self.assessments],
                     students=self.students)
 
 class Assessment(db.Model):
@@ -190,11 +189,7 @@ def send_401():
 @app.route('/api/module/', methods=['GET'])
 @auth.login_required
 def get_module():
-    modules = []
-    for module in Module.query.all():
-        if module.academic == g.user.id:
-            modules.append(module.to_dict())
-    return jsonify({"modules":modules})
+    return jsonify({"modules":[module.to_dict() for module in Module.query.all()]})
 
 @app.route('/api/user', methods=['GET'])
 @auth.login_required
