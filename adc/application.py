@@ -107,8 +107,8 @@ class Assessment(db.Model):
                     format=str(self.format),
                     name=self.name,
                     marks=self.marks,
-                    release_date=self.release_date,
-                    submission_date=self.submission_date)
+                    release_date=self.release_date.strftime("%d/%m/%Y"),
+                    submission_date=self.submission_date.strftime("%d/%m/%Y"))
 
 class Student(db.Model):
     __tablename__ = "student"
@@ -142,16 +142,16 @@ class Project(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(80), nullable=False)
     state = db.Column(db.String(80), nullable=False)
-    create_date = db.Column(db.String(80), nullable=False)
-    due_date = db.Column(db.String(80), nullable=False)
+    create_date = db.Column(db.DateTime, nullable=False)
+    due_date = db.Column(db.DateTime, nullable=False)
     forms = db.relationship('Form', backref='project', lazy=True) # one to many.
 
     def to_dict(self):
         return dict(id=self.id,
                     name=self.name,
                     state=str(self.state),
-                    create_date=self.create_date,
-                    due_date=self.due_date,
+                    create_date=self.create_date.strftime("%d/%m/%Y"),
+                    due_date=self.due_date.strftime("%d/%m/%Y"),
                     forms=[e.to_dict() for e in self.forms])
 
 # ---------------- Other -------------------- #
