@@ -226,12 +226,12 @@ def get_project():
     all_projects = Project.query.all()
 
     # return complete projects for LTM.
-    if g.user.usertype == "ltm":
-        print("Returning all projects for LTM")
+    if g.user.usertype in ("ltm", "tutor"):
+        print("Returning all projects for LTM and tutor")
         return jsonify({"projects":[project.to_dict() for project in all_projects]})
 
     # return projects with only module forms for academic.
-    if g.user.usertype == "academic":
+    elif g.user.usertype == "academic":
         print("Returning projects for user", g.user.id)
 
         # Find module of current academic.
