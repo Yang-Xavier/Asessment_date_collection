@@ -83,11 +83,13 @@ class Module(db.Model):
             back_populates="modules") # many to many.
 
     def to_dict(self):
+        academic_name = User.query.filter_by(id=self.academic).first().name
         return dict(id=self.id,
                     code=self.code,
                     name=self.name,
+                    academic_name=academic_name,
                     semester=str(self.semester),
-                    academic=self.academic,
+                    academic_id=self.academic,
                     students=self.students)
 
 class Assessment(db.Model):
