@@ -205,14 +205,15 @@ def get_user():
 def create_project():
     if g.user.usertype != "ltm":
         print("Only LTM can create projects")
-        return jsonify({"error":"Invalid module ID in project form"})
+        return jsonify({"error_code":2,
+            "error_msg":"Invalid module ID in project form"})
 
     # Get request params.
     json = request.get_json()
     project = Project(name=json["name"],
             state="created",
-            create_date=datetime.now().strftime("%d/%m/%Y"),
-            due_date=json["due_date"])
+            create_date=datetime.now(),
+            due_date=datetime.strptime(json["due_date"], "%d/%m/%Y"))
     db.session.add(project)
     db.session.flush()
     db.session.refresh(project)
@@ -222,7 +223,7 @@ def create_project():
                 project_id=project.id)
         db.session.add(form)
     db.session.commit()
-    return jsonify({"status":"success"})
+    return jsonify({"error_code":0, "error_msg":"success"})
 
 @app.route('/api/project', methods=['GET'])
 @auth.login_required
@@ -254,10 +255,41 @@ def get_project():
 
         return jsonify(ret_dict)
 
-@app.route('/api/project', methods=['PUT'])
+@app.route('/api/form', methods=['POST'])
 @auth.login_required
-def update_project():
-    pass
+def create_forms():
+    # only academic can call this API.
+    if g.user.usertype != "academic":
+        return jsonify({"error_code":1,
+            "error_msg":"API can only be called by academic"})
+
+    json = request.get_json()
+    if not json:
+        return jsonify({"error_code":4, "error_msg":"Bad request"})
+
+    for form_json in json["forms"]:
+        result = Form.query.filter_by(id=form_json["id"]).all()
+        if len(result) == 0:
+            return jsonify({"error_code":3, "error_msg":"Form does not exist"})
+
+        # gather old assessments for deletion.
+        for asm in Assessment.query.filter_by(form_id=form_json["id"]).all():
+            db.session.delete(asm)
+
+        form = result[0]
+        form.is_filled = True
+        form.submission_date = datetime.now()
+        for asm_json in form_json["assessments"]:
+            Assessment(name=asm_json["asm_name"],
+                    format=asm_json["asm_format"],
+                    marks=asm_json["asm_per"],
+                    release_date=datetime.strptime(asm_json["asm_release"], "%d/%m/%Y"),
+                    submission_date=datetime.strptime(asm_json["asm_due"], "%d/%m/%Y"),
+                    form=form)
+        db.session.add(form)
+
+    db.session.commit()
+    return jsonify({"error_code":0, "error_msg":"success"})
 
 app.register_blueprint(api, url_prefix="/api")
 
