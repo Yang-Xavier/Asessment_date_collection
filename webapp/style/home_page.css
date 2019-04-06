@@ -4,6 +4,7 @@
     justify-items: stretch;
     height: 100%;
     width: 100%;
+    overflow: hidden;
 }
 
 .home_page .header_bar {

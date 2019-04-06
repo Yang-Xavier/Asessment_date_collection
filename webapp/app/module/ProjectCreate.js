@@ -36,7 +36,7 @@ class ProjectCreate extends BaseNode{
             const name_block = $('<div class="name_block form-control"><label>Project Name</label></div>');
             const name = $('<input type="text"/>');
 
-            const time_block = $('<div class="time_block form-control"><label>Collection Date</label></div>');
+            const time_block = $('<div class="time_block form-control"><label>Deadline</label></div>');
             const time = $('<input />');
 
             const module_selection_btn = $("<button class='form-control'><i/>Select Modules</button>");
@@ -54,16 +54,16 @@ class ProjectCreate extends BaseNode{
                 const post_data = {};
 
                 post_data['name'] = name.val();
-                post_data['deadline'] = time.val();
+                post_data['due_date'] = time.val();
                 post_data['modules'] = this.state['selected_id'];
 
-                request
-                    .post(API.project)
-                    .set("Authorization", get_format_token())
-                    .send(post_data)
-                    .then(()=>{
-
-                    }, ()=>{})
+                // request
+                //     .post(API.project)
+                //     .set("Authorization", get_format_token())
+                //     .send(post_data)
+                //     .then(()=>{
+                //
+                //     }, ()=>{})
             });
 
 
@@ -110,10 +110,11 @@ class ProjectCreate extends BaseNode{
             this.show_modules_selection(modules_selection);
         });
 
-        this.module_selection.popup(700,700)
+        this.module_selection.popup(900,700)
     }
 
     show_modules_selection(modules_selection) {
+
         this.state["selected_id"] = modules_selection.state['selected_items'];
         const selected_id = modules_selection.state['selected_items'];
         const all_items = modules_selection.state['modules'];
@@ -123,9 +124,11 @@ class ProjectCreate extends BaseNode{
         });
 
         const modules_display = new ModulesDisplay({
-            modules:selected_modules,
-            selectable: false
+            modules: selected_modules,
+            selectable: false,
+            no_process: true
         });
+
         this.module_selection_display.html(modules_display.render())
     }
 

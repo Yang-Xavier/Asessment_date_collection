@@ -15,7 +15,9 @@ const Semester_Selection = [ "Semester 1 only", "Semester 2 only","BOTH Semester
 const API = {
     token: RQ_HOST + '/api/token',
     user: RQ_HOST + '/api/user',
-    project: RQ_HOST + '/api/project'
+    project: RQ_HOST + '/api/project',
+    modules: RQ_HOST + '/api/module/',
+    form: RQ_HOST + '/api/form',
 }
 
 

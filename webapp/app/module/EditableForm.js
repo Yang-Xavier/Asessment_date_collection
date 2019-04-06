@@ -5,7 +5,6 @@ import SingleField from './SingleField'
 
 import BaseNode from "../util/BaseNode"
 import {add_animate} from '../util/node_util'
-import {Semester_Selection} from '../util/constant'
 
 /*
 * Based on bootstrap*/
@@ -17,7 +16,6 @@ class EditableForm extends BaseNode{
 
         // states
         this.set_state({
-            semester: Semester_Selection[0],
             form_fields:[],
             field_counter: 0,
             editable: true
@@ -33,27 +31,11 @@ class EditableForm extends BaseNode{
         this.submit_btn = $('<button type="button" class="btn btn-secondary submit_btn">Save</button>');
         this.add_more_btn = $('<button type="button" class="btn btn-light add_btn">Add More Assessment</button>')
 
-        this.semester_selection = () => {
-            const container = $("<div class='semester_selection form-group'/>");
-            const label  = $("<label>Semester: &nbsp;</label>");
-            container.append(label)
-
-
-            const selection = $("<select class='form-control'/>");
-            for( let i in Semester_Selection) {
-                selection.append("<option>" + Semester_Selection[i] + "</option>");
-            }
-            selection.val(this.state["semester"]);
-            selection.on("change", () => {
-                this.state["semester"] = selection.val();
-            })
-            container.append(selection);
-            return container
-        };
+        this.semester_selection = $("<label>" + "Semester: " + this.state["semester"] + "</label>");
 
 
         this.head_label = $("<label></label>");
-        this.head_label.text("Form: " + this.state['form_name']);
+        this.head_label.text("Project: " + this.state['form_name']);
         this.header.append(this.head_label);
         this.head_label = $("<label></label>");
         this.head_label.text("Academic: " + this.state['username']);
@@ -61,13 +43,13 @@ class EditableForm extends BaseNode{
         this.head_label = $("<label></label>");
         this.head_label.text("Module: " + this.state['module_code']);
         this.header.append(this.head_label);
-        this.header.append(this.semester_selection());
+        this.header.append(this.semester_selection);
 
         const init_state_single_form = {
             editable: this.state['editable'],
             removable: false,
             title: "Assignment ",
-            id: this.state["field_counter"],
+            index: this.state["field_counter"],
             remove_callback: this.remove_field.bind(this)
         };
 
@@ -79,7 +61,7 @@ class EditableForm extends BaseNode{
 
             for(let i = 1; i < this.state['form_data'].length; i++) {
                 init_state_single_form.removable = true;
-                init_state_single_form.id = i;
+                init_state_single_form.index = i;
 
                 const state = Object.assign(init_state_single_form,this.state['form_data'][i]);
                 const new_field = new SingleField(state);
@@ -103,7 +85,7 @@ class EditableForm extends BaseNode{
             editable:true,
             removable: true,
             title: "Assignment ",
-            id: this.state["field_counter"],
+            index: this.state["field_counter"],
             remove_callback: this.remove_field.bind(this)
         });
         this.form_Panel.append(new_field.render());
@@ -111,13 +93,13 @@ class EditableForm extends BaseNode{
         this.state["field_counter"]++;
     }
 
-    remove_field(id) {
+    remove_field(index) {
         this.state["form_fields"] = this.state["form_fields"]
-            .slice(0,id)
-            .concat(this.state["form_fields"].slice(id+1));
+            .slice(0,index)
+            .concat(this.state["form_fields"].slice(index+1));
         this.state["field_counter"]--;
         for(let i in this.state["form_fields"]) {
-            this.state["form_fields"][i].set_state({'id': parseInt(i)});
+            this.state["form_fields"][i].set_state({'index': parseInt(i)});
         }
 
     }

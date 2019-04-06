@@ -1,4 +1,5 @@
 import $ from "jquery"
+import route from 'riot-route'
 
 import BaseNode from "../util/BaseNode"
 
@@ -25,11 +26,9 @@ class ModulesDisplay extends BaseNode{
         *
         * }*/
 
-        if(!param.modules) {
-            this.set_state({
-                modules: this.get_all_modules()
-            })
-        }
+        this.set_state({
+            modules: !param.modules?this.get_all_modules():this.get_forms(param)
+        })
 
 
         this.set_state({selected_module: []});
@@ -51,9 +50,9 @@ class ModulesDisplay extends BaseNode{
         };
 
         if (this.state["selectable"]) {
-            this.items.append($("<div class='item title'><span>Module Code</span><span>Module Name</span><span>Module Capacity</span><span>Module Lecturer</span></div>")) //add title
+            this.items.append($("<div class='item title'><span>Module Code</span><span>Module Name</span><span>Module Semester</span><span>Module Lecturer</span></div>")) //add title
         } else {
-            this.items.append($("<div class='item title'><span>Module Code</span><span>Module Name</span><span>Module Capacity</span><span>Module Lecturer</span><span>Filled</span></div>")) //add title
+            this.items.append($("<div class='item title'><span>Module Code</span><span>Module Name</span><span>Module Semester</span><span>Module Lecturer</span><span>Filled</span></div>")) //add title
         }
         for(let i in this.state['modules']) {
             const item_ = item(this.state['modules'][i],i);
@@ -78,50 +77,55 @@ class ModulesDisplay extends BaseNode{
     }
 
     get_all_modules() {
-        // request here
+        let modules = [];
 
-        return [{
-                id: 0,
-                code: "COM123",
-                name: 'Test',
-                details: {
-                    capacity: 60,
-                    lecturer: "ABC/CBA"
-                },
-                selected: false
-            },
-            {
-                id: 1,
-                code: "COM123",
-                name: 'Test',
-                details: {
-                    capacity: 60,
-                    lecturer: "ABC/CBA"
-                },
-                selected: false
-            },
-            {
-                id: 2,
-                code: "COM123",
-                name: 'Test',
-                details: {
-                    capacity: 60,
-                    lecturer: "ABC/CBA"
-                },
-                selected: false
-            },
-            {
-                id: 3,
-                code: "COM123",
-                name: 'Test',
-                details: {
-                    capacity: 60,
-                    lecturer: "ABC/CBA"
-                },
-                selected: false
-            }
+        for(let i in window.global.modules) {
+            const module = {}
+            module['id'] = window.global.modules[i].academic_id;
+            module['name'] = window.global.modules[i].name;
+            module['code'] = window.global.modules[i].code;
+            module['selected'] = false;
 
-            ]
+            module['details'] = {};
+            module['details']['capacity'] = window.global.modules[i].students.length;
+            module['details']['lecturer'] = window.global.modules[i].academic_name;
+            module['details']['semester'] = window.global.modules[i].semester;
+
+            modules.push(module)
+
+        }
+
+        return modules
+
+
+    }
+
+    get_forms(param) {
+        if(param["no_process"]) {
+            return param.modules
+        }
+
+        let modules = [];
+        for(let i in param.modules) {
+            const module = {};
+            module['id'] = param.modules[i].form_id;
+            module['name'] = param.modules[i].module.name;
+            module['code'] = param.modules[i].module.code;
+            module['filled'] = param.modules[i].filled;
+
+            module['details'] = {};
+            module['details']['capacity'] = param.modules[i].module.students.length;
+            module['details']['lecturer'] = param.modules[i].module.academic_name;
+            module['details']['semester'] = param.modules[i].module.semester;
+
+            modules.push(module)
+
+        }
+
+
+
+
+        return modules
     }
 
 
@@ -151,17 +155,23 @@ class ModuleItem extends BaseNode{
         *  }
         **/
 
+
         this.container = $("<div class='item'/>");
 
         this.container.append($("<span> " + this.state["code"] + " </span>"));
         this.container.append($("<span> " + this.state["name"] + " </span>"));
-        this.container.append($("<span> " + this.state["details"]["capacity"] + " </span>"));
+        this.container.append($("<span> " + this.state["details"]["semester"] + " </span>"));
         this.container.append($("<span> " + this.state["details"]["lecturer"] + " </span>"));
 
 
         if (!this.state["selectable"]) {
             const  status_block = $("<span class='status'>"+(this.state['filled']?"<i class= 'fa fa-check' />":"")+"</span>");
             this.container.append(status_block);
+            if (this.state['filled']) {
+                this.container.on('click', () => {
+                    route('/home/form/' + this.state['id'])
+                })
+            }
         } else {
             this.container.addClass('selectable');
             this.container.addClass(this.state['selected']?'selected': '');

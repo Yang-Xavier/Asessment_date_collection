@@ -14,22 +14,24 @@ class FormsDisplay extends BaseNode{
             * this.state = {
                data: [{
                    form_name:
+
                    form_submitted_date:
                    form_release_date:
                    form_due:
                    editable:
-                   form_content: [{
+                   assessments: [{
                        "asm_format": "",
                         "asm_name": "",
                         "asm_per": "",
                         "asm_release": "",
-                        "asm_due": ""
+                        "asm_due": "",
+                        "id":
                    }, {}]
                },{}],
 
              }
             * */
-
+console.log(param)
         this.container = $("<div class='form_display'></div>");
         this.display_blocks = [];
 
@@ -51,13 +53,13 @@ class DisplayBlock extends BaseNode{
     constructor(param) {
         /*
         * para = {
-        *  form_id:
+        *  id:  //
            form_name:
            form_submitted_date:
            form_release_date:
            form_due:
            editable:
-           form_content: [{
+           assessments: [{
                "asm_format": "",
                 "asm_name": "",
                 "asm_per": "",
@@ -73,7 +75,7 @@ class DisplayBlock extends BaseNode{
         this.information_block = $("<div class='information_block'></div>");
 
         this.container.on('click', () => {
-            route('home/form/'+ this.state["form_id"])})
+            route('home/form/'+ this.state["id"])})
     }
 
 

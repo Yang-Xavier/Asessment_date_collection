@@ -25,6 +25,7 @@ class SingleField extends BaseNode{
             "asm_release": "",
             "asm_due": "",
             "id": 0,
+            "index":0,
             "editable": true
         };
         param = Object.assign(init_state,param);
@@ -117,7 +118,7 @@ class SingleField extends BaseNode{
 
 
 
-        this.divided_line = $("<div class='divide_line'>"+ this.state["title"]+ (this.state["id"]+1) +"</div>");
+        this.divided_line = $("<div class='divide_line'>"+ this.state["title"]+ (this.state["index"]+1) +"</div>");
         this.remove_block = $("<div class='remove_block '><i class='fas fa-times-circle'/></div>");
 
         this.left_block = $('<div class="left"></div>');
@@ -137,7 +138,7 @@ class SingleField extends BaseNode{
     remove() {
         add_animate(this.container, 'zoomOut', () => {
             if (this.state["remove_callback"]){
-                this.state["remove_callback"](this.state["id"]);
+                this.state["remove_callback"](this.state["index"]);
             }
             this.asm_period_field.find('input').data('dateRangePicker').destroy();
             this.container.remove();
@@ -146,7 +147,7 @@ class SingleField extends BaseNode{
     }
 
     update(){
-        this.divided_line.html(this.state["title"]+ (this.state["id"]+1));
+        this.divided_line.html(this.state["title"]+ (this.state["index"]+1));
     }
 
     render() {

@@ -26,22 +26,12 @@ class ReadOnlyForm extends BaseNode{
         this.container = $("<div class='form_container'></div>");
         this.buttom_btn_block = $("<div class='btn_block'></div>");
 
-        this.semester_selection = () => {
-            const container = $("<div class='semester_selection form-group'/>");
-            const label  = $("<label>Semester: </label>");
-            container.append(label);
-
-            const semester_label = $("<label/>");
-            semester_label.html("&nbsp;"+this.state["semester"]);
-            container.append(semester_label);
-
-            return container
-        };
+        this.semester_selection = $("<label>"+"Semester: "+ this.state["semester"] +" </label>");
 
         this.form_Panel = $("<form role='form'></form>");
 
         this.head_label = $("<label></label>");
-        this.head_label.text("Form: " + this.state['form_name']);
+        this.head_label.text("Project: " + this.state['form_name']);
         this.header.append(this.head_label);
         this.head_label = $("<label></label>");
         this.head_label.text("Academic: " + this.state['username']);
@@ -49,13 +39,13 @@ class ReadOnlyForm extends BaseNode{
         this.head_label = $("<label></label>");
         this.head_label.text("Module: " + this.state['module_code']);
         this.header.append(this.head_label);
-        this.header.append(this.semester_selection());
+        this.header.append(this.semester_selection);
 
         const init_state_single_form = {
             editable: this.state['editable'],
             removable: false,
             title: "Assignment ",
-            id: this.state["field_counter"],
+            index: this.state["field_counter"],
         };
         if (this.state['form_data'].length > 0) {
             const state = Object.assign(init_state_single_form,this.state['form_data'][0]);
@@ -64,7 +54,7 @@ class ReadOnlyForm extends BaseNode{
             this.state["field_counter"]++;
 
             for(let i = 1; i < this.state['form_data'].length; i++) {
-                init_state_single_form.id = this.state["field_counter"];
+                init_state_single_form.index = this.state["field_counter"];
                 const state = Object.assign(init_state_single_form,this.state['form_data'][i]);
                 const new_field = new SingleField(state);
                 this.state["form_fields"].push(new_field);

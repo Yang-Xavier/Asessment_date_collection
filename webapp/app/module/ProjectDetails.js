@@ -38,7 +38,7 @@ class ProjectDetails extends BaseNode{
 
             const header = $("<div class='header'/>");
             const project_name = $("<div class='name'>" + this.state["project_name"] + "</div>");
-            const due =   $("<div class='status'> <span>Collection Date: " + this.state["project_due"] + "</span></div>");
+            const due =   $("<div class='status'> <span>Deadline: " + this.state["project_due"] + "</span></div>");
             const status = $("<span><span> Status: " + this.state["status"] + "</span></span>");
 
             const visual_sellection = $("<div class='visual_selection'><div class='v_icon'>V</div><i class='eye_icon fas fa-eye'/></div>");
@@ -69,19 +69,13 @@ class ProjectDetails extends BaseNode{
 
         this.forms = (() =>{
             const container = $("<div class='forms'/>");
-            const param = {selectable:false, module: this.state['modules']};
-            const modules_display = new ModulesDisplay(param)
+            const param = {selectable:false, modules: this.state['modules']};
 
-            container.append(modules_display.render())
+            const modules_display = new ModulesDisplay(param);
+
+            container.append(modules_display.render());
             return container
         })();
-
-
-
-
-
-
-
  }
 
  render() {

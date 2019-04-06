@@ -28,7 +28,6 @@ class LTMPage extends HomePageBased{
             const create_label = $("<div class='create_label'></div>");
 
             container.on('click', () =>{
-                console.log(123)
                 route('home/project/creating')
             });
             create_label.append(create_btn);

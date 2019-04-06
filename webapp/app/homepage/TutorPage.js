@@ -41,32 +41,10 @@ class TutorPage extends HomePageBased{
             'icon': 'fa-clipboard-check',
             'click_callback': (id) => {
                 this.select_nav(id);
-                route("/home/projects/done")
+                route("/home/projects/visualizable")
             },
             'id': "done"
         }));
-
-        // this.menu_items.push(new MenuItem({
-        //     'title': 'Pending',
-        //     'icon': 'fa-file-contract',
-        //     'click_callback': (id) => {
-        //         this.select_nav(id);
-        //         route("/home/projects/pending")
-        //     },
-        //     'id': "pending"
-        // }));
-        //
-        // this.menu_items.push(new MenuItem({
-        //     'title': 'All Projects',
-        //     'icon': 'fa-file',
-        //     'click_callback': (id) => {
-        //         this.select_nav(id);
-        //         route("/home/projects/all")
-        //     },
-        //     'id': "all"
-        // }));
-
-
 
         for(let i in this.menu_items) {
             form_items['items'].push(this.menu_items[i])

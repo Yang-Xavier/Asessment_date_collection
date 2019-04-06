@@ -21,6 +21,8 @@ for (let route_ in config) {
 route.start(true);
 route.base(MyRouter['base']);
 
+window.global = {}
+
 const current_path = location.pathname;
 const param = location.search;
 const hash = location.hash;

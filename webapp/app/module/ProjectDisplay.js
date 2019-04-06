@@ -11,7 +11,7 @@ class ProjectDisplay extends BaseNode{
                data: [{
                    project_name:
                    project_submitted_date:
-                   project_release_date:
+                   project_release:
                    project_due:
                },{}],
              }
@@ -39,7 +39,7 @@ class DisplayBlock extends BaseNode{
         * para = {
         *  project_name:
            project_submitted_date:
-           project_release:
+           project_create:
            project_due:
 
            status:
@@ -52,9 +52,9 @@ class DisplayBlock extends BaseNode{
         this.container = $("<div class='display_container'/>");
 
         this.due_block = $("<div class='due'>Due: " + this.state["project_due"] + "</div>");
-        this.release_block = $("<div class='release'>Release: " + this.state["project_release"] + "</div>");
+        this.release_block = $("<div class='release'>Create: " + this.state["project_create"] + "</div>");
         this.project_name_blcok = $("<div class='project_name'>" + this.state["project_name"] + "</div>");
-        this.status_block = $("<div class='status'> Status: " + this.state["status"] + "</div>");
+        this.status_block = $("<div class='status'> Progress: " + this.state["status"] + "</div>");
         this.information_block = $("<div class='information_block'></div>");
 
         this.status_logo = (() => {

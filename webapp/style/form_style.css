@@ -23,6 +23,11 @@
     width: 30%;
     text-align: center;
 }
+.form_container .header label:first-child {
+    width: 100%;
+    text-align: center;
+}
+
 .form_container .header .semester_selection {
     width: 100%;
     margin: 0;

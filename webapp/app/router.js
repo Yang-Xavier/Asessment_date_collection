@@ -30,6 +30,8 @@ import '../style/home_page.css'
 let user_inform={};
 
 let home_page;
+let projects;
+let home_status;
 
 const RouterList = {
     'base': "/app/",
@@ -45,102 +47,45 @@ const RouterList = {
                     home_page = page;
                     mount(home_page, $("#root"))
                 })
-
         },
 
         'home/forms/*': (status) => {
             // some request here
 
-            const new_form = {
-                data: [
-                    {
-                        form_name:"testtesttesttesttesttesttesttesttesttest",
-                        form_submitted_date:"00/00/0000",
-                        form_release_date:"00/00/0000",
-                        form_due:"00/00/0000",
-                        editable: true,
-                        form_id: 1
-                    },
-                    {
-                        form_name:"testtesttesttesttesttesttesttesttesttest",
-                        form_submitted_date:"00/00/0000",
-                        form_release_date:"00/00/0000",
-                        form_due:"00/00/0000",
-                        editable: true,
-                        form_id: 1
-                    }
-                    ,
-                    {
-                        form_name:"testtesttesttesttesttesttesttesttesttest",
-                        form_submitted_date:"00/00/0000",
-                        form_release_date:"00/00/0000",
-                        form_due:"00/00/0000",
-                        editable: true,
-                        form_id: 1
-                    },
-                    {
-                        form_name:"testtesttesttesttesttesttesttesttesttest",
-                        form_submitted_date:"00/00/0000",
-                        form_release_date:"00/00/0000",
-                        form_due:"00/00/0000",
-                        editable: true,
-                        form_id: 1
-                    }
-                ]
-            };
-            const submitted_form = {
-                data: [
-                    {
-                        form_name:"testtesttesttesttesttesttesttesttesttest",
-                        form_submitted_date:"00/00/0000",
-                        form_release_date:"00/00/0000",
-                        form_due:"00/00/0000",
-                        editable: false,
-                        form_id: 2
-                    },
-                    {
-                        form_name:"testtesttesttesttesttesttesttesttesttest",
-                        form_submitted_date:"00/00/0000",
-                        form_release_date:"00/00/0000",
-                        form_due:"00/00/0000",
-                        editable: false,
-                        form_id: 2
-                    }
-                    ,
-                    {
-                        form_name:"testtesttesttesttesttesttesttesttesttest",
-                        form_submitted_date:"00/00/0000",
-                        form_release_date:"00/00/0000",
-                        form_due:"00/00/0000",
-                        editable: false,
-                        form_id: 2
-                    },
-                    {
-                        form_name:"testtesttesttesttesttesttesttesttesttest",
-                        form_submitted_date:"00/00/0000",
-                        form_release_date:"00/00/0000",
-                        form_due:"00/00/0000",
-                        editable: false,
-                        form_id: 2
-                    }
-                ]
-            };
+            home_status = status;
 
-            //
 
-            let data;
-            switch (status) {
-                case 'new':
-                    data = new_form;
-                    break;
-                case 'submitted':
-                    data = submitted_form;
-                    break;
-            }
 
-            let project_display = new FormsDisplay(data);
+            mount_to_homepage(()=>{
+                let data = [];
+                let projects;
+                projects = window.global.projects;
+                for( let i in projects) {
+                    const form_content = {};
+                    for (let j in projects[i].forms) {
+                        form_content["editable"] = false;
+                        form_content["form_due"] = projects[i]["project_due"];
+                        form_content["form_submitted_date"] = projects[i].forms[j]["form_submitted_date"];
+                        form_content["id"] = projects[i].forms[j]["form_id"];
+                        form_content["form_release_date"] = projects[i]["project_create"];
+                        form_content["form_name"] = projects[i]["project_name"];
+                        form_content["state"] = projects[i]["state"]
+                        data.push(form_content)
+                    }
+                }
 
-            mount_to_homepage(project_display, status)
+                switch (status) {
+                    case 'new':
+                        data= [].filter.call(data, term => term.state != 'done');
+
+                        break;
+                    case 'submitted':
+                        data= [].filter.call(data, term => term.state == 'done');
+                        break;
+                }
+
+               return new FormsDisplay({data: data});
+            })
 
         },
 
@@ -148,255 +93,79 @@ const RouterList = {
 
             let project_display;
 
-            if(status == 'creating') {
-                project_display = new ProjectCreate();
-                mount_to_homepage(project_display, status)
+            home_status = status;
 
-            }
-            else {
-                request
-                    .get(API.project)
-                    .set("Authorization", get_format_token())
-                    .then((data)=>{
-                        let project_data;
+            mount_to_homepage(()=>{
+                let project_data;
 
-                        switch (status) {
-                            case 'done':
-                                project_data = [].filter.call(data.body.projects, term => term.state=='done');
-                                project_data = projects_data_parsing(project_data);
-                                break;
-                            case 'pending':
-                                project_data = [].filter.call(data.body.projects, term => term.state=='created');
+                switch (status) {
+                    case 'done':
+                        project_data = [].filter.call(window.global.projects, term => term.state=='done');
+                        break;
+                    case 'pending':
+                        project_data = [].filter.call(window.global.projects, term => term.state=='waiting_on_academics');
+                        break;
+                    case 'visualizable':
+                        project_data = [].filter.call(window.global.projects, term => term.state=='assessment_data_collected' || term.state=='done');
+                        break;
+                }
 
-                                project_data = projects_data_parsing(project_data);
-                                break;
-                        }
+                project_display = new ProjectDisplay({data: project_data});
 
-                        project_display = new ProjectDisplay({data: project_data});
-                        mount_to_homepage(project_display, status)
-                    }, () => {route('login')})
-            }
+                return project_display
 
-            const projects_done = {
-                data: [
-                    {
-                        project_name:"testtesttesttesttesttesttesttesttesttest",
-                        project_release:"00/00/0000",
-                        project_due:"00/00/0000",
-                        status: '200/200',
-                        done: true,
-                        project_id: 1
-                    },
-                    {
-                        project_name:"testtesttesttesttesttesttesttesttesttest",
-                        project_release:"00/00/0000",
-                        project_due:"00/00/0000",
-                        status: '200/200',
-                        done: true,
-                        project_id: 1
-                    },
-                    {
-                        project_name:"testtesttesttesttesttesttesttesttesttest",
-                        project_release:"00/00/0000",
-                        project_due:"00/00/0000",
-                        status: '200/200',
-                        done:true,
-                        project_id: 1
-                    },
-                    {
-                        project_name:"testtesttesttesttesttesttesttesttesttest",
-                        project_release:"00/00/0000",
-                        project_due:"00/00/0000",
-                        status: '200/200',
-                        done: true,
-                        project_id: 1
-                    }
-                ]};
-
-            const projects_pending = {
-                data: [
-                    {
-                        project_name:"testtesttesttesttesttesttesttesttesttest",
-                        project_release:"00/00/0000",
-                        project_due:"00/00/0000",
-                        status: '100/200',
-                        done: false,
-                        checking: true,
-                        project_id: 2
-                    },
-                    {
-                        project_name:"testtesttesttesttesttesttesttesttesttest",
-                        project_release:"00/00/0000",
-                        project_due:"00/00/0000",
-                        status: '100/200',
-                        done: false,
-                        checking: true,
-                        project_id: 2
-                    }
-                    ,
-                    {
-                        project_name:"testtesttesttesttesttesttesttesttesttest",
-                        project_release:"00/00/0000",
-                        project_due:"00/00/0000",
-                        status: '100/200',
-                        done: false,
-                        checking: true,
-                        project_id: 2
-                    },
-                    {
-                        project_name:"testtesttesttesttesttesttesttesttesttest",
-                        project_release:"00/00/0000",
-                        project_due:"00/00/0000",
-                        status: '100/200',
-                        done: false,
-                        checking: true,
-                        project_id: 2
-                    }
-                ]
-            };
+            }, status)
 
 
         },
 
         'home/project/creating': () => {
-
-            let project_display = new ProjectCreate();
-            mount_to_homepage(project_display)
+            mount_to_homepage(() =>  new ProjectCreate())
         },
 
         'home/project/*': (id) => {
-            const mock_data = {
-                modules: [
-                    {
-                        id:0,
-                        name:'Team Software Project',
-                        code: "COM666",
-                        details: {
-                            capacity: 100,
-                            lecturer: "ABCABCABC"
-                        },
-                        filled: false
-                    },{
-                        id:1,
-                        name:'Team Software Project',
-                        code: "COM666",
-                        details: {
-                            capacity: 100,
-                            lecturer: "ABCABCABC"
-                        },
-                        filled: true
-                    },{
-                        id:2,
-                        name:'Team Software Project',
-                        code: "COM666",
-                        details: {
-                            capacity: 100,
-                            lecturer: "ABCABCABC"
-                        },
-                        filled: true
-                    },
-                ],
-                project_name: "TESTTESTTESTTESTTESTTESTTESTTEST",
-                project_due: "00/00/000",
-                status: "00/000",
-                state: 'pending'
 
-            }
-
-            mount_to_homepage(new ProjectDetails(mock_data));
+            mount_to_homepage(() =>{
+                const data = [].filter.call(window.global.projects,project => project.project_id == (id+""))[0];
+                data["modules"] = data["forms"];
+                return new ProjectDetails(data)
+            });
         },
 
         'home/form/*': (id) => {
             // some request here
-            const mock_data_new = {
-                "semester": 'Semester 1 only',
-                "editable":true,
-                "form_name": "Form Name",
-                "username": "User Name",
-                "module_code": "COM6666",
-                "form_data":[
-                    {
-                    "asm_format": "MOLE quiz",
-                    "asm_name": "Test",
-                    "asm_per": "100",
-                    "asm_release": "00/00/0000",
-                    "asm_due": "00/00/0000" ,
-                    },
-                    {
-                        "asm_format": "MOLE quiz",
-                        "asm_name": "Test",
-                        "asm_per": "100",
-                        "asm_release": "00/00/0000",
-                        "asm_due": "00/00/0000" ,
-                    },
-                    {
-                        "asm_format": "MOLE quiz",
-                        "asm_name": "Test",
-                        "asm_per": "100",
-                        "asm_release": "00/00/0000",
-                        "asm_due": "00/00/0000" ,
-                    },
-                    {
-                        "asm_format": "MOLE quiz",
-                        "asm_name": "Test",
-                        "asm_per": "100",
-                        "asm_release": "00/00/0000",
-                        "asm_due": "00/00/0000" ,
+
+
+            mount_to_homepage(()=>{
+                let data = {};
+                let projects;
+                projects = window.global.projects;
+                for( let i in projects) {
+                    for (let j in projects[i].forms) {
+                        if( projects[i].forms[j]["form_id"] == id) {
+                            data = {
+                                'form_data': projects[i].forms[j]["assessments"],
+                                'editable': projects[i].state != 'done',
+                                'form_name': projects[i]['project_name'],
+                                'semester': projects[i].forms[j].module["semester"],
+                                'username': projects[i].forms[j].module["academic_name"],
+                                'module_code': projects[i].forms[j].module["code"]
+
+                            };
+                            break;
+                        }
                     }
-            ]};
-            const mock_data_submitted = {
-                "semester": 'Semester 1 only',
-                "editable":false,
-                "form_name": "Form Name",
-                "username": "User Name",
-                "module_code": "COM6666",
-                "form_data":[
-                    {
-                        "asm_format": "MOLE quiz",
-                        "asm_name": "Test",
-                        "asm_per": "100",
-                        "asm_release": "00/00/0000",
-                        "asm_due": "00/00/0000" ,
-                    },
-                    {
-                        "asm_format": "MOLE quiz",
-                        "asm_name": "Test",
-                        "asm_per": "100",
-                        "asm_release": "00/00/0000",
-                        "asm_due": "00/00/0000" ,
-                    },
-                    {
-                        "asm_format": "MOLE quiz",
-                        "asm_name": "Test",
-                        "asm_per": "100",
-                        "asm_release": "00/00/0000",
-                        "asm_due": "00/00/0000" ,
-                    },
-                    {
-                        "asm_format": "MOLE quiz",
-                        "asm_name": "Test",
-                        "asm_per": "100",
-                        "asm_release": "00/00/0000",
-                        "asm_due": "00/00/0000" ,
-                    }
-                ]};
+                }
 
-            let data = {"editable": true};
-            //
+                let form_fields;
+                if(data['editable']) {
+                    form_fields = new EditableForm(data);
+                } else {
+                    form_fields = new ReadOnlyForm(data);
+                }
 
-
-            let form_fields;
-            if(data['editable']) {
-                data = mock_data_new;
-                form_fields = new EditableForm(data);
-            } else {
-                data = mock_data_submitted;
-                form_fields = new ReadOnlyForm(data);
-            }
-
-            home_page.mount_content(form_fields);
-            if(!home_page.mounted)
-                mount(home_page, $("#root"));
+                return form_fields;
+            })
         },
 
         'visualisation/*..': (graph_type)=>{
@@ -435,24 +204,41 @@ const mount_homepage_frame = () => {
                     frame = new TutorPage(user_inform);
                     break
             }
-            return frame
-        }, ()=>{route('login')});
+            frame.set_state({status: ""})
+
+        }, ()=>{route('login')})
+        .then(() => {
+            return request
+                .get(API.modules)
+                .set("Authorization", get_format_token())
+                .then(data => {
+                    window.global.modules = data.body.modules;
+                    return request
+                        .get(API.project)
+                        .set("Authorization", get_format_token())
+                        .then(data => {
+                            window.global.projects = projects_data_parsing(data.body.projects);
+                            return frame
+                        })
+                })
+        })
 }
 
-const mount_to_homepage = (node, status) => {
+const mount_to_homepage = (node_fn) => {
     if (!home_page) {
         mount_homepage_frame()
             .then(page => {
-                page.mount_content(node);
-                page.set_state({status: status});
-                home_page = page;
-                mount(home_page, $("#root"))
-            })
+                    page.mount_content(node_fn());
+                    page.set_state({status: home_status});
+                    home_page = page;
+                    mount(home_page, $("#root"))
+                })
+
     } else {
-        home_page.mount_content(node);
-        home_page.set_state({status: status});
+        home_page.mount_content(node_fn());
+        home_page.set_state({status: home_status});
     }
-}
+};
 
 
 export default RouterList;

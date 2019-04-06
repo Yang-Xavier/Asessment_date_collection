@@ -198,5 +198,5 @@
 .project_create .display_content {
     width: 100%;
     flex-grow: 2;
-    padding: 0 5% 0 5%;
+    padding: 0 5% 5% 5%;
 }
