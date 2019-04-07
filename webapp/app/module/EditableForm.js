@@ -1,10 +1,15 @@
 import $ from "jquery"
+import request from 'superagent'
+import route from 'riot-route'
 
 import '../../style/form_style.css'
 import SingleField from './SingleField'
 
 import BaseNode from "../util/BaseNode"
 import {add_animate} from '../util/node_util'
+import {get_format_token} from "../util/cookie_util";
+import {API} from "../util/constant";
+import {projects_data_parsing} from "../util/data_parse_util";
 
 /*
 * Based on bootstrap*/
@@ -117,38 +122,38 @@ class EditableForm extends BaseNode{
             else{
                 this.state['form_fields'][i].asm_name_field.find('input').css({"border": "1px solid #ced4da"})
             }
-
             per += parseInt(this.state['form_fields'][i].state['asm_per']);
-            if(this.state['form_fields'][i].state['asm_per'] == ""){
+        }
+
+        for(let i in this.state['form_fields']) {
+            if (this.state['form_fields'][i].state['asm_per'] == "") {
                 this.state['form_fields'][i].asm_per_field.find('input').css({"border": "1px solid red"});
                 alert("Please submit the percentage");
-                add_animate(this.state['form_fields'][i].asm_per_field.find('input'),'shake')
+                add_animate(this.state['form_fields'][i].asm_per_field.find('input'), 'shake')
                 return
             }
-            else if(per==100){
+            else if (per == 100) {
                 this.state['form_fields'][i].asm_per_field.find('input').css({"border": "1px solid #ced4da"})
             }
             else {
-                for(let i in this.state['form_fields']) {
+                for (let i in this.state['form_fields']) {
                     this.state['form_fields'][i].asm_per_field.find('input').css({"border": "1px solid red"})
-                    add_animate(this.state['form_fields'][i].asm_per_field.find('input'),'shake')
+                    add_animate(this.state['form_fields'][i].asm_per_field.find('input'), 'shake')
                 }
                 alert("The total percentage should equal to 100%");
                 return
             }
 
-            if(this.state['form_fields'][i].state['asm_release'] == ""){
+            if (this.state['form_fields'][i].state['asm_release'] == "") {
                 this.state['form_fields'][i].asm_period_field.find('input').css({"border": "1px solid red"})
                 alert("Please submit the peroid");
-                add_animate(this.state['form_fields'][i].asm_period_field.find('input'),'shake')
+                add_animate(this.state['form_fields'][i].asm_period_field.find('input'), 'shake')
                 return
             }
-            else{
+            else {
                 this.state['form_fields'][i].asm_period_field.find('input').css({"border": "1px solid #ced4da"})
             }
-
         }
-
         return true
     }
 
@@ -161,9 +166,10 @@ class EditableForm extends BaseNode{
         }
     }
     submit() {
-        let data = {
-
+        const data = {
+            forms: [],
         };
+
         const items = [];
         for(let i in this.state['form_fields']) {
             const item ={};
@@ -174,6 +180,27 @@ class EditableForm extends BaseNode{
             item['asm_due'] = this.state['form_fields'][i].state['asm_due'];
             items.push(item)
         }
+        data.forms.push({
+            id: this.state["id"],
+            assessments: items
+        })
+
+        request
+            .post(API.form)
+            .set("Authorization", get_format_token())
+            .send(data)
+            .then((data)=>{
+                return request
+                    .get(API.project)
+                    .set("Authorization", get_format_token())
+                    .then((data)=>{
+                        window.global.projects = projects_data_parsing(data.body.projects);
+                    },()=>route('login'))
+            },()=>route('login'))
+            .then(()=>{
+                route('home/forms/new')
+            })
+
     }
 
     render() {

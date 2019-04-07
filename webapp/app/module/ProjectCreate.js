@@ -1,5 +1,6 @@
 import $ from "jquery"
 import request from 'superagent'
+import route from 'riot-route'
 
 
 import 'jquery-ui/ui/widgets/datepicker';
@@ -17,6 +18,7 @@ import {API} from '../util/constant'
 import {get_format_token} from '../util/cookie_util'
 
 import '../../style/project_style.css'
+import {projects_data_parsing} from "../util/data_parse_util";
 
 class ProjectCreate extends BaseNode{
     constructor(param) {
@@ -56,17 +58,23 @@ class ProjectCreate extends BaseNode{
                 post_data['due_date'] = time.val();
                 post_data['modules'] = this.state['selected_id'];
 
-                // request
-                //     .post(API.project)
-                //     .set("Authorization", get_format_token())
-                //     .send(post_data)
-                //     .then(()=>{
-                //         route("/home/projects/pending");
-                //     }, ()=>{
-                //         route("login")
-                //     })
-                console.log(post_data)
-
+                request
+                    .post(API.project)
+                    .set("Authorization", get_format_token())
+                    .send(post_data)
+                    .then((data)=>{
+                        return request
+                                .get(API.project)
+                                .set("Authorization", get_format_token())
+                                .then(data => {
+                                    window.global.projects = projects_data_parsing(data.body.projects);
+                                    route("home/projects/pending");
+                                },()=>{
+                                    route("login")
+                                })
+                    }, ()=>{
+                        route("login")
+                    })
             });
 
 

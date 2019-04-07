@@ -2,7 +2,7 @@
 const development_env = true;
 const RQ_HOST = development_env ? 'http://localhost:8081':'';
 
-const ASM_Format_Options= ["MOLE quiz", "Assignment", "Presentation", "Assessed lab", "Group Systems Design Project", "Formal exam", "Exercise/problem sheet"];
+const ASM_Format_Options= ["MOLE quiz", "Assignment", "Presentation", "Assessed lab", "Group project", "Formal exam", "Problem sheet", "Portfolio"];
 
 const Form_Field_Title = {
     "asm_format": "What format will this assessment take?",

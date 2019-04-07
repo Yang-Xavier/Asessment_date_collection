@@ -58,7 +58,7 @@ class ReadOnlyForm extends BaseNode{
                 const state = Object.assign(init_state_single_form,this.state['form_data'][i]);
                 const new_field = new SingleField(state);
                 this.state["form_fields"].push(new_field);
-                this.state["field_counter"] = i;
+                this.state["field_counter"]++;
             }
 
         } else {

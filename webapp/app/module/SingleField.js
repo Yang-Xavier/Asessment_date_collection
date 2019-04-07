@@ -146,9 +146,9 @@ class SingleField extends BaseNode{
 
     }
 
-    update(){
-        this.divided_line.html(this.state["title"]+ (this.state["index"]+1));
-    }
+    // update(){
+    //     this.divided_line.html(this.state["title"] + (this.state["index"]+1));
+    // }
 
     render() {
         if (this.state["title"]){

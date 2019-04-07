@@ -17,6 +17,8 @@ import ProjectDisplay from "./module/ProjectDisplay"
 import ProjectCreate from "./module/ProjectCreate"
 import ProjectDetails from "./module/ProjectDetails"
 
+import Heatmap from './module/Heatmap'
+
 import {mount} from './util/node_util'
 import {API} from './util/constant'
 import {get_format_token} from './util/cookie_util'
@@ -30,7 +32,7 @@ import '../style/home_page.css'
 let user_inform={};
 
 let home_page;
-let projects;
+
 let home_status;
 
 const RouterList = {
@@ -145,12 +147,12 @@ const RouterList = {
                         if( projects[i].forms[j]["form_id"] == id) {
                             data = {
                                 'form_data': projects[i].forms[j]["assessments"],
-                                'editable': projects[i].state != 'done',
+                                'editable': projects[i].state != 'done' && window.global.user["user_type"] == 'academic',
                                 'form_name': projects[i]['project_name'],
                                 'semester': projects[i].forms[j].module["semester"],
                                 'username': projects[i].forms[j].module["academic_name"],
-                                'module_code': projects[i].forms[j].module["code"]
-
+                                'module_code': projects[i].forms[j].module["code"],
+                                'id': id
                             };
                             break;
                         }
@@ -178,7 +180,9 @@ const RouterList = {
             console.log("404")
         },
         'test': () => {
-
+            mount_to_homepage(()=>{
+                return new Heatmap()
+            })
         }
     }
 };
@@ -193,6 +197,7 @@ const mount_homepage_frame = () => {
             const data = d.body;
             user_inform["user_type"] = data.user["usertype"];
             user_inform["user_name"] = data.user["name"];
+            window.global.user = user_inform;
             switch (user_inform['user_type']) {
                 case "academic":
                     frame = new AcademicPage(user_inform);
@@ -233,7 +238,6 @@ const mount_to_homepage = (node_fn) => {
                     home_page = page;
                     mount(home_page, $("#root"))
                 })
-
     } else {
         home_page.mount_content(node_fn());
         home_page.set_state({status: home_status});

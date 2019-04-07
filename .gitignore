@@ -14,7 +14,7 @@ build/
 .*
 */static/
 !.gitignore
-*/node_modules/
+node_modules/*
 */ext
 
 adc.db
