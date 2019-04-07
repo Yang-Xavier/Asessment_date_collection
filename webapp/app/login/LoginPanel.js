@@ -17,7 +17,7 @@ class LoginPanel extends BaseNode{
 
         // UI
         this.set_state({
-            title: "Module Deliver",
+            title: "Assessment Data Collection",
             checkBoxLabel: "Remember me",
             loginBtnLabel: "Login in"
         });

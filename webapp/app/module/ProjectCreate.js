@@ -126,9 +126,19 @@ class ProjectCreate extends BaseNode{
 
     show_modules_selection(modules_selection) {
 
-        this.state["selected_id"] = modules_selection.state['selected_items'];
-        const selected_id = modules_selection.state['selected_items'];
+        // this.state["selected_id"] = modules_selection.state['selected_items'];
+        let selected_id = modules_selection.state['selected_items'];
         const all_items = modules_selection.state['modules'];
+
+        const id_dict = {}
+        for(let i in selected_id) {
+            id_dict[selected_id[i]] = ""
+        }
+        selected_id = id_dict;
+        this.state["selected_id"] = []
+        for(let key in selected_id) {
+            this.state["selected_id"].push(parseInt(key))
+        }
         const selected_modules = all_items.filter(term => {
             term['filled'] = false;
             return term.id in selected_id

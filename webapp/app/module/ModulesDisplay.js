@@ -39,9 +39,13 @@ class ModulesDisplay extends BaseNode{
 
 
         const item = (module, index) => {
+            const s_items = {};
+            for(let i in this.state['selected_items']) {
+                s_items[this.state['selected_items'][i]] = ""
+            }
             const init_state = Object.assign(module, {
                 index: index,
-                selected: this.state['selected_items']? (module.id in this.state['selected_items']) : false,
+                selected: this.state['selected_items']? (module.id in s_items) : false,
                 selectable: this.state['selectable'],
                 select_callback: (id, status) => {this.select_item(id, status)}
             });
@@ -80,7 +84,7 @@ class ModulesDisplay extends BaseNode{
         let modules = [];
 
         for(let i in window.global.modules) {
-            const module = {}
+            const module = {};
             module['id'] = window.global.modules[i].id;
             module['name'] = window.global.modules[i].name;
             module['code'] = window.global.modules[i].code;
@@ -198,12 +202,5 @@ class ModuleItem extends BaseNode{
     }
 
 }
-
-
-
-
-
-
-
 
 export default ModulesDisplay;
