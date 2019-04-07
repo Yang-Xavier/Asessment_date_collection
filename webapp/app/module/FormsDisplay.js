@@ -31,7 +31,6 @@ class FormsDisplay extends BaseNode{
 
              }
             * */
-console.log(param)
         this.container = $("<div class='form_display'></div>");
         this.display_blocks = [];
 

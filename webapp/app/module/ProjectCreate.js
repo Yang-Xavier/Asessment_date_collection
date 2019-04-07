@@ -25,7 +25,6 @@ class ProjectCreate extends BaseNode{
         this.set_state({
             'project_name': '',
             'project_due': '',
-            'selected_modules': [{id:'', name:'', code:'', details:''}],
             'selected_id': []
         });
 
@@ -62,8 +61,12 @@ class ProjectCreate extends BaseNode{
                 //     .set("Authorization", get_format_token())
                 //     .send(post_data)
                 //     .then(()=>{
-                //
-                //     }, ()=>{})
+                //         route("/home/projects/pending");
+                //     }, ()=>{
+                //         route("login")
+                //     })
+                console.log(post_data)
+
             });
 
 

@@ -43,7 +43,7 @@ class TutorPage extends HomePageBased{
                 this.select_nav(id);
                 route("/home/projects/visualizable")
             },
-            'id': "done"
+            'id': "visualizable"
         }));
 
         for(let i in this.menu_items) {

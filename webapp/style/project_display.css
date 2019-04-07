@@ -36,13 +36,10 @@
     color: #767676;
     position: relative;
 }
-
 .content_block .form_display .display_container .information_block .form_name,
 .content_block .project_display .display_container .information_block .project_name {
     width: 100%;
     overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
     height: 100px;
     font-size: 1rem;
 }
