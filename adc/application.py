@@ -211,7 +211,7 @@ def create_project():
     # Get request params.
     json = request.get_json()
     project = Project(name=json["name"],
-            state="created",
+            state="waiting_on_academics",
             create_date=datetime.now(),
             due_date=datetime.strptime(json["due_date"], "%d/%m/%Y"))
     db.session.add(project)
