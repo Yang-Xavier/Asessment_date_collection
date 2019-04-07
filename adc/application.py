@@ -288,6 +288,14 @@ def create_forms():
                     form=form)
         db.session.add(form)
 
+    # change project status if required.
+    projects = Project.query.all()
+    for project in projects:
+        forms = Form.query.filter_by(project_id=project.id).all()
+        if all([form.is_filled for form in forms]):
+            project.status = "assessment_data_collected"
+            db.session.add(project)
+
     db.session.commit()
     return jsonify({"error_code":0, "error_msg":"success"})
 
