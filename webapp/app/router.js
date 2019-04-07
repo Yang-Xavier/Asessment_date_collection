@@ -63,19 +63,20 @@ const RouterList = {
                 let projects;
                 projects = window.global.projects;
                 for( let i in projects) {
-                    const form_content = {};
+
                     for (let j in projects[i].forms) {
+                        const form_content = {};
                         form_content["editable"] = false;
                         form_content["form_due"] = projects[i]["project_due"];
                         form_content["form_submitted_date"] = projects[i].forms[j]["form_submitted_date"];
                         form_content["id"] = projects[i].forms[j]["form_id"];
                         form_content["form_release_date"] = projects[i]["project_create"];
                         form_content["form_name"] = projects[i]["project_name"];
-                        form_content["state"] = projects[i]["state"]
+                        form_content["state"] = projects[i]["state"];
                         data.push(form_content)
                     }
                 }
-
+                console.log(data)
                 switch (status) {
                     case 'new':
                         data= [].filter.call(data, term => term.state != 'done');
