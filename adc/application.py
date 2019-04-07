@@ -239,9 +239,9 @@ def get_project():
     elif g.user.usertype == "academic":
         print("Returning projects for user", g.user.id)
 
-        # Find module of current academic.
-        acad_module = Module.query.filter_by(academic=g.user.id).first()
-        print("Module of current user", acad_module)
+        # Find modules of current academic.
+        acad_modules = [module.id for module in Module.query.filter_by(academic=g.user.id).all()]
+        print("Modules of current user", acad_modules)
 
         ret_dict = {"projects":[project.to_dict() for project in all_projects]}
 
@@ -249,7 +249,7 @@ def get_project():
         for project in ret_dict["projects"]:
             new_forms = []
             for form in project["forms"]:
-                if form["module_id"] == acad_module.id:
+                if form["module_id"] in acad_modules:
                     new_forms.append(form)
             project["forms"] = new_forms
 
