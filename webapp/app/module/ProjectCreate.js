@@ -104,7 +104,7 @@ class ProjectCreate extends BaseNode{
                 autoUpdateInput: false,
             });
             time.on('apply.daterangepicker', (ev, picker) => {
-                time.val(picker.startDate.format('MM/DD/YYYY'));
+                time.val(picker.startDate.format('DD/MM/YYYY'));
                 this.state["project_due"] = time.val();
             });
             time.on('cancel.daterangepicker', (ev, picker) => {
@@ -119,8 +119,8 @@ class ProjectCreate extends BaseNode{
                 autoUpdateInput: false,
             });
             p1.on('apply.daterangepicker', (ev, picker) => {
-                const start = picker.startDate.format('MM/DD/YYYY');
-                const end = picker.endDate.format('MM/DD/YYYY');
+                const start = picker.startDate.format('DD/MM/YYYY');
+                const end = picker.endDate.format('DD/MM/YYYY');
 
                 p1.val(start + " - " + end);
                 this.state["semester1"]["start"] = start;
@@ -139,8 +139,8 @@ class ProjectCreate extends BaseNode{
                 autoUpdateInput: false,
             });
             p2.on('apply.daterangepicker', (ev, picker) => {
-                const start = picker.startDate.format('MM/DD/YYYY');
-                const end = picker.endDate.format('MM/DD/YYYY');
+                const start = picker.startDate.format('DD/MM/YYYY');
+                const end = picker.endDate.format('DD/MM/YYYY');
 
                 p2.val(start + " - " + end);
                 this.state["semester2"]["start"] = start;
@@ -159,8 +159,8 @@ class ProjectCreate extends BaseNode{
                 autoUpdateInput: false,
             });
             e1.on('apply.daterangepicker', (ev, picker) => {
-                const start = picker.startDate.format('MM/DD/YYYY');
-                const end = picker.endDate.format('MM/DD/YYYY');
+                const start = picker.startDate.format('DD/MM/YYYY');
+                const end = picker.endDate.format('DD/MM/YYYY');
 
                 e1.val(start + " - " + end);
                 this.state["semester1"]["exam_period"]["start"] = start;
@@ -181,8 +181,8 @@ class ProjectCreate extends BaseNode{
                 autoUpdateInput: false,
             });
             e2.on('apply.daterangepicker', (ev, picker) => {
-                const start = picker.startDate.format('MM/DD/YYYY');
-                const end = picker.endDate.format('MM/DD/YYYY');
+                const start = picker.startDate.format('DD/MM/YYYY');
+                const end = picker.endDate.format('DD/MM/YYYY');
 
                 e2.val(start + " - " + end);
                 this.state["semester2"]["exam_period"]["start"] = start;

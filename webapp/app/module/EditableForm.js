@@ -113,39 +113,44 @@ class EditableForm extends BaseNode{
     }
 
     check() {
-        // let per = 0;
+        let per = 0;
 
-        // const check_empty = (field) => {
-        //     if(field.state['asm_name'] == "") {
-        //         field.asm_name_field.find('input').css({"border": "1px solid red"});
-        //         add_animate(field.asm_name_field.find('input'),'shake');
-        //         alert("Please enter the name of the assessment");
-        //         return false
-        //     } else {
-        //         field.asm_name_field.find('input').css({"border": "1px solid #ced4da"})
-        //     }
-        //     if(field.state['asm_per'] == 0) {
-        //         field.asm_per_field.find('input').css({"border": "1px solid red"});
-        //         add_animate(field.asm_per_field.find('input'),'shake');
-        //         alert("Please enter the name of the assessment");
-        //         return false
-        //     } else {
-        //         field.asm_name_field.find('input').css({"border": "1px solid #ced4da"})
-        //     }
-        //
-        // };
+        const check_empty = (field) => {
+            if(field.state['asm_name'] == "") {
+                field.asm_name_field.find('input').css({"border": "1px solid red"});
+                add_animate(field.asm_name_field.find('input'),'shake');
+                alert("Please enter the name of the assessment");
+                return false
+            } else {
+                field.asm_name_field.find('input').css({"border": "1px solid #ced4da"})
+            }
+            if(field.state['asm_per'] == 0) {
+                field.asm_per_field.find('input').css({"border": "1px solid red"});
+                add_animate(field.asm_per_field.find('input'),'shake');
+                alert("Please enter the percentage of the assessment");
+                return false
+            } else {
+                field.asm_name_field.find('input').css({"border": "1px solid #ced4da"})
+            }
+            return true
+        };
 
-        // const check_exam_period = (field) => {
-        //
-        // };
-        // const check_holiday = (field) => {
-        //
-        // };
-        // const check_academic_year = (field) => {
-        //
-        // };  // assessment in two semesters or just on
-        //
-        // const check_summup = () => {};
+        const check_exam_period = (field) => {
+            return true
+        };
+        const check_holiday = (field) => {
+            return true
+        };
+        const check_academic_year = (field) => {
+            return true
+        };  // assessment in two semesters or just on
+
+        const check_summup = (fields, percentage) => {
+            if(percentage == 100) { return true }
+
+
+
+        };
 
         // check empty block
         // for(let i in this.state['form_fields']) {
