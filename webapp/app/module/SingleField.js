@@ -104,15 +104,14 @@ class SingleField extends BaseNode{
                         locale: {
                             format: "DD/MM/YYYY"
                         },
-                        startDate: this.state["asm_release"],
-                        endDate: this.state["asm_due"],
+                        startDate: this.state["asm_release"]? this.state["asm_release"]: new Date(),
+                        endDate: this.state["asm_due"]? this.state["asm_due"]: new Date(),
                         // maxDate:"",
                         // minDate:""
                     },
                     (start, end, label) => {
                         this.state["asm_release"] = start.format("DD/MM/YYYY");
                         this.state["asm_due"] = end.format("DD/MM/YYYY");
-
                     })
             }
 

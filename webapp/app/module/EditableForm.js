@@ -145,57 +145,28 @@ class EditableForm extends BaseNode{
             return true
         };  // assessment in two semesters or just on
 
-        const check_summup = (fields, percentage) => {
-            if(percentage == 100) { return true }
-
-
-
+        const check_sumup = (fields, percentage) => {
+            if(percentage == 100) {
+                for(let i in fields) {
+                    fields[i].asm_per_field.find('input').css({"border": "1px solid #ced4da"})
+                }
+                return true
+            } else {
+                for(let i in fields) {
+                    fields[i].asm_per_field.find('input').css({"border": "1px solid red"})
+                    add_animate(fields[i].asm_per_field.find('input'), 'shake')
+                }
+                alert("The percentage of assessment should be summed up to 100%");
+                return false
+            }
         };
 
-        // check empty block
-        // for(let i in this.state['form_fields']) {
-        //     if(this.state['form_fields'][i].state['asm_name'] == ""){
-        //         this.state['form_fields'][i].asm_name_field.find('input').css({"border": "1px solid red"});
-        //         add_animate(this.state['form_fields'][i].asm_name_field.find('input'),'shake');
-        //         alert("Please submit the name");
-        //         return
-        //     }
-        //     else{
-        //         this.state['form_fields'][i].asm_name_field.find('input').css({"border": "1px solid #ced4da"})
-        //     }
-        //     per += parseInt(this.state['form_fields'][i].state['asm_per']);
-        // }
+        for(let i in this.state['form_fields']) {
+            if(!check_empty(this.state['form_fields'][i])) return false;
+            per += parseInt(this.state['form_fields'][i].state['asm_per']);
+        }
 
-        // check the percentage of assessment
-        // for(let i in this.state['form_fields']) {
-        //     if (this.state['form_fields'][i].state['asm_per'] == "") {
-        //         this.state['form_fields'][i].asm_per_field.find('input').css({"border": "1px solid red"});
-        //         alert("Please submit the percentage");
-        //         add_animate(this.state['form_fields'][i].asm_per_field.find('input'), 'shake')
-        //         return
-        //     }
-        //     else if (per == 100) {
-        //         this.state['form_fields'][i].asm_per_field.find('input').css({"border": "1px solid #ced4da"})
-        //     }
-        //     else {
-        //         for (let i in this.state['form_fields']) {
-        //             this.state['form_fields'][i].asm_per_field.find('input').css({"border": "1px solid red"})
-        //             add_animate(this.state['form_fields'][i].asm_per_field.find('input'), 'shake')
-        //         }
-        //         alert("The total percentage should equal to 100%");
-        //         return
-        //     }
-        //
-        //     if (this.state['form_fields'][i].state['asm_release'] == "") {
-        //         this.state['form_fields'][i].asm_period_field.find('input').css({"border": "1px solid red"})
-        //         alert("Please submit the peroid");
-        //         add_animate(this.state['form_fields'][i].asm_period_field.find('input'), 'shake')
-        //         return
-        //     }
-        //     else {
-        //         this.state['form_fields'][i].asm_period_field.find('input').css({"border": "1px solid #ced4da"})
-        //     }
-        // }
+        if(!check_sumup(this.state['form_fields'], per)) return false;
 
         return true
     }
