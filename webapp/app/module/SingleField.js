@@ -1,9 +1,10 @@
 import $ from "jquery"
+import '../lib/DateRangePicker';
 
 import BaseNode from "../util/BaseNode"
 
+
 import {Form_Field_Title, ASM_Format_Options} from "../util/constant"
-import '../lib/DateRangePicker'
 
 import {add_animate} from "../util/node_util";
 
@@ -92,24 +93,29 @@ class SingleField extends BaseNode{
         this.asm_period_field = (() =>{
             const group = $("<div class='form-group'></div>");
             const label = $("<label></label>");
-            const field = $("<input class='form-control' />");
-            const separator = '   to   ';
+            const field = $("<input class='form-control dropup' />");
+            const separator = ' - '
             if (this.state['asm_release'].length != 0 && this.state['asm_due'].length != 0)
                 field.val(this.state['asm_release'] + separator + this.state['asm_due']);
             field.attr("disabled", !this.state['editable']);
             label.text(Form_Field_Title["asm_period"]);
+            if(this.state['editable']) {
+                field.daterangepicker({
+                        locale: {
+                            format: "DD/MM/YYYY"
+                        },
+                        startDate: this.state["asm_release"],
+                        endDate: this.state["asm_due"],
+                        // maxDate:"",
+                        // minDate:""
+                    },
+                    (start, end, label) => {
+                        this.state["asm_release"] = start.format("DD/MM/YYYY");
+                        this.state["asm_due"] = end.format("DD/MM/YYYY");
 
-            field
-                .dateRangePicker({
-                    format: 'DD/MM/YYYY',
-                    separator: separator,})
-                .bind('datepicker-change',(event,obj) => {
-                    const value = obj.value.split(separator);
+                    })
+            }
 
-                    this.state["asm_release"] = value[0];
-                    this.state["asm_due"] = value[1];
-
-                });
 
             group.append(label);
             group.append(field);
@@ -140,7 +146,7 @@ class SingleField extends BaseNode{
             if (this.state["remove_callback"]){
                 this.state["remove_callback"](this.state["index"]);
             }
-            this.asm_period_field.find('input').data('dateRangePicker').destroy();
+            this.asm_period_field.find('input').data('daterangepicker').remove();
             this.container.remove();
         })
 

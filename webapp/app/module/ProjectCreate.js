@@ -2,11 +2,7 @@ import $ from "jquery"
 import request from 'superagent'
 import route from 'riot-route'
 
-
-import 'jquery-ui/ui/widgets/datepicker';
-import 'jquery-ui/themes/base/core.css';
-import 'jquery-ui/themes/base/theme.css';
-import 'jquery-ui/themes/base/datepicker.css';
+import '../lib/DateRangePicker';
 
 
 import BaseNode from "../util/BaseNode"
@@ -27,6 +23,8 @@ class ProjectCreate extends BaseNode{
         this.set_state({
             'project_name': '',
             'project_due': '',
+            'semester1': { "start": '', "end": '', "exam_period": {"start": '', "end": ''} },
+            'semester2': { "start": '', "end": '', "exam_period": {"start": '', "end": ''} },
             'selected_id': []
         });
 
@@ -37,8 +35,22 @@ class ProjectCreate extends BaseNode{
             const name_block = $('<div class="name_block form-control"><label>Project Name</label></div>');
             const name = $('<input type="text"/>');
 
-            const time_block = $('<div class="time_block form-control"><label>Deadline</label></div>');
+            const time_block = $('<div class="time_block form-control"><label>Form Collection Date </label></div>');
             const time = $('<input />');
+
+            const acdemic_period_1 = $('<div class="period_block form-control"><label>Period of 1st Semester</label></div>')
+            const p1 = $('<input />');
+
+            const acdemic_period_2 = $('<div class="period_block form-control"><label> Period of 2nd Semester</label></div>')
+            const p2 = $('<input />');
+
+            const exam_period1 = $('<div class="e_period_block period_block form-control"><label> Examination Period of 1st Semester</label></div>')
+            const e1 = $('<input />');
+
+            const exam_period2 = $('<div class="e_period_block period_block form-control"><label> Examination Period of 2nd Semester</label></div>')
+            const e2 = $('<input />');
+
+
 
             const module_selection_btn = $("<button class='form-control'><i/>Select Modules</button>");
             const save_btn = $("<button class='form-control'><i/>Save and Send</button>");
@@ -57,6 +69,10 @@ class ProjectCreate extends BaseNode{
                 post_data['name'] = name.val();
                 post_data['due_date'] = time.val();
                 post_data['modules'] = this.state['selected_id'];
+                post_data["semester1"] = this.state['semester1'];
+                post_data["semester2"] = this.state['semester2'];
+
+                // console.log(post_data)
 
                 request
                     .post(API.project)
@@ -79,13 +95,121 @@ class ProjectCreate extends BaseNode{
 
 
             // time picker
-            time.datepicker({dateFormat: 'dd/mm/yy'});
+            time.daterangepicker({
+                locale: {
+                    format: "DD/MM/YYYY"
+                },
+                singleDatePicker: true,
+                showDropdowns: true,
+                autoUpdateInput: false,
+            });
+            time.on('apply.daterangepicker', (ev, picker) => {
+                time.val(picker.startDate.format('MM/DD/YYYY'));
+                this.state["project_due"] = time.val();
+            });
+            time.on('cancel.daterangepicker', (ev, picker) => {
+                time.val('');
+                this.state["project_due"] = time.val();
+            });
+
+            p1.daterangepicker({
+                locale: {
+                    format: "DD/MM/YYYY"
+                },
+                autoUpdateInput: false,
+            });
+            p1.on('apply.daterangepicker', (ev, picker) => {
+                const start = picker.startDate.format('MM/DD/YYYY');
+                const end = picker.endDate.format('MM/DD/YYYY');
+
+                p1.val(start + " - " + end);
+                this.state["semester1"]["start"] = start;
+                this.state["semester1"]["end"] = end;
+            });
+            p1.on('cancel.daterangepicker', (ev, picker) => {
+                p1.val('');
+                this.state["semester1"]["start"] = "";
+                this.state["semester1"]["end"] = "";
+            });
+
+            p2.daterangepicker({
+                locale: {
+                    format: "DD/MM/YYYY"
+                },
+                autoUpdateInput: false,
+            });
+            p2.on('apply.daterangepicker', (ev, picker) => {
+                const start = picker.startDate.format('MM/DD/YYYY');
+                const end = picker.endDate.format('MM/DD/YYYY');
+
+                p2.val(start + " - " + end);
+                this.state["semester2"]["start"] = start;
+                this.state["semester2"]["end"] = end;
+            });
+            p2.on('cancel.daterangepicker', (ev, picker) => {
+                p2.val('');
+                this.state["semester2"]["start"] = "";
+                this.state["semester2"]["end"] = "";
+            });
+
+            e1.daterangepicker({
+                locale: {
+                    format: "DD/MM/YYYY"
+                },
+                autoUpdateInput: false,
+            });
+            e1.on('apply.daterangepicker', (ev, picker) => {
+                const start = picker.startDate.format('MM/DD/YYYY');
+                const end = picker.endDate.format('MM/DD/YYYY');
+
+                e1.val(start + " - " + end);
+                this.state["semester1"]["exam_period"]["start"] = start;
+                this.state["semester1"]["exam_period"]["end"] = end;
+            });
+            e1.on('cancel.daterangepicker', (ev, picker) => {
+                e1.val('');
+
+                this.state["semester1"]["exam_period"]["start"] = "";
+                this.state["semester1"]["exam_period"]["end"] = "";
+            });
+
+
+            e2.daterangepicker({
+                locale: {
+                    format: "DD/MM/YYYY"
+                },
+                autoUpdateInput: false,
+            });
+            e2.on('apply.daterangepicker', (ev, picker) => {
+                const start = picker.startDate.format('MM/DD/YYYY');
+                const end = picker.endDate.format('MM/DD/YYYY');
+
+                e2.val(start + " - " + end);
+                this.state["semester2"]["exam_period"]["start"] = start;
+                this.state["semester2"]["exam_period"]["end"] = end;
+            });
+            e2.on('cancel.daterangepicker', (ev, picker) => {
+                e2.val('');
+
+                this.state["semester2"]["exam_period"]["start"] = "";
+                this.state["semester2"]["exam_period"]["end"] = "";
+            });
+
 
             name_block.append(name);
             time_block.append(time);
+            acdemic_period_1.append(p1);
+            acdemic_period_2.append(p2);
+            exam_period1.append(e1);
+            exam_period2.append(e2);
 
             container.append(name_block);
+            container.append(acdemic_period_1);
+            container.append(exam_period1);
+            container.append(acdemic_period_2);
+            container.append(exam_period2);
             container.append(time_block);
+
 
             container.append(module_selection_btn);
             container.append(save_btn);

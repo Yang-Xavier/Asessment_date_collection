@@ -73,10 +73,10 @@ const RouterList = {
                         form_content["form_release_date"] = projects[i]["project_create"];
                         form_content["form_name"] = projects[i]["project_name"];
                         form_content["state"] = projects[i]["state"];
+                        form_content["module"] = projects[i].forms[j]["module"]["code"];
                         data.push(form_content)
                     }
                 }
-                console.log(data)
                 switch (status) {
                     case 'new':
                         data= [].filter.call(data, term => term.state != 'done');

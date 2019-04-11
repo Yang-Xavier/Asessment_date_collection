@@ -1,0 +1,9 @@
+.heatmap_container {
+    width: 100%;
+    position: relative;
+    padding-top: 100px;
+    text-align: center;
+}
+.heatmap_container .heatmap {
+    display: inline-block;
+}

@@ -10,7 +10,8 @@
 
 .project_create .header {
     width: 100%;
-    height: 150px;
+    height: 300px;
+    min-height: 300px;
     padding: 20px 5% 20px 5%;
     box-sizing: border-box;
     display: flex;
@@ -35,32 +36,41 @@
 .project_create .header .form-control {
     display: inline;
     position: relative;
-    width: 40%;
+    width: 46%;
     flex-grow: 2;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 .project_create .header button.form-control {
-    width: 200px;
+    width: 27%;
 }
-
-.project_create .header .name_block {
+.project_create .header .name_block{
     width: 100%;
-    margin-bottom: 20px;
 }
-.project_create .header .form-control.name_block label {
-    width: 120px;
+.project_create .header .period_block {
+    width: 46%;
+}
+.project_create .header .period_block.e_period_block {
+    width: 54%;
 }
 
 .project_create .header .form-control label{
-    width: 120px;
+    width: 200px;
     border-right: 1px solid #ced4da;
     text-align: center;
     white-space: nowrap;
 
 }
 .project_create .header .form-control input {
-    width: calc(100% - 120px);
+    width: calc(100% - 200px);
     padding: 0 10px 0 10px;
     flex-grow: 2;
+}
+.project_create .header .form-control.period_block.e_period_block label{
+    width: 280px;
+}
+.project_create .header .form-control.period_block.e_period_block input{
+    width: calc(100% - 280px);
 }
 
 .project_create .selection_btn {
