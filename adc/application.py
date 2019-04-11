@@ -147,6 +147,14 @@ class Project(db.Model):
     state = db.Column(db.String(80), nullable=False)
     create_date = db.Column(db.DateTime, nullable=False)
     due_date = db.Column(db.DateTime, nullable=False)
+    sem1_bgn = db.Column(db.DateTime, nullable=False)
+    sem1_end = db.Column(db.DateTime, nullable=False)
+    sem2_bgn = db.Column(db.DateTime, nullable=False)
+    sem2_end = db.Column(db.DateTime, nullable=False)
+    exam1_bgn = db.Column(db.DateTime, nullable=False)
+    exam1_end = db.Column(db.DateTime, nullable=False)
+    exam2_bgn = db.Column(db.DateTime, nullable=False)
+    exam2_end = db.Column(db.DateTime, nullable=False)
     forms = db.relationship('Form', backref='project', lazy=True) # one to many.
 
     def to_dict(self):
@@ -155,6 +163,12 @@ class Project(db.Model):
                     state=str(self.state),
                     project_create=self.create_date.strftime("%d/%m/%Y"),
                     project_due=self.due_date.strftime("%d/%m/%Y"),
+                    sem1_bgn=self.due_date.strftime("%d/%m/%Y"),
+                    sem1_end=self.due_date.strftime("%d/%m/%Y"),
+                    exam1_bgn=self.due_date.strftime("%d/%m/%Y"),
+                    exam1_end=self.due_date.strftime("%d/%m/%Y"),
+                    exam2_bgn=self.due_date.strftime("%d/%m/%Y"),
+                    exam2_end=self.due_date.strftime("%d/%m/%Y"),
                     forms=[e.to_dict() for e in self.forms])
 
 # ---------------- Other -------------------- #
@@ -213,7 +227,15 @@ def create_project():
     project = Project(name=json["name"],
             state="waiting_on_academics",
             create_date=datetime.now(),
-            due_date=datetime.strptime(json["due_date"], "%d/%m/%Y"))
+            due_date=datetime.strptime(json["due_date"], "%d/%m/%Y"),
+            sem1_bgn=datetime.strptime(json["semester1"]["start"], "%d/%m/%Y"),
+            sem1_end=datetime.strptime(json["semester1"]["end"], "%d/%m/%Y"),
+            sem2_bgn=datetime.strptime(json["semester2"]["start"], "%d/%m/%Y"),
+            sem2_end=datetime.strptime(json["semester2"]["end"], "%d/%m/%Y"),
+            exam1_bgn=datetime.strptime(json["semester1"]["exam_period"]["start"], "%d/%m/%Y"),
+            exam1_end=datetime.strptime(json["semester1"]["exam_period"]["end"], "%d/%m/%Y"),
+            exam2_bgn=datetime.strptime(json["semester2"]["exam_period"]["start"], "%d/%m/%Y"),
+            exam2_end=datetime.strptime(json["semester2"]["exam_period"]["end"], "%d/%m/%Y"))
     db.session.add(project)
     db.session.flush()
     db.session.refresh(project)
@@ -287,13 +309,14 @@ def create_forms():
                     submission_date=datetime.strptime(asm_json["asm_due"], "%d/%m/%Y"),
                     form=form)
         db.session.add(form)
+    db.session.commit()
 
-    # change project status if required.
+    # change project state if required.
     projects = Project.query.all()
     for project in projects:
         forms = Form.query.filter_by(project_id=project.id).all()
         if all([form.is_filled for form in forms]):
-            project.status = "assessment_data_collected"
+            project.state = "assessment_data_collected"
             db.session.add(project)
 
     db.session.commit()

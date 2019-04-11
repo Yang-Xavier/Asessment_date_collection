@@ -164,6 +164,14 @@ projects = [
         state="done",
         create_date=datetime.now(),
         due_date=datetime.strptime("03/05/19","%d/%m/%y"),
+        sem1_bgn=datetime.strptime("03/05/19","%d/%m/%y"),
+        sem1_end=datetime.strptime("03/05/19","%d/%m/%y"),
+        sem2_bgn=datetime.strptime("03/05/19","%d/%m/%y"),
+        sem2_end=datetime.strptime("03/05/19","%d/%m/%y"),
+        exam1_bgn=datetime.strptime("03/05/19","%d/%m/%y"),
+        exam1_end=datetime.strptime("03/05/19","%d/%m/%y"),
+        exam2_bgn=datetime.strptime("03/05/19","%d/%m/%y"),
+        exam2_end=datetime.strptime("03/05/19","%d/%m/%y"),
         forms=forms)
     ]
 
