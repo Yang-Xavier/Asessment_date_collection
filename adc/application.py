@@ -158,17 +158,29 @@ class Project(db.Model):
     forms = db.relationship('Form', backref='project', lazy=True) # one to many.
 
     def to_dict(self):
+        semester1 = {
+                "start" : self.sem1_bgn.strftime("%d/%m/%Y"),
+                "end" : self.sem1_end.strftime("%d/%m/%Y"),
+                "exam_period" : {
+                    "start" : self.exam1_bgn.strftime("%d/%m/%Y"),
+                    "end" : self.exam1_end.strftime("%d/%m/%Y")
+                    }
+                }
+        semester2 = {
+                "start" : self.sem2_bgn.strftime("%d/%m/%Y"),
+                "end" : self.sem2_end.strftime("%d/%m/%Y"),
+                "exam_period" : {
+                    "start" : self.exam2_bgn.strftime("%d/%m/%Y"),
+                    "end" : self.exam2_end.strftime("%d/%m/%Y")
+                    }
+                }
         return dict(project_id=self.id,
                     project_name=self.name,
                     state=str(self.state),
                     project_create=self.create_date.strftime("%d/%m/%Y"),
                     project_due=self.due_date.strftime("%d/%m/%Y"),
-                    sem1_bgn=self.due_date.strftime("%d/%m/%Y"),
-                    sem1_end=self.due_date.strftime("%d/%m/%Y"),
-                    exam1_bgn=self.due_date.strftime("%d/%m/%Y"),
-                    exam1_end=self.due_date.strftime("%d/%m/%Y"),
-                    exam2_bgn=self.due_date.strftime("%d/%m/%Y"),
-                    exam2_end=self.due_date.strftime("%d/%m/%Y"),
+                    semester1=semester1,
+                    semester2=semester2,
                     forms=[e.to_dict() for e in self.forms])
 
 # ---------------- Other -------------------- #
