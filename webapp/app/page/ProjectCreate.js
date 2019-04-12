@@ -7,8 +7,8 @@ import '../lib/DateRangePicker';
 
 import BaseNode from "../util/BaseNode"
 
-import ModulesDisplay from'./ModulesDisplay'
-import Popup from './Popup'
+import ModulesDisplay from '../module/ModulesDisplay'
+import Popup from '../module/Popup'
 
 import {API} from '../util/constant'
 import {get_format_token} from '../util/cookie_util'

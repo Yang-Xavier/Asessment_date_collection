@@ -20,6 +20,7 @@ class Popup {
         this.container.append(this.content);
         this.container.append(this.mask);
 
+        this.parent_node.append(this.container);
     }
 
     set_on_close(fn) {
@@ -34,14 +35,22 @@ class Popup {
         this.content.css({
             width: width + 'px',
             height: height + 'px'
+        })
+        this.container.css({
+            display: "block"
         });
 
-        this.parent_node.append(this.container);
+    }
+
+    destory() {
+        this.container.remove();
     }
 
     close() {
-        this.on_close();
-        this.container.remove();
+        if(this.on_close) this.on_close();
+        this.container.css({
+            display: "none"
+        });
     }
 }
 

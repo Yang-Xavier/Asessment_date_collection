@@ -4,8 +4,6 @@ import '../../style/form_style.css'
 import SingleField from './SingleField'
 
 import BaseNode from "../util/BaseNode"
-import {add_animate} from '../util/node_util'
-import {Semester_Selection} from "../util/constant";
 
 /*
 * Based on bootstrap*/
@@ -31,7 +29,7 @@ class ReadOnlyForm extends BaseNode{
         this.form_Panel = $("<form role='form'></form>");
 
         this.head_label = $("<label></label>");
-        this.head_label.text("Project: " + this.state['form_name']);
+        this.head_label.text(this.state['form_name']);
         this.header.append(this.head_label);
         this.head_label = $("<label></label>");
         this.head_label.text("Academic: " + this.state['username']);

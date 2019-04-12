@@ -17,7 +17,10 @@ class SingleField extends BaseNode{
         *   removable:
         *   title:
         *   id:
-        *   remove_callback
+        *   remove_callback:
+        *   date_range
+        *
+        *
         * }*/
         const init_state = {
             "asm_format": ASM_Format_Options[0],
@@ -27,9 +30,9 @@ class SingleField extends BaseNode{
             "asm_due": "",
             "id": 0,
             "index":0,
-            "editable": true
+            "editable": true,
         };
-        param = Object.assign(init_state,param);
+        param = Object.assign(init_state, param);
 
         super(param);
 
@@ -100,14 +103,15 @@ class SingleField extends BaseNode{
             field.attr("disabled", !this.state['editable']);
             label.text(Form_Field_Title["asm_period"]);
             if(this.state['editable']) {
+                // const minDate = new Date(Date.parse())
                 field.daterangepicker({
                         locale: {
                             format: "DD/MM/YYYY"
                         },
-                        startDate: this.state["asm_release"]? this.state["asm_release"]: new Date(),
-                        endDate: this.state["asm_due"]? this.state["asm_due"]: new Date(),
-                        // maxDate:"",
-                        // minDate:""
+                        startDate: this.state["asm_release"]? this.state["asm_release"]: this.state['date_range']['start'],
+                        endDate: this.state["asm_due"]? this.state["asm_due"]: this.state['date_range']['start'],
+                        maxDate: this.state['date_range']['end'],
+                        minDate: this.state['date_range']['start']
                     },
                     (start, end, label) => {
                         this.state["asm_release"] = start.format("DD/MM/YYYY");

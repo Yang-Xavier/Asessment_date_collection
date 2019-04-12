@@ -10,12 +10,12 @@ import LTMPage from './homepage/LTMPage'
 
 import FormsDisplay from './module/FormsDisplay'
 
-import EditableForm from "./module/EditableForm";
-import ReadOnlyForm from "./module/ReadOnlyForm";
+import EditableForm from "./page/EditableForm";
+import ReadOnlyForm from "./page/ReadOnlyForm";
 
 import ProjectDisplay from "./module/ProjectDisplay"
-import ProjectCreate from "./module/ProjectCreate"
-import ProjectDetails from "./module/ProjectDetails"
+import ProjectCreate from "./page/ProjectCreate"
+import ProjectDetails from "./page/ProjectDetails"
 
 import Heatmap from './module/Heatmap'
 

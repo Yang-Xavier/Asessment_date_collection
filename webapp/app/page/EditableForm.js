@@ -1,15 +1,17 @@
 import $ from "jquery"
 import request from 'superagent'
 import route from 'riot-route'
+import Holidays from 'date-holidays'
 
 import '../../style/form_style.css'
-import SingleField from './SingleField'
+import SingleField from '../module/SingleField'
 
 import BaseNode from "../util/BaseNode"
 import {add_animate} from '../util/node_util'
 import {get_format_token} from "../util/cookie_util";
 import {API} from "../util/constant";
-import {projects_data_parsing} from "../util/data_parse_util";
+import {projects_data_parsing,parse_date} from "../util/data_parse_util";
+import Popup from '../module/Popup';
 
 /*
 * Based on bootstrap*/
@@ -17,9 +19,14 @@ class EditableForm extends BaseNode{
     constructor(param) {
         // param e.g.
 
+        param = Object.assign(param, {
+            semester1: {"start": "01/07/2019", "end": "01/02/2020", "exam_period": {"start": "02/02/2020", "end": "08/02/2020"}},
+            semester2: {"start": "01/03/2020", "end": "01/06/2020", "exam_period": {"start": "02/06/2020", "end": "08/06/2020"}}
+        });
+
         super(param);
 
-        // param = {}
+
 
         // states
         this.set_state({
@@ -41,10 +48,25 @@ class EditableForm extends BaseNode{
         this.add_more_btn = $('<button type="button" class="btn btn-light add_btn">Add More Assessment</button>')
 
         this.semester_selection = $("<label>" + "Semester: " + this.state["semester"] + "</label>");
+        const help_btn = $("<span> <i class='fas fa-question-circle'/> </span>");
 
+        this.popup = new Popup((() => {
+            const container = $("<div class='inform_semester'/>");
+            container.append($("<div>1st Semester Period: " + this.state['semester1']['start'] + " - " + this.state['semester1']['end'] +"</div>"))
+            container.append($("<div>1st Semester Examination Period: " + this.state['semester1']['exam_period']['start'] + " - " + this.state['semester1']['exam_period']['end'] +"</div>"))
+            container.append($("<div>2nd Semester Period: " + this.state['semester2']['start'] + " - " + this.state['semester2']['end'] +"</div>"))
+            container.append($("<div>2nd Semester Examination Period: " + this.state['semester2']['exam_period']['start'] + " - " + this.state['semester2']['exam_period']['end'] +"</div>"))
+            container.append($("<div style='color: var(--red)'>N.B. The assessment deadline cannot be set in the weeekends, the holidays, or the exams period (except exams)</div>"))
+            return container
+        })());
+        help_btn.on('click', () => {
+            this.popup.popup(500, 200)
+        });
 
-        this.head_label = $("<label></label>");
-        this.head_label.text("Project: " + this.state['form_name']);
+        this.semester_selection.append(help_btn);
+
+        this.head_label = $("<label>" + + "</label>");
+        this.head_label.text(this.state['form_name']);
         this.header.append(this.head_label);
         this.head_label = $("<label></label>");
         this.head_label.text("Academic: " + this.state['username']);
@@ -59,7 +81,25 @@ class EditableForm extends BaseNode{
             removable: false,
             title: "Assignment ",
             index: this.state["field_counter"],
-            remove_callback: this.remove_field.bind(this)
+            remove_callback: this.remove_field.bind(this),
+            date_range: (()=>{
+                const date= {start: '', end: ''}
+                switch (this.state['semester']) {
+                    case 'one':
+                        date["start"] = parse_date(this.state['semester1']['start'])
+                        date["end"] = parse_date(this.state['semester1']['exam_period']['end'])
+                        break;
+                    case 'two':
+                        date["start"] = parse_date(this.state['semester2']['start'])
+                        date["end"] = parse_date(this.state['semester2']['exam_period']['end'])
+                        break;
+                    case 'both':
+                        date["start"] = parse_date(this.state['semester1']['start'])
+                        date["end"] = parse_date(this.state['semester2']['exam_period']['end'])
+                        break;
+                }
+                return date
+            })()
         };
         if (this.state['form_data'].length > 0) {
             const state = Object.assign(init_state_single_form, this.state['form_data'][0]);
@@ -78,7 +118,6 @@ class EditableForm extends BaseNode{
             }
 
         } else {
-            // init_state_single_form.removable = false;
             const new_field = new SingleField(init_state_single_form);
             this.state["form_fields"].push(new_field);
             this.state["field_counter"]++;
@@ -136,14 +175,57 @@ class EditableForm extends BaseNode{
         };
 
         const check_exam_period = (field) => {
-            return true
+            if(field.state['asm_format'].indexOf("exam") > 0) {
+                return true
+            }
+            const date = parse_date(field.state['asm_due']);
+            let flag = true;
+            let start,end;
+            switch (this.state['semester']) {
+                case 'one':
+                    start = parse_date(this.state['semester1']['exam_period']['start']);
+                    if(!(date<start)){flag = false;}
+                    break;
+                case 'two':
+                    start = parse_date(this.state['semester2']['exam_period']['start']);
+                    if(!(date<start)) flag = false;
+                    break;
+                case 'both':
+                    start = parse_date(this.state['semester1']['exam_period']['start']);
+                    end = parse_date(this.state['semester1']['exam_period']['end']);
+                    if(date>start&&date<end) flag = false;
+                    start = parse_date(this.state['semester2']['exam_period']['start']);
+                    end = parse_date(this.state['semester2']['exam_period']['end']);
+                    if(date>start&&date<end) flag = false;
+                    break;
+            }
+
+            if(!flag) {
+                this.popup.popup(500,200);
+                add_animate(field.asm_period_field.find('input'),'shake');
+                field.asm_period_field.find('input').css({"border": "1px solid red"});
+            } else {
+                field.asm_period_field.find('input').css({"border": "1px solid ced4da"});
+            }
+            return flag
         };
+
         const check_holiday = (field) => {
+            const hd = new Holidays();
+            hd.init("GB", "ENG", "no", {});
+            const due = parse_date(field.state['asm_due'])
+            if(hd.isHoliday(due) || due.getDay() == 6 || due.getDay() == 0){
+                this.popup.popup(500,200);
+                add_animate(field.asm_period_field.find('input'),'shake');
+                field.asm_period_field.find('input').css({"border": "1px solid red"});
+            }else {
+                field.asm_period_field.find('input').css({"border": "1px solid ced4da"});
+            }
+
+
+
             return true
         };
-        const check_academic_year = (field) => {
-            return true
-        };  // assessment in two semesters or just on
 
         const check_sumup = (fields, percentage) => {
             if(percentage == 100) {
@@ -163,6 +245,9 @@ class EditableForm extends BaseNode{
 
         for(let i in this.state['form_fields']) {
             if(!check_empty(this.state['form_fields'][i])) return false;
+            if(!check_exam_period(this.state['form_fields'][i])) return false;
+            if(!check_holiday(this.state['form_fields'][i])) return false;
+
             per += parseInt(this.state['form_fields'][i].state['asm_per']);
         }
 
@@ -197,7 +282,7 @@ class EditableForm extends BaseNode{
         data.forms.push({
             id: this.state["id"],
             assessments: items
-        })
+        });
 
         request
             .post(API.form)
@@ -216,6 +301,7 @@ class EditableForm extends BaseNode{
             })
 
     }
+
 
     render() {
 

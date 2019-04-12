@@ -1,7 +1,7 @@
 import $ from "jquery"
 
 import BaseNode from "../util/BaseNode"
-import ModulesDisplay from "./ModulesDisplay";
+import ModulesDisplay from "../module/ModulesDisplay";
 
 import "../../style/project_detail.css"
 
