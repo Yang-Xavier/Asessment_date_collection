@@ -92,7 +92,7 @@ class Module(db.Model):
                     level=self.level,
                     academic_name=academic_name,
                     academic_id=self.academic,
-                    students=[s.to_dict() for s in self.students])
+                    students=[s.id for s in self.students])
 
 class Assessment(db.Model):
     __tablename__ = "assessment"
