@@ -73,9 +73,10 @@ class Module(db.Model):
     __tablename__ = "module"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    code = db.Column(db.String(10), unique=True, nullable=False)
+    code = db.Column(db.String(10), nullable=False)
     name = db.Column(db.String(80), nullable=False)
     semester = db.Column(db.String(80), nullable=False)
+    level = db.Column(db.String(10), nullable=False)
     academic = db.Column(db.Integer, db.ForeignKey('user.id')) # foreign key.
     students = db.relationship(
             "Student",
@@ -88,6 +89,7 @@ class Module(db.Model):
                     code=self.code,
                     name=self.name,
                     semester=str(self.semester),
+                    level=self.level,
                     academic_name=academic_name,
                     academic_id=self.academic,
                     students=self.students)
