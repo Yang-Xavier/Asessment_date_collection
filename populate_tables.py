@@ -1,3 +1,5 @@
+import random
+
 from datetime import datetime
 from adc.application import *
 
@@ -29,6 +31,16 @@ modules = [Module(id=0, level="PG1", code="COM3301", name="Experiencing Genesys"
            Module(id=7, level="PG1", code="COM1003", name="Java Programming", semester="two", academic=8),
            Module(id=8, level="PG1", code="COM1005", name="Machines and Intelligence", semester="two", academic=9),
            Module(id=9, level="PG1", code="COM1009", name="Introduction to Algorithms and Data Structures", semester="two", academic=10)]
+
+# students.
+random.seed(0)
+for sid in range(20):
+    s = Student(id=sid)
+    module_ids = list(range(10))
+    random.shuffle(module_ids)
+    s.modules.append(modules[module_ids[0]])
+    s.modules.append(modules[module_ids[1]])
+    s.modules.append(modules[module_ids[2]])
 
 # Forms.
 forms = [Form(id=0, project_id=0, is_filled=True, module_id=0),

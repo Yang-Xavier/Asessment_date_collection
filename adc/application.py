@@ -92,7 +92,7 @@ class Module(db.Model):
                     level=self.level,
                     academic_name=academic_name,
                     academic_id=self.academic,
-                    students=self.students)
+                    students=[s.to_dict() for s in self.students])
 
 class Assessment(db.Model):
     __tablename__ = "assessment"
@@ -117,11 +117,14 @@ class Student(db.Model):
     __tablename__ = "student"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.String(80), nullable=False)
     modules = db.relationship(
             "Module",
             secondary=student_module_table,
             back_populates="students") # many to many.
+
+    def to_dict(self):
+        return dict(id=self.id,
+                    modules=[m.id for m in self.modules])
 
 class Form(db.Model):
     __tablename__ = "form"
