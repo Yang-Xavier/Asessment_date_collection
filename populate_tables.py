@@ -16,6 +16,7 @@ users = [User(id=0, name="LTM", usertype="ltm", email="ltm@sheffield.ac.uk"),
          User(id=8, name="Maria-Cruz Villa-Uriol", usertype="academic", email="Maria-Cruz_Villa-Uriol@sheffield.ac.uk"),
          User(id=9, name="Phil Green", usertype="academic", email="Phil_Green@sheffield.ac.uk"),
          User(id=10, name="Dirk Sudholt", usertype="academic", email="Dirk_Sudholt@sheffield.ac.uk")]
+         User(id=11, name="Tutor", usertype="tutor", email="tutor@sheffield.ac.uk")]
 
 # modules.
 modules = [Module(id=0, level="PG1", code="COM3301", name="Experiencing Genesys", semester="both", academic=1),
@@ -27,7 +28,7 @@ modules = [Module(id=0, level="PG1", code="COM3301", name="Experiencing Genesys"
            Module(id=6, level="PG1", code="COM1002", name="Foundations of Computer Science", semester="two", academic=7),
            Module(id=7, level="PG1", code="COM1003", name="Java Programming", semester="two", academic=8),
            Module(id=8, level="PG1", code="COM1005", name="Machines and Intelligence", semester="two", academic=9),
-           Module(id=9, level="PG1", code="COM1009", name="Introduction to Algorithms and Data Structures", semester="two", academic=24)]
+           Module(id=9, level="PG1", code="COM1009", name="Introduction to Algorithms and Data Structures", semester="two", academic=10)]
 
 # Forms.
 forms = [Form(id=0, project_id=0, is_filled=True, module_id=0),
