@@ -47,16 +47,16 @@ projects = [
     Project(id=0,
         name="Assessment Data Collection for 2018/19",
         state="done",
-        create_date=datetime.strptime("01/04/19","%d/%m/%y"),
-        due_date=datetime.strptime("01/05/19","%d/%m/%y"),
-        sem1_bgn=datetime.strptime("15/09/19","%d/%m/%y"),
-        sem1_end=datetime.strptime("15/12/19","%d/%m/%y"),
-        exam1_bgn=datetime.strptime("15/11/19","%d/%m/%y"),
-        exam1_end=datetime.strptime("15/12/19","%d/%m/%y"),
-        sem2_bgn=datetime.strptime("15/01/20","%d/%m/%y"),
-        sem2_end=datetime.strptime("15/05/20","%d/%m/%y"),
-        exam2_bgn=datetime.strptime("15/04/20","%d/%m/%y"),
-        exam2_end=datetime.strptime("15/05/20","%d/%m/%y"),
+        create_date=datetime.strptime("01/04/18","%d/%m/%y"),
+        due_date=datetime.strptime("01/05/18","%d/%m/%y"),
+        sem1_bgn=datetime.strptime("15/09/18","%d/%m/%y"),
+        sem1_end=datetime.strptime("31/12/18","%d/%m/%y"),
+        exam1_bgn=datetime.strptime("01/01/19","%d/%m/%y"),
+        exam1_end=datetime.strptime("31/01/19","%d/%m/%y"),
+        sem2_bgn=datetime.strptime("01/02/19","%d/%m/%y"),
+        sem2_end=datetime.strptime("31/05/19","%d/%m/%y"),
+        exam2_bgn=datetime.strptime("01/06/19","%d/%m/%y"),
+        exam2_end=datetime.strptime("30/06/19","%d/%m/%y"),
         forms=forms)
     ]
 
@@ -100,16 +100,16 @@ Assessment(format="MOLE quiz", name="MOLE Quiz 3", marks=2.5, release_date=datet
 Assessment(format="MOLE quiz", name="MOLE Quiz 4", marks=2.5, release_date=datetime.strptime("29/03/19","%d/%m/%y"), submission_date=datetime.strptime("29/03/19","%d/%m/%y"),  form=forms[7])
 Assessment(format="MOLE quiz", name="MOLE Quiz 5", marks=2.5, release_date=datetime.strptime("10/05/19","%d/%m/%y"), submission_date=datetime.strptime("10/05/19","%d/%m/%y"),  form=forms[7])
 Assessment(format="Problem sheet", name="Lab Problem Sheet 1", marks=5, release_date=datetime.strptime("01/03/19","%d/%m/%y"), submission_date=datetime.strptime("01/03/19","%d/%m/%y"),  form=forms[7])
-Assessment(format="Problem sheet", name="Lab Problem Sheet 2", marks=5, release_date=datetime.strptime("15/03/18","%d/%m/%y"), submission_date=datetime.strptime("15/03/19","%d/%m/%y"),  form=forms[7])
+Assessment(format="Problem sheet", name="Lab Problem Sheet 2", marks=5, release_date=datetime.strptime("15/03/19","%d/%m/%y"), submission_date=datetime.strptime("15/03/19","%d/%m/%y"),  form=forms[7])
 Assessment(format="Assignment", name="Assignment", marks=27.5, release_date=datetime.strptime("22/11/18","%d/%m/%y"), submission_date=datetime.strptime("10/05/19","%d/%m/%y"),  form=forms[7])
 Assessment(format="Formal exam", name="Exam", marks=50, release_date=datetime.strptime("02/01/19","%d/%m/%y"), submission_date=datetime.strptime("02/01/19","%d/%m/%y"),  form=forms[7])
 Assessment(format="Assignment", name="ASSIGNMENT 1: Searching Word Lattices", marks=50, release_date=datetime.strptime("25/02/19","%d/%m/%y"), submission_date=datetime.strptime("18/03/19","%d/%m/%y"),  form=forms[8])
 Assessment(format="Assignment", name="ASSIGNMENT 2:  Rule Networks", marks=50, release_date=datetime.strptime("25/03/19","%d/%m/%y"), submission_date=datetime.strptime("30/04/19","%d/%m/%y"),  form=forms[8])
-Assessment(format="Problem sheet", name="1st marked problem sheet", marks=7.5, release_date=datetime.strptime("18/02/18","%d/%m/%y"), submission_date=datetime.strptime("25/02/18","%d/%m/%y"),  form=forms[9])
-Assessment(format="Problem sheet", name="2nd marked problem sheet", marks=7.5, release_date=datetime.strptime("04/03/18","%d/%m/%y"), submission_date=datetime.strptime("11/03/18","%d/%m/%y"),  form=forms[9])
-Assessment(format="Problem sheet", name="3rd marked problem sheet", marks=7.5, release_date=datetime.strptime("18/03/18","%d/%m/%y"), submission_date=datetime.strptime("25/03/18","%d/%m/%y"),  form=forms[9])
-Assessment(format="Problem sheet", name="4th marked problem sheet", marks=7.5, release_date=datetime.strptime("01/04/18","%d/%m/%y"), submission_date=datetime.strptime("29/04/18","%d/%m/%y"),  form=forms[9])
-Assessment(format="Formal exam", name="Exam", marks=70, release_date=datetime.strptime("01/06/18","%d/%m/%y"), submission_date=datetime.strptime("01/06/18","%d/%m/%y"),  form=forms[9])
+Assessment(format="Problem sheet", name="1st marked problem sheet", marks=7.5, release_date=datetime.strptime("18/02/19","%d/%m/%y"), submission_date=datetime.strptime("25/02/19","%d/%m/%y"),  form=forms[9])
+Assessment(format="Problem sheet", name="2nd marked problem sheet", marks=7.5, release_date=datetime.strptime("04/03/19","%d/%m/%y"), submission_date=datetime.strptime("11/03/19","%d/%m/%y"),  form=forms[9])
+Assessment(format="Problem sheet", name="3rd marked problem sheet", marks=7.5, release_date=datetime.strptime("18/03/19","%d/%m/%y"), submission_date=datetime.strptime("25/03/19","%d/%m/%y"),  form=forms[9])
+Assessment(format="Problem sheet", name="4th marked problem sheet", marks=7.5, release_date=datetime.strptime("01/04/19","%d/%m/%y"), submission_date=datetime.strptime("29/04/19","%d/%m/%y"),  form=forms[9])
+Assessment(format="Formal exam", name="Exam", marks=70, release_date=datetime.strptime("01/06/19","%d/%m/%y"), submission_date=datetime.strptime("01/06/19","%d/%m/%y"),  form=forms[9])
 
 # add to session.
 for user in users:
