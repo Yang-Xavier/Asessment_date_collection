@@ -15,7 +15,7 @@ users = [User(id=0, name="LTM", usertype="ltm", email="ltm@sheffield.ac.uk"),
          User(id=7, name="Mark Stevenson", usertype="academic", email="Mark_Stevenson@sheffield.ac.uk"),
          User(id=8, name="Maria-Cruz Villa-Uriol", usertype="academic", email="Maria-Cruz_Villa-Uriol@sheffield.ac.uk"),
          User(id=9, name="Phil Green", usertype="academic", email="Phil_Green@sheffield.ac.uk"),
-         User(id=10, name="Dirk Sudholt", usertype="academic", email="Dirk_Sudholt@sheffield.ac.uk")]
+         User(id=10, name="Dirk Sudholt", usertype="academic", email="Dirk_Sudholt@sheffield.ac.uk"),
          User(id=11, name="Tutor", usertype="tutor", email="tutor@sheffield.ac.uk")]
 
 # modules.
