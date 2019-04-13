@@ -16,8 +16,10 @@ import ReadOnlyForm from "./page/ReadOnlyForm";
 import ProjectDisplay from "./module/ProjectDisplay"
 import ProjectCreate from "./page/ProjectCreate"
 import ProjectDetails from "./page/ProjectDetails"
+import Visualization from "./page/Visualization"
 
 import Heatmap from './module/Heatmap'
+
 
 import {mount} from './util/node_util'
 import {API} from './util/constant'
@@ -182,8 +184,11 @@ const RouterList = {
         },
         'test': () => {
             mount_to_homepage(()=>{
-                return new Heatmap()
+                return new Visualization({project_id: 0, editable: true})
             })
+            // mount_to_homepage(()=>{
+            //     return new Heatmap({project_id: 0, editable: true})
+            // })
         }
     }
 };

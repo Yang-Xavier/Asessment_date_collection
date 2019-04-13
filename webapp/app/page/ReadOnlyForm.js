@@ -1,7 +1,7 @@
 import $ from "jquery"
 
 import '../../style/form_style.css'
-import SingleField from './SingleField'
+import SingleField from '../module/SingleField'
 
 import BaseNode from "../util/BaseNode"
 

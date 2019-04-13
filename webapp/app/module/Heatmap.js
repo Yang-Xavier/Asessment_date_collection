@@ -4,59 +4,60 @@ import $ from "jquery";
 
 import CalHeatMap from 'cal-heatmap'
 import 'cal-heatmap/cal-heatmap.css'
-import '../../style/visualisation_page.css'
 
 import BaseNode from "../util/BaseNode";
 
-class Heatmap extends BaseNode{
+class HeatMap extends BaseNode{
     constructor(param) {
         /*
         * param = {
-        *   project_id:
+        *   data:
+        *   name:
+        *   title:
         * }
         * */
-        param = {
-            project_id: 0
-        }
         super(param);
-
 
         this.container = $("<div class='heatmap_container'/>");
 
-        this.set_state({
-            data: this.get_data()
-        })
         this.heatmap_node = $("<div class='heatmap'/>");
+        this.title = $("<div class='title'/>");
+        this.title.text(this.state['title']);
 
         this.heatmap = this.init_heatmap(this.heatmap_node)
     }
 
     init_heatmap(node) {
         let heatmap = new CalHeatMap();
+// console.log(this.state)
         heatmap.init({
             itemSelector: node[0],
             domain: 'month',
             subDomain: 'day',
             subDomainTextFormat: "%d",
             cellSize: '20',
-            tooltip: true,
+
             weekStartOnMonday: false,
 
             domainGutter: 10,
             domainMargin: 10,
-            range: 5,
+            range: 8,
 
-            legend: [10, 20, 30, 40],
+            itemName: this.state["name"],
+            legend: [0.005, 0.01, 0.02, 0.3],
             legendVerticalPosition: 'bottom',
             legendHorizontalPosition:'center',
-            legendMargin: [0, 0, 20, ],
+            tooltip: true,
+            subDomainTitleFormat: {
+                empty: "{date}",
+                filled: "{count} {name} {connector} {date}"
+            },
 
-            // start: new Date(2000, 0, 15),
-            // minDate: new Date(2000, 1),
-            // maxDate: new Date(2000, 8),
-            // data: {},
-            considerMissingDataAsZero:true,
-
+            start: this.state["start"],
+            end: this.state["end"],
+            minDate: this.state["start"],
+            maxDate: this.state["end"],
+            // data: this.state['data'],
 
             onClick: (date, item)=> this.onClick(date, item)
         });
@@ -77,18 +78,19 @@ class Heatmap extends BaseNode{
         // console.log(this.heatmap)
     }
 
-    get_data() {
-        // const project = window.global.projects.filter(term => );
-        // console.log(window.global.projects)
+    update() {
+
+        this.heatmap.update(this.state["data"]);
     }
 
     render() {
 
 
+        this.container.append(this.title);
         this.container.append(this.heatmap_node)
         return this.container
     }
 
 }
 
-export default Heatmap;
+export default HeatMap;
