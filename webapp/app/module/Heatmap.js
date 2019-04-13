@@ -18,6 +18,8 @@ class HeatMap extends BaseNode{
         * */
         super(param);
 
+
+
         this.container = $("<div class='heatmap_container'/>");
 
         this.heatmap_node = $("<div class='heatmap'/>");
@@ -29,22 +31,22 @@ class HeatMap extends BaseNode{
 
     init_heatmap(node) {
         let heatmap = new CalHeatMap();
-// console.log(this.state)
         heatmap.init({
             itemSelector: node[0],
             domain: 'month',
             subDomain: 'day',
             subDomainTextFormat: "%d",
-            cellSize: '20',
+            cellSize: '24',
 
             weekStartOnMonday: false,
 
             domainGutter: 10,
             domainMargin: 10,
-            range: 8,
+            range: 6,
+            animationDuration: 200,
 
             itemName: this.state["name"],
-            legend: [0.005, 0.01, 0.02, 0.3],
+            legend: this.state["legend"],
             legendVerticalPosition: 'bottom',
             legendHorizontalPosition:'center',
             tooltip: true,
@@ -57,7 +59,6 @@ class HeatMap extends BaseNode{
             end: this.state["end"],
             minDate: this.state["start"],
             maxDate: this.state["end"],
-            // data: this.state['data'],
 
             onClick: (date, item)=> this.onClick(date, item)
         });
@@ -65,12 +66,12 @@ class HeatMap extends BaseNode{
         return heatmap
     }
 
-    next(date) {
-
+    next(n) {
+        this.heatmap.next(n);
     }
 
-    previous(date){
-
+    previous(n){
+        this.heatmap.previous(n);
     }
 
     onClick(date, item) {
@@ -79,8 +80,8 @@ class HeatMap extends BaseNode{
     }
 
     update() {
-
         this.heatmap.update(this.state["data"]);
+        this.heatmap.options.data = this.state["data"]
     }
 
     render() {

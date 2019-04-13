@@ -39,7 +39,9 @@
     color: #ccc
 }
 .v_container .fun_nav button.ban:hover {
+    border: 1px solid #ccc;
     cursor: not-allowed;
+    color: #ccc
 }
 
 .v_container .fun_nav button:hover {

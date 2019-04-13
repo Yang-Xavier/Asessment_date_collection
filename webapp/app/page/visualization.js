@@ -17,8 +17,7 @@ class Visualization extends BaseNode{
         super(param);
 
 
-        // this.state["filter_module"] = {"all": "All"}
-        // this.state["current_date"] = new Date()
+        this.state["filter_module"] = {"id": "all"};
 
 
         this.set_state(this.process_data());
@@ -37,12 +36,12 @@ class Visualization extends BaseNode{
                     const selection = $("<select class='selection'/>");
                     const option_module = {};
                     const op = $("<option _id='all'>All</option>");
-                    op.attr("_id" , "all")
+                    op.attr("_id" , "all");
                     selection.append(op);
                     _.forEach(this.state['origin_data'], term => {
                         if(!option_module[term['module_id']]) {
                             option_module[term['module_id']] = term['module_code'];
-                            const item = $("<option>" + term['module_code'] + "</option>");
+                            const item = $("<option>" + term['module_code'] +  " / " + term["run_in"] + "</option>");
                             item.attr("_id" ,term['module_id']);
                             selection.append(item);
                         }
@@ -52,9 +51,9 @@ class Visualization extends BaseNode{
                         const s_index = selection[0].selectedIndex;
                         const k = $(e.currentTarget[s_index]).attr("_id");
                         this.set_state({
-                            filter: { [k]: selection.val()}
+                            filter_module: { "id": k}
                         })
-                    })
+                    });
 
                     return selection
                 })();
@@ -68,6 +67,29 @@ class Visualization extends BaseNode{
                 const cont = $("<div/>");
                 const next_btn = $("<button class='next_btn'>Next</button>");
                 const pre_btn = $("<button class='pre_btn'>Previous</button>");
+
+                next_btn.on('click', ()=>{
+
+                    if(this.state["date"]>=dateFn.addMonths(this.state["start"],6)){
+                        next_btn.addClass("ban")
+                    } else {
+                        this.heatmap_peroid_next();
+                        pre_btn.removeClass("ban")
+                        next_btn.removeClass("ban")
+                    }
+                });
+
+                pre_btn.on('click', ()=>{
+
+                    if(this.state["date"]<=this.state["start"]){
+                        pre_btn.addClass("ban")
+                    } else {
+                        this.heatmap_peroid_pre();
+                        next_btn.removeClass("ban");
+                        pre_btn.removeClass("ban")
+                    }
+                });
+
 
                 cont.append(pre_btn);
                 cont.append(next_btn);
@@ -112,19 +134,19 @@ class Visualization extends BaseNode{
             "asm_due": "",
             "asm_name": "",
             "module_code":"",
-            "academic":""
+            "academic":"",
+            "run_in":"",
+            "students": []
             },{}]
             * */
 
-        const data = {}
+        const data = {};
         const project_data = window.global.projects.filter(term => term['project_id'] == this.state['project_id'])[0]
 
-        data["semester1"] = project_data["semester1"];
-        data["semester2"] = project_data["semester2"];
-        // this.set_state({
-        //     semester1: project_data['semester1'],
-        //     semester2: project_data['semester2']
-        // });
+        data["date"] = parse_date(project_data["semester1"]["start"]);
+        data["start"] = parse_date(project_data["semester1"]["start"]);
+        data["end"] = parse_date(project_data["semester2"]["exam_period"]["end"]);
+
 
         let asm_data = [];
         for(let i in project_data["forms"]) {
@@ -135,6 +157,9 @@ class Visualization extends BaseNode{
                     "form_id":project_data["forms"][i]["form_id"],
                     "module_id": project_data["forms"][i]["module_id"],
                     "module_code":project_data["forms"][i]["module"]["code"],
+                    "run_in": project_data["forms"][i]["module"]["semester"],
+                    "students": project_data["forms"][i]["module"]["students"],
+
                     "academic":project_data["forms"][i]["module"]["academic_name"],
 
                     "asm_id": project_data["forms"][i]["assessments"][j]["id"],
@@ -142,7 +167,7 @@ class Visualization extends BaseNode{
                     "asm_release": parse_date(project_data["forms"][i]["assessments"][j]["asm_release"]),
                     "asm_due": parse_date(project_data["forms"][i]["assessments"][j]["asm_due"]),
                     "asm_name": project_data["forms"][i]["assessments"][j]["asm_name"],
-                    "asm_per": project_data["forms"][i]["assessments"][j]["asm_per"]
+                    "asm_per": project_data["forms"][i]["assessments"][j]["asm_per"],
                 };
                 asm_data.push(data)
             }
@@ -154,7 +179,16 @@ class Visualization extends BaseNode{
 
     }
 
-    heatmap_data_bun(asm_data) {
+    heatmap_data_bun() {
+
+        let asm_data = [];
+        if(this.state["filter_module"]["id"] == "all") {
+            asm_data = this.state["origin_data"]
+        } else {
+            asm_data = this.state["origin_data"].filter(term => term["module_id"] == this.state["filter_module"]["id"])
+        }
+
+
         const heatmap_data = {};
 
         for(let i in asm_data) {
@@ -184,11 +218,44 @@ class Visualization extends BaseNode{
             heatmap_data[k] = parseFloat(((heatmap_data[k]-min)/(max-min)).toFixed(4));
 
         }
+
         return heatmap_data
     }
 
-    heatmap_data_stu(stu_data) {
+    heatmap_data_stu() {
+        let asm_data = [];
+        if(this.state["filter_module"]["id"] == "all") {
+            asm_data = this.state["origin_data"]
+        } else {
+            asm_data = this.state["origin_data"].filter(term => term["module_id"] == this.state["filter_module"]["id"])
+        }
 
+
+        const heatmap_data = {};
+
+        for(let i in asm_data) {
+            const release = asm_data[i]['asm_release'];
+            const due = asm_data[i]['asm_due'];
+            const gap = Math.abs(dateFn.differenceInCalendarDays(release, due));
+
+
+            for (let d = 1; d <= gap; d++ ) {
+                const new_timestamp = (dateFn.addDays(release, d-1).getTime() / 1000);
+                const students = asm_data[i]['students'];
+
+                if(heatmap_data[new_timestamp]) {
+                    heatmap_data[new_timestamp].push(...students)
+                } else {
+                    heatmap_data[new_timestamp] = []
+                    heatmap_data[new_timestamp].push(...students)
+                }
+            }
+        }
+
+        for(let k in heatmap_data) {
+            heatmap_data[k] = _.union(heatmap_data[k]).length
+        }
+        return heatmap_data
     }
 
     timeline_data() {
@@ -201,27 +268,48 @@ class Visualization extends BaseNode{
             this.heatmap_bun = new HeatMap({
                 "title": "HeatMap for Assessment Periods",
                 "name": ["bunching", "bunching"],
-                "start": parse_date(this.state["semester1"]["start"]),
-                "end": parse_date(this.state["semester2"]["exam_period"]["end"])
+                "start": this.state["start"],
+                "end": this.state["end"],
+                "legend": [0.005, 0.01, 0.02, 0.3],
+                "click":()=>{}
             });
 
 
             this.heatmap_stu = new HeatMap({
                 "title": "HeatMap for Number of Students Doing Assessments",
                 "name": ["student", "students"],
-                "start": parse_date(this.state["semester1"]["start"]),
-                "end": parse_date(this.state["semester2"]["exam_period"]["end"])
+                "start": this.state["start"],
+                "end": this.state["end"],
+                "legend": [2, 8, 12, 16],
+                "click": ()=>{}
             });
 
         }
 
         this.heatmap_bun.set_state({
-            "data": this.heatmap_data_bun(this.state['origin_data']),
+            "data": this.heatmap_data_bun(),
         });
 
         this.heatmap_stu.set_state({
             "data": this.heatmap_data_stu(),
         })
+    }
+
+    heatmap_peroid_next() {
+        const n = 3;
+        this.heatmap_bun.next(n);
+        this.heatmap_stu.next(n);
+        this.state["date"] = dateFn.addMonths(this.state["date"], n);
+
+    }
+
+    heatmap_peroid_pre() {
+        const n = 3;
+        this.heatmap_bun.previous(n);
+        this.heatmap_stu.previous(n);
+        this.state["date"] = dateFn.subMonths(this.state["date"], n);
+
+
     }
 
     render() {
