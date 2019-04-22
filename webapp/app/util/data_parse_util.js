@@ -1,9 +1,12 @@
+import moment from 'moment'
+
 export const projects_data_parsing = (data) =>{
     const new_data = [];
     for(let i in data) {
+
         let item = {};
         item['status'] = (data[i].forms.filter(asm => asm.is_filled)).length + "/" + data[i].forms.length;
-        item['checking'] = data[i].state == '';
+        item['checking'] = data[i].state == 'assessment_data_collected';
         item['done'] = data[i].state == 'done';
         item['pending'] = data[i].state != 'done';
         item = Object.assign(data[i], item);
@@ -35,19 +38,7 @@ export const forms_data_parsing = (data, project) => {
 }
 
 export const parse_date = (str, fmt) => {
-    fmt = fmt || 'dd/MM/yyyy';
-    var obj = {y: 0, M: 1, d: 0, H: 0, h: 0, m: 0, s: 0, S: 0};
-    fmt.replace(/([^yMdHmsS]*?)(([yMdHmsS])\3*)([^yMdHmsS]*?)/g, function(m, $1, $2, $3, $4, idx, old)
-    {
-        str = str.replace(new RegExp($1+'(\\d{'+$2.length+'})'+$4), function(_m, _$1)
-        {
-            obj[$3] = parseInt(_$1);
-            return '';
-        });
-        return '';
-    });
-    obj.M--;
-    var date = new Date(obj.y, obj.M, obj.d, obj.H, obj.m, obj.s);
-    if(obj.S !== 0) date.setMilliseconds(obj.S);
-    return date;
+    fmt = fmt || 'DD/MM/YYYY';
+    const date = moment.utc(str, fmt).toDate();
+    return date
 }

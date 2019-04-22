@@ -1,4 +1,5 @@
 import $ from "jquery"
+import route from 'riot-route'
 
 import BaseNode from "../util/BaseNode"
 import ModulesDisplay from "../module/ModulesDisplay";
@@ -42,18 +43,18 @@ class ProjectDetails extends BaseNode{
             const status = $("<span><span> Status: " + this.state["status"] + "</span></span>");
 
             const visual_sellection = $("<div class='visual_selection'><div class='v_icon'>V</div><i class='eye_icon fas fa-eye'/></div>");
-            const heatmap_btn = $("<div class='visual_btn heatmap'>Heatmap</div>");
-            const timeline_btn = $("<div class='visual_btn timeline'>Timeline</div>");
+            const visual_btn = $("<div class='visual_btn '>Visualization</div>");
 
             const notify_btn = $("<div class='notify_btn' ><div class='icon'><i class='fas fa-bell'/></div><div class='text'>Notify</div></div>");
             const function_block = $("<div class='function_block'/>");
 
+            visual_btn.on('click', () => {
+                route('visualisation/'+this.state['project_id']);
+            })
 
-
-            if(this.state["state"] == 'done') {
+            if(this.state["done"] || this.state['checking']) {
                 status.append($("<i class='done fas fa-check-circle'/>"));
-                visual_sellection.append(heatmap_btn);
-                visual_sellection.append(timeline_btn);
+                visual_sellection.append(visual_btn);
                 function_block.append(visual_sellection);
             } else {
                 function_block.append(notify_btn);

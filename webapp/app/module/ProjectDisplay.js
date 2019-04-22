@@ -16,7 +16,6 @@ class ProjectDisplay extends BaseNode{
                },{}],
              }
             * */
-
         this.container = $("<div class='project_display'></div>");
         this.display_blocks = [];
         for( let i in this.state['data']) {

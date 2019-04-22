@@ -30,10 +30,10 @@ class BaseNode {
         // update the state
         // this doesn't need to be overwrite
         this.state = Object.assign(this.state, state); // Update the state
-        this.update();
+        this.update(state);
     }
 
-    update() {
+    update(new_state) {
 
 
         // update for node

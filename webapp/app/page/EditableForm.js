@@ -213,11 +213,13 @@ class EditableForm extends BaseNode{
         const check_holiday = (field) => {
             const hd = new Holidays();
             hd.init("GB", "ENG", "no", {});
-            const due = parse_date(field.state['asm_due'])
+            const due = parse_date(field.state['asm_due']);
+
             if(hd.isHoliday(due) || due.getDay() == 6 || due.getDay() == 0){
                 this.popup.popup(500,200);
                 add_animate(field.asm_period_field.find('input'),'shake');
                 field.asm_period_field.find('input').css({"border": "1px solid red"});
+                return false
             }else {
                 field.asm_period_field.find('input').css({"border": "1px solid ced4da"});
             }

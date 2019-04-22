@@ -3,7 +3,7 @@ import {mount} from './node_util'
 
 class HomePageBased extends BaseNode{
     constructor(param) {
-        super(param)
+        super(param);
         this.set_state({mounted: false})
     }
 

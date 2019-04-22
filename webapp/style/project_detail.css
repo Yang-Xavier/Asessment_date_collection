@@ -77,7 +77,7 @@
 
 
 .project_detail .header .function_block .v_icon{
-    display: inline-block;
+    display: block;
     height: 40px;
     width: 40px;
     text-align: center;
@@ -93,7 +93,7 @@
 
 
 .project_detail .header .function_block .visual_selection:hover {
-    width: 250px;
+    width: 180px;
     color: #85C1E9;
     border: 1px solid #85C1E9;
 }

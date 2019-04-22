@@ -18,9 +18,6 @@ import ProjectCreate from "./page/ProjectCreate"
 import ProjectDetails from "./page/ProjectDetails"
 import Visualization from "./page/Visualization"
 
-import Heatmap from './module/Heatmap'
-
-
 import {mount} from './util/node_util'
 import {API} from './util/constant'
 import {get_format_token} from './util/cookie_util'
@@ -108,7 +105,7 @@ const RouterList = {
                         project_data = [].filter.call(window.global.projects, term => term.state=='done');
                         break;
                     case 'pending':
-                        project_data = [].filter.call(window.global.projects, term => term.state=='waiting_on_academics');
+                        project_data = [].filter.call(window.global.projects, term => term.state!='done');
                         break;
                     case 'visualizable':
                         project_data = [].filter.call(window.global.projects, term => term.state=='assessment_data_collected' || term.state=='done');
@@ -139,7 +136,6 @@ const RouterList = {
 
         'home/form/*': (id) => {
             // some request here
-
 
             mount_to_homepage(()=>{
                 let data = {};
@@ -173,8 +169,10 @@ const RouterList = {
             })
         },
 
-        'visualisation/*..': (graph_type)=>{
-
+        'visualisation/*': (id)=>{
+            mount_to_homepage(()=>{
+                return new Visualization({project_id: id, editable: window.global.user['user_type'] == 'tutor'})
+            })
         },
         'module/*': (module_id)=>{
             console.log(module_id)
@@ -186,9 +184,6 @@ const RouterList = {
             mount_to_homepage(()=>{
                 return new Visualization({project_id: 0, editable: true})
             })
-            // mount_to_homepage(()=>{
-            //     return new Heatmap({project_id: 0, editable: true})
-            // })
         }
     }
 };

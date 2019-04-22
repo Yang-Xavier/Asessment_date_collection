@@ -1,8 +1,7 @@
 import $ from "jquery";
-
-
-
 import CalHeatMap from 'cal-heatmap'
+
+
 import 'cal-heatmap/cal-heatmap.css'
 
 import BaseNode from "../util/BaseNode";
@@ -18,8 +17,6 @@ class HeatMap extends BaseNode{
         * */
         super(param);
 
-
-
         this.container = $("<div class='heatmap_container'/>");
 
         this.heatmap_node = $("<div class='heatmap'/>");
@@ -31,8 +28,17 @@ class HeatMap extends BaseNode{
 
     init_heatmap(node) {
         let heatmap = new CalHeatMap();
-        heatmap.init({
-            itemSelector: node[0],
+        const config = this.get_config();
+
+        config["itemSelector"] = node[0];
+
+        heatmap.init(config);
+
+        return heatmap
+    }
+
+    get_config() {
+        const default_config = {
             domain: 'month',
             subDomain: 'day',
             subDomainTextFormat: "%d",
@@ -45,8 +51,6 @@ class HeatMap extends BaseNode{
             range: 6,
             animationDuration: 200,
 
-            itemName: this.state["name"],
-            legend: this.state["legend"],
             legendVerticalPosition: 'bottom',
             legendHorizontalPosition:'center',
             tooltip: true,
@@ -55,15 +59,10 @@ class HeatMap extends BaseNode{
                 filled: "{count} {name} {connector} {date}"
             },
 
-            start: this.state["start"],
-            end: this.state["end"],
-            minDate: this.state["start"],
-            maxDate: this.state["end"],
-
             onClick: (date, item)=> this.onClick(date, item)
-        });
+        };
 
-        return heatmap
+        return Object.assign(default_config, this.state["config"])
     }
 
     next(n) {
@@ -88,7 +87,7 @@ class HeatMap extends BaseNode{
 
 
         this.container.append(this.title);
-        this.container.append(this.heatmap_node)
+        this.container.append(this.heatmap_node);
         return this.container
     }
 
