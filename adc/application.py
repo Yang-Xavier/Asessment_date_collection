@@ -6,7 +6,9 @@ application.py
 import enum
 from datetime import datetime
 
-from flask import Flask, Blueprint, jsonify, g, request
+from docx import Document
+from docx.shared import Mm
+from flask import Flask, Blueprint, jsonify, g, request, send_file
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from flask_httpauth import HTTPBasicAuth
@@ -364,6 +366,67 @@ def update_assessment():
     db.session.commit()
 
     return jsonify({"error_code":0, "error_msg":"success"})
+
+@app.route('/api/print/<project_id>', methods=['GET'])
+@auth.login_required
+def print_booklet(project_id):
+    # only LTM can call this API.
+    if g.user.usertype != "ltm":
+        return jsonify({"error_code":5,
+            "error_msg":"API can only be called by LTM"})
+
+    result = Project.query.filter_by(id=project_id).all()
+    if len(result) == 0:
+        return jsonify({"error_code":3, "error_msg":"Project " + str(project_id) + " does not exist"})
+    project = result[0]
+    print("Printing project", project_id)
+
+    # Fetch all modules.
+    modules = Module.query.all()
+    module_data = {}
+    for module in modules:
+        module_data[module.id] = {}
+        module_data[module.id]["name"] = module.name
+        module_data[module.id]["code"] = module.code
+    forms = Form.query.filter_by(project_id=project_id).all()
+
+    document = Document()
+    # set page size.
+    section = document.sections[0]
+    section.page_height = Mm(297)
+    section.page_width = Mm(210)
+    section.left_margin = Mm(25.4)
+    section.right_margin = Mm(25.4)
+    section.top_margin = Mm(25.4)
+    section.bottom_margin = Mm(25.4)
+    section.header_distance = Mm(12.7)
+    section.footer_distance = Mm(12.7)
+    document.add_heading("Module Assessments", 0)
+    p = document.add_paragraph("Project name: " + project.name)
+
+    for form in forms:
+        document.add_heading(module_data[form.module_id]["code"] + " " + module_data[form.module_id]["name"], level=1)
+        table = document.add_table(rows=1, cols=5)
+        table.style = 'Table Grid'
+        hdr_cells = table.rows[0].cells
+        hdr_cells[0].text = "Format"
+        hdr_cells[1].text = "Name"
+        hdr_cells[2].text = "Marks"
+        hdr_cells[3].text = "Release date"
+        hdr_cells[4].text = "Deadline"
+        for asm in form.assessments:
+            row_cells = table.add_row().cells
+            row_cells[0].text = asm.format
+            row_cells[1].text = asm.name
+            row_cells[2].text = str(asm.marks)
+            row_cells[3].text = asm.release_date.strftime("%d/%m/%Y")
+            row_cells[4].text = asm.submission_date.strftime("%d/%m/%Y")
+
+    filename = "/tmp/" + "".join([s if s.isalnum() else "-" for s in project.name]) + ".docx"
+
+    document.save(filename)
+
+    return send_file(filename)
 
 
 app.register_blueprint(api, url_prefix="/api")
