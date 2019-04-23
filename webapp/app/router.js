@@ -43,6 +43,7 @@ const RouterList = {
         },
 
         'home': () => {
+            set_title("Home");
             mount_homepage_frame()
                 .then(page => {
                     home_page = page;
@@ -55,7 +56,7 @@ const RouterList = {
 
             home_status = status;
 
-
+            set_title("Forms " + status);
 
             mount_to_homepage(()=>{
                 let data = [];
@@ -97,6 +98,8 @@ const RouterList = {
 
             home_status = status;
 
+            set_title("Project " + status);
+
             mount_to_homepage(()=>{
                 let project_data;
 
@@ -122,11 +125,12 @@ const RouterList = {
         },
 
         'home/project/creating': () => {
+            set_title("Create new project");
             mount_to_homepage(() =>  new ProjectCreate())
         },
 
         'home/project/*': (id) => {
-
+            set_title("Project");
             mount_to_homepage(() =>{
                 const data = [].filter.call(window.global.projects,project => project.project_id == (id+""))[0];
                 data["modules"] = data["forms"];
@@ -136,7 +140,7 @@ const RouterList = {
 
         'home/form/*': (id) => {
             // some request here
-
+            set_title("Form");
             mount_to_homepage(()=>{
                 let data = {};
                 let projects;
@@ -170,6 +174,7 @@ const RouterList = {
         },
 
         'visualisation/*': (id)=>{
+            set_title("Visualisation");
             mount_to_homepage(()=>{
                 return new Visualization({project_id: id, editable: window.global.user['user_type'] == 'tutor'})
             })
@@ -178,6 +183,7 @@ const RouterList = {
             console.log(module_id)
         },
         'default': () =>{
+            set_title("404");
             console.log("404")
         },
         'test': () => {
@@ -243,6 +249,10 @@ const mount_to_homepage = (node_fn) => {
         home_page.mount_content(node_fn());
         home_page.set_state({status: home_status});
     }
+};
+
+const set_title = (title) => {
+    document.title = title
 };
 
 

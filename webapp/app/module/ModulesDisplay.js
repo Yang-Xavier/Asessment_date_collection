@@ -122,6 +122,7 @@ class ModulesDisplay extends BaseNode{
             module['details']['capacity'] = param.modules[i].module.students.length;
             module['details']['lecturer'] = param.modules[i].module.academic_name;
             module['details']['semester'] = param.modules[i].module.semester;
+            module['details']['level'] = param.modules[i].module.level
 
             modules.push(module)
 

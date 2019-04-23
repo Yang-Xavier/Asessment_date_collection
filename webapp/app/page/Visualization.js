@@ -278,14 +278,14 @@ class Visualization extends BaseNode{
 
         const data = {};
         const project_data = window.global.projects.filter(term => term['project_id'] == this.state['project_id'])[0];
-
+        this.state['editable'] = this.state['editable'] && (!project_data.done);
         data["date"] = parse_date(project_data["semester1"]["start"]);
         data["start"] = parse_date(project_data["semester1"]["start"]);
         data["end"] = parse_date(project_data["semester2"]["exam_period"]["end"]);
-        data['modules'] = [];
+        const modules = [];
         let asm_data = [];
         for(let i in project_data["forms"]) {
-            data['modules'].push(project_data["forms"][i]['module']);
+            modules.push(project_data["forms"][i]['module']);
 
             for(let j in project_data["forms"][i]["assessments"]) {
                 let d = {
@@ -309,9 +309,10 @@ class Visualization extends BaseNode{
             }
         }
 
+
         asm_data = asm_data.sort((a,b) => a["asm_release"] - b["asm_release"]);
         data["origin_data"] = asm_data;
-        data['modules'] = _.uniq(data['modules']);
+        data['modules'] = _.uniq(modules);
 
        return data;
 
@@ -415,7 +416,7 @@ class Visualization extends BaseNode{
                 start: moment(asm["asm_release"]).format('YYYY-MM-DD'),
                 end: moment(asm["asm_due"]).format('YYYY-MM-DD'),
                 type: asm["asm_release"].getTime() == asm["asm_due"].getTime()? "box": "range",
-                editable: this.state['editable']?{
+                editable: this.state['editable'] ? {
                     remove: false,
                     updateGroup:false,
                     updateTime: true,
