@@ -58,7 +58,7 @@ forms = [Form(id=0, project_id=0, is_filled=True, module_id=0),
 projects = [
     Project(id=0,
         name="Assessment Data Collection for 2018/19",
-        state="done",
+        state="assessment_data_collected",
         create_date=datetime.strptime("01/04/18","%d/%m/%y"),
         due_date=datetime.strptime("01/05/18","%d/%m/%y"),
         sem1_bgn=datetime.strptime("15/09/18","%d/%m/%y"),

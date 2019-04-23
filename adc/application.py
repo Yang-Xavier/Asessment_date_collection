@@ -339,6 +339,32 @@ def create_forms():
     db.session.commit()
     return jsonify({"error_code":0, "error_msg":"success"})
 
+@app.route('/api/assessment', methods=['PUT'])
+@auth.login_required
+def update_assessment():
+    # only tutor can call this API.
+    if g.user.usertype != "tutor":
+        return jsonify({"error_code":5,
+            "error_msg":"API can only be called by academic"})
+
+    json = request.get_json()
+    if not json:
+        return jsonify({"error_code":4, "error_msg":"Bad request"})
+
+    for asm_json in json["assessments"]:
+        result = Form.query.filter_by(id=asm_json["id"]).all()
+        if len(result) == 0:
+            return jsonify({"error_code":3, "error_msg":"Assessment " + asm_json["id"] + " does not exist"})
+        asm = result[0]
+        asm.release_date = datetime.strptime(asm_json["new_start"], "%d/%m/%Y")
+        asm.submission_date = datetime.strptime(asm_json["new_end"], "%d/%m/%Y")
+        db.session.add(asm)
+
+    db.session.commit()
+
+    return jsonify({"error_code":0, "error_msg":"success"})
+
+
 app.register_blueprint(api, url_prefix="/api")
 
 if __name__ == '__main__':
