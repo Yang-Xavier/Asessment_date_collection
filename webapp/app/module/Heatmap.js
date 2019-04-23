@@ -74,8 +74,9 @@ class HeatMap extends BaseNode{
     }
 
     onClick(date, item) {
+
         this.heatmap.highlight(date);
-        // console.log(this.heatmap)
+        this.state['click'](date, item)
     }
 
     update() {

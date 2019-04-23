@@ -61,7 +61,7 @@ class ProjectDetails extends BaseNode{
                 function_block.append(notify_btn);
             }
 
-            if(this.state["done"]) {
+            if(this.state["done"] && window.global.user["user_type"] == 'ltm') {
                 function_block.append(print_btn);
             }
 

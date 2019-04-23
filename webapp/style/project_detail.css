@@ -85,12 +85,32 @@
     margin: 0;
     font-weight: bold;
 }
+
 .project_detail .header .function_block .visual_btn,
 .project_detail .header .function_block .notify_btn div{
     display: inline-block;
     margin: 0 20px 0 20px;
 }
 
+.project_detail .header .function_block .print_btn {
+    display: block;
+    position: absolute;
+    left: 0;
+    width: 60px;
+    height: 40px;
+    border-radius: 5px;
+    line-height: 40px;
+    text-align: center;
+    color: var(--red);
+    border: 1px solid var(--red);
+}
+
+.project_detail .header .function_block .print_btn:hover {
+    cursor: pointer;
+    color: #fff;
+    background: var(--red);
+    border: 1px solid var(--red);
+}
 
 .project_detail .header .function_block .visual_selection:hover {
     width: 180px;

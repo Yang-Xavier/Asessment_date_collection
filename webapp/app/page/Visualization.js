@@ -219,18 +219,19 @@ class Visualization extends BaseNode{
             "end": this.state["end"],
             "minDate": this.state["start"],
             "maxDate": this.state["end"],
-            "legend": [2, 8, 12, 16],
+            "legend": [40, 70, 100, 130],
         };
 
         this.heatmap_bun = new HeatMap({
             "title": "HeatMap for Assessment Periods",
-            "click":()=>{},
+            "click":(date, item)=>{
+            },
             "config": config_bun,
         });
 
         this.heatmap_stu = new HeatMap({
             "title": "HeatMap for Number of Students Doing Assessments",
-            "click": ()=>{},
+            "click": (date, item)=>{},
             "config": config_stu
         });
 
@@ -335,7 +336,8 @@ class Visualization extends BaseNode{
             const due = asm_data[i]['asm_due'];
             const gap = Math.abs(dateFn.differenceInCalendarDays(release, due));
 
-            for (let d = 1; d <= gap; d++ ) {
+            for (let d = 1; (d-1) <= gap; d++ ) {
+                console.log(gap)
                 const new_timestamp = (dateFn.addDays(release, d-1).getTime() / 1000);
                 const weight = asm_data[i]['asm_per'] / d;
 
