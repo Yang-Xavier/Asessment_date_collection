@@ -2,6 +2,7 @@ import $ from 'jquery'
 import dateFn from 'date-fns'
 import _ from 'lodash'
 import moment from "moment"
+import request from 'superagent'
 
 import BaseNode from "../util/BaseNode"
 
@@ -12,6 +13,8 @@ import {parse_date} from "../util/data_parse_util";
 
 
 import '../../style/visualisation_page.css'
+import {get_format_token} from "../util/cookie_util";
+import {API} from "../util/constant";
 
 class Visualization extends BaseNode{
     constructor(param) {
@@ -155,7 +158,7 @@ class Visualization extends BaseNode{
 
             reset_btn.on("click", () => {
                 if(!this.state['changed'])
-                    return
+                    return;
 
                 this.timeline.state['changed_items'] = [];
                 this.set_state(Object.assign(this.process_data(), {changed: false}));
@@ -171,19 +174,30 @@ class Visualization extends BaseNode{
 
                 // filter
                 let new_data = [];
+                const changed_data = [];
                 _.forEach(this.timeline.state['changed_items'], term => {
                     new_data = _.forEach(this.state["origin_data"], oterm => {
                         if(term.id == oterm.asm_id) {
+                            changed_data.push({
+                                id: term.id,
+                                new_start: moment(term.start).format("DD/MM/YYYY"),
+                                new_end: moment(term.end).format("DD/MM/YYYY"),
+                            })
                             oterm.asm_release = term.start;
                             oterm.asm_due = term.end;
                         }
                         return oterm
                     })
                 });
-                this.set_state({"origin_data": new_data});
-                this.timeline.state['changed_items'] = [];
-                this.set_state({"changed": true})
-                alert("Saved");
+                this.submit_change(changed_data)
+                    .then(() => {
+                        this.set_state({"origin_data": new_data});
+                        this.set_state({"backup_data": new_data});
+                        this.timeline.state['changed_items'] = [];
+                        this.set_state({"changed": true});
+                        alert("Saved");
+                    });
+
             });
 
             return cont;
@@ -337,7 +351,7 @@ class Visualization extends BaseNode{
             const gap = Math.abs(dateFn.differenceInCalendarDays(release, due));
 
             for (let d = 1; (d-1) <= gap; d++ ) {
-                console.log(gap)
+
                 const new_timestamp = (dateFn.addDays(release, d-1).getTime() / 1000);
                 const weight = asm_data[i]['asm_per'] / d;
 
@@ -346,8 +360,15 @@ class Visualization extends BaseNode{
                 } else {
                     heatmap_data[new_timestamp] = weight
                 }
+
+                // if(gap == 0) {
+                //     console.log(asm_data[i]['module_code']+"_"+asm_data[i]['run_in'], gap, new_timestamp)
+                // }
             }
         }
+
+
+
         let min = 1000;
         let max = 0;
         for(let k in heatmap_data) {
@@ -503,6 +524,16 @@ class Visualization extends BaseNode{
 
 
         return this.container;
+    }
+
+    submit_change(data) {
+        const sub_data = {};
+        sub_data['assessments'] = data;
+
+        return request
+            .put(API.assessment)
+            .set("Authorization", get_format_token())
+            .send(sub_data)
     }
 
 }

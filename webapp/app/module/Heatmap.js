@@ -80,8 +80,9 @@ class HeatMap extends BaseNode{
     }
 
     update() {
+        this.heatmap.options.data = this.state["data"];
         this.heatmap.update(this.state["data"]);
-        this.heatmap.options.data = this.state["data"]
+
     }
 
     render() {
