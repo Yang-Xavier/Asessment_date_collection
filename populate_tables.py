@@ -34,7 +34,7 @@ modules = [Module(id=0, level="PG1", code="COM3301", name="Experiencing Genesys"
 
 # students.
 random.seed(0)
-for sid in range(20):
+for sid in range(100):
     s = Student(id=sid)
     module_ids = list(range(10))
     random.shuffle(module_ids)
