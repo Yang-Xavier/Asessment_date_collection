@@ -47,10 +47,11 @@ class ProjectDetails extends BaseNode{
 
             const notify_btn = $("<div class='notify_btn' ><div class='icon'><i class='fas fa-bell'/></div><div class='text'>Notify</div></div>");
             const function_block = $("<div class='function_block'/>");
+            const print_btn = $("<div class='print_btn'>Print</div>");
 
             visual_btn.on('click', () => {
                 route('visualisation/'+this.state['project_id']);
-            })
+            });
 
             if(this.state["done"] || this.state['checking']) {
                 status.append($("<i class='done fas fa-check-circle'/>"));
@@ -58,6 +59,10 @@ class ProjectDetails extends BaseNode{
                 function_block.append(visual_sellection);
             } else {
                 function_block.append(notify_btn);
+            }
+
+            if(this.state["done"]) {
+                function_block.append(print_btn);
             }
 
             due.append(status);
