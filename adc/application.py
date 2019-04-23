@@ -352,10 +352,11 @@ def update_assessment():
         return jsonify({"error_code":4, "error_msg":"Bad request"})
 
     for asm_json in json["assessments"]:
-        result = Form.query.filter_by(id=asm_json["id"]).all()
+        result = Assessment.query.filter_by(id=asm_json["id"]).all()
         if len(result) == 0:
-            return jsonify({"error_code":3, "error_msg":"Assessment " + asm_json["id"] + " does not exist"})
+            return jsonify({"error_code":3, "error_msg":"Assessment " + str(asm_json["id"]) + " does not exist"})
         asm = result[0]
+        print("Updating assessment ", asm.id, ",", asm.name)
         asm.release_date = datetime.strptime(asm_json["new_start"], "%d/%m/%Y")
         asm.submission_date = datetime.strptime(asm_json["new_end"], "%d/%m/%Y")
         db.session.add(asm)
