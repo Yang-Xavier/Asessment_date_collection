@@ -1,11 +1,11 @@
 import $ from "jquery"
 import route from 'riot-route'
+import request from "superagent"
 
 import BaseNode from "../util/BaseNode"
 import ModulesDisplay from "../module/ModulesDisplay";
 
 import "../../style/project_detail.css"
-
 
 class ProjectDetails extends BaseNode{
     constructor(param) {
@@ -91,6 +91,10 @@ class ProjectDetails extends BaseNode{
      this.container.append(this.forms);
 
      return this.container
+ }
+
+ print_doc() {
+
  }
 
 }

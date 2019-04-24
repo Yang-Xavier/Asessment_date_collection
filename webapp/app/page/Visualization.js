@@ -199,7 +199,6 @@ class Visualization extends BaseNode{
                     });
 
             });
-
             return cont;
         };
 

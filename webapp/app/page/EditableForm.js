@@ -128,12 +128,32 @@ class EditableForm extends BaseNode{
     }
 
     add_more() {
+
         const new_field = new SingleField({
             editable:true,
             removable: true,
             title: "Assignment ",
             index: this.state["field_counter"],
-            remove_callback: this.remove_field.bind(this)
+            remove_callback: this.remove_field.bind(this),
+            date_range: (()=>{
+                switch (this.state['semester']) {
+                    case 'one':
+                        return {
+                            start: this.state['semester1']['start'],
+                            end: this.state['semester1']['exam_period']['start']
+                        };
+                    case 'two':
+                        return {
+                            start: this.state['semester2']['start'],
+                            end: this.state['semester2']['exam_period']['start']
+                        };
+                    case 'both':
+                        return {
+                            start: this.state['semester1']['start'],
+                            end: this.state['semester2']['exam_period']['start']
+                        }
+                }
+            })()
         });
         this.form_Panel.append(new_field.render());
         this.state["form_fields"].push(new_field);

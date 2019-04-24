@@ -103,7 +103,7 @@ class SingleField extends BaseNode{
             field.attr("disabled", !this.state['editable']);
             label.text(Form_Field_Title["asm_period"]);
             if(this.state['editable']) {
-                // const minDate = new Date(Date.parse())
+                console.log(this.state)
                 field.daterangepicker({
                         locale: {
                             format: "DD/MM/YYYY"
