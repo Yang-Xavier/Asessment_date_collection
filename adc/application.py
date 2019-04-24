@@ -16,7 +16,7 @@ from passlib.apps import custom_app_context as pwd_context
 from itsdangerous import (TimedJSONWebSignatureSerializer as Serializer, BadSignature, SignatureExpired)
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, expose_headers=["x-suggested-filename"])
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///../adc.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SECRET_KEY"] = "desidragons"
@@ -422,11 +422,18 @@ def print_booklet(project_id):
             row_cells[3].text = asm.release_date.strftime("%d/%m/%Y")
             row_cells[4].text = asm.submission_date.strftime("%d/%m/%Y")
 
-    filename = "/tmp/" + "".join([s if s.isalnum() else "-" for s in project.name]) + ".docx"
+    filename = "".join([s if s.isalnum() else "-" for s in project.name]) + ".docx"
+    filepath = "/tmp/" + filename
 
-    document.save(filename)
+    print("Saving", filename, "to /tmp")
+    document.save(filepath)
 
-    return send_file(filename)
+    result = send_file(filepath,
+            as_attachment=True,
+            mimetype="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            conditional=False)
+    result.headers["x-suggested-filename"] = filename
+    return result
 
 
 app.register_blueprint(api, url_prefix="/api")
