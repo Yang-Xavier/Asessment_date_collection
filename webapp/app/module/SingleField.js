@@ -103,7 +103,6 @@ class SingleField extends BaseNode{
             field.attr("disabled", !this.state['editable']);
             label.text(Form_Field_Title["asm_period"]);
             if(this.state['editable']) {
-                console.log(this.state)
                 field.daterangepicker({
                         locale: {
                             format: "DD/MM/YYYY"
@@ -111,12 +110,16 @@ class SingleField extends BaseNode{
                         startDate: this.state["asm_release"]? this.state["asm_release"]: this.state['date_range']['start'],
                         endDate: this.state["asm_due"]? this.state["asm_due"]: this.state['date_range']['start'],
                         maxDate: this.state['date_range']['end'],
-                        minDate: this.state['date_range']['start']
-                    },
-                    (start, end, label) => {
-                        this.state["asm_release"] = start.format("DD/MM/YYYY");
-                        this.state["asm_due"] = end.format("DD/MM/YYYY");
-                    })
+                        minDate: this.state['date_range']['start'],
+                        autoUpdateInput: false,
+                    });
+                field.on('apply.daterangepicker', (ev, picker) => {
+
+                    this.state["asm_release"] = picker.startDate.format("DD/MM/YYYY");
+                    this.state["asm_due"] = picker.endDate.format("DD/MM/YYYY");
+
+                    field.val(picker.startDate.format("DD/MM/YYYY") + ' - ' + picker.endDate.format("DD/MM/YYYY"))
+                })
             }
 
 
