@@ -18,7 +18,8 @@ const API = {
     project: RQ_HOST + '/api/project',
     modules: RQ_HOST + '/api/module/',
     form: RQ_HOST + '/api/form',
-    assessment: RQ_HOST + '/api/assessment'
+    assessment: RQ_HOST + '/api/assessment',
+    print: id => RQ_HOST + '/api/print/' + id
 }
 
 

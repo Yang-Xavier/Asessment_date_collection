@@ -6,6 +6,8 @@ import BaseNode from "../util/BaseNode"
 import ModulesDisplay from "../module/ModulesDisplay";
 
 import "../../style/project_detail.css"
+import {API} from "../util/constant";
+import {get_format_token} from "../util/cookie_util";
 
 class ProjectDetails extends BaseNode{
     constructor(param) {
@@ -63,6 +65,9 @@ class ProjectDetails extends BaseNode{
 
             if(this.state["done"] && window.global.user["user_type"] == 'ltm') {
                 function_block.append(print_btn);
+                print_btn.on('click', () => {
+                    this.print_doc()
+                })
             }
 
             due.append(status);
@@ -95,6 +100,19 @@ class ProjectDetails extends BaseNode{
 
  print_doc() {
 
+    request
+        .get(API.print(this.state['project_id']))
+        .set("Authorization", get_format_token())
+        .then(data => {
+            const filename = data["headers"]["x-suggested-filename"];
+
+            const a = $("<a/>");
+            a.attr('href', API.print(this.state['project_id']));
+            a.attr('download', filename);
+
+            $("body").append(a);
+            a[0].dispatchEvent(new MouseEvent('click'))
+        })
  }
 
 }
