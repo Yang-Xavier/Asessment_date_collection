@@ -335,8 +335,9 @@ def create_forms():
     for project in projects:
         forms = Form.query.filter_by(project_id=project.id).all()
         if all([form.is_filled for form in forms]):
-            project.state = "assessment_data_collected"
-            db.session.add(project)
+            if project.state == "waiting_on_academics":
+                project.state = "assessment_data_collected"
+                db.session.add(project)
 
     db.session.commit()
     return jsonify({"error_code":0, "error_msg":"success"})
