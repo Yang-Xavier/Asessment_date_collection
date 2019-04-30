@@ -19,10 +19,10 @@ class EditableForm extends BaseNode{
     constructor(param) {
         // param e.g.
 
-        param = Object.assign(param, {
-            semester1: {"start": "01/07/2019", "end": "01/02/2020", "exam_period": {"start": "02/02/2020", "end": "08/02/2020"}},
-            semester2: {"start": "01/03/2020", "end": "01/06/2020", "exam_period": {"start": "02/06/2020", "end": "08/06/2020"}}
-        });
+        // param = Object.assign(param, {
+        //     semester1: {"start": "01/07/2019", "end": "01/02/2020", "exam_period": {"start": "02/02/2020", "end": "08/02/2020"}},
+        //     semester2: {"start": "01/03/2020", "end": "01/06/2020", "exam_period": {"start": "02/06/2020", "end": "08/06/2020"}}
+        // });
 
         super(param);
 

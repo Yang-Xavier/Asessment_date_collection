@@ -155,7 +155,9 @@ const RouterList = {
                                 'semester': projects[i].forms[j].module["semester"],
                                 'username': projects[i].forms[j].module["academic_name"],
                                 'module_code': projects[i].forms[j].module["code"],
-                                'id': id
+                                'id': id,
+                                'semester1': projects[i]["semester1"],
+                                'semester2': projects[i]["semester2"]
                             };
                             break;
                         }
