@@ -42,12 +42,11 @@
     width: 35%;
     max-width: 218px;
     align-items: center;
-    font-size: 30px;
-    color: var(--dark);
+    font-size: 28px;
     line-height: 100%;
     padding: 10px 0 0 0;
     font-family: 'Lobster', cursive;
-    color: #412C64;
+    color: #2471A3;
 }
 
 .login_all_panel .container_block .form_block {
