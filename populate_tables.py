@@ -69,6 +69,20 @@ projects = [
         sem2_end=datetime.strptime("31/05/19","%d/%m/%y"),
         exam2_bgn=datetime.strptime("01/06/19","%d/%m/%y"),
         exam2_end=datetime.strptime("30/06/19","%d/%m/%y"),
+        forms=forms),
+    Project(id=1,
+        name="Assessment Data Collection for 2018/19 (new)",
+        state="done",
+        create_date=datetime.strptime("01/04/18","%d/%m/%y"),
+        due_date=datetime.strptime("01/05/18","%d/%m/%y"),
+        sem1_bgn=datetime.strptime("15/09/18","%d/%m/%y"),
+        sem1_end=datetime.strptime("31/12/18","%d/%m/%y"),
+        exam1_bgn=datetime.strptime("01/01/19","%d/%m/%y"),
+        exam1_end=datetime.strptime("31/01/19","%d/%m/%y"),
+        sem2_bgn=datetime.strptime("01/02/19","%d/%m/%y"),
+        sem2_end=datetime.strptime("31/05/19","%d/%m/%y"),
+        exam2_bgn=datetime.strptime("01/06/19","%d/%m/%y"),
+        exam2_end=datetime.strptime("30/06/19","%d/%m/%y"),
         forms=forms)
     ]
 
